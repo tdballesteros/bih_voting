@@ -283,3 +283,31 @@ death_data <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>%
 # write formatted data
 write.csv(death_data, "Formatted Data/deaths_per_municipality_formatted.csv")
 
+### Nationalist Votes 1991 -------------------------------------------------------------------------
+nat_votes_1991 <- readxl::read_xlsx("Data/bih_parties_1997_leanings.xlsx") %>%
+  dplyr::rename_with(tolower) %>%
+  dplyr::full_join(election_tally, by = "party") %>%
+  dplyr::filter(
+    !is.na(municipality),
+    !municipality %in%
+      c("Lista na Nivou / Razini Grada Mostara za Gradsko Vijeće",
+        "Općina Mostar Jug za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Jugoistok za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Jugozapad za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Sjever za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Zapad za Gradsko Vijeće Grada Mostara")
+      ) %>%
+  # collapse by binary value
+  dplyr::group_by(municipality, binary) %>%
+  dplyr::summarise(
+    # vote_count = sum(vote_count, na.rm = TRUE),
+    # total_municipal_votes = max(total_municipal_votes, na.rm = TRUE),
+    percent_vote = sum(percent_vote, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = binary, values_from = percent_vote) %>%
+  replace(is.na(.), 0) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(nat_votes_1991, "Formatted Data/nationalist_votes_1991.csv")
