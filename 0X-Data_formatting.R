@@ -48,7 +48,7 @@ census_data_1991 <- readxl::read_xlsx("Data/bih_census_1991.xlsx") %>%
   )
 
 # write formatted data
-write.csv(census_data_1991, "Formatted Data/census_data_1991_formatted.csv")
+write.csv(census_data_1991, "Formatted Data/census_data_1991_formatted.csv", row.names = FALSE)
 
 ### 2013 Census Data -------------------------------------------------------------------------------
 census_data_2013 <- readxl::read_xlsx("Data/bih_census_2013.xlsx") %>%
@@ -71,12 +71,29 @@ census_data_2013 <- readxl::read_xlsx("Data/bih_census_2013.xlsx") %>%
                               (percent_not_declared * (0.5 - percent_not_declared)^2) +
                               (percent_other * (0.5 - percent_other)^2) +
                               (percent_no_answer * (0.5 - percent_no_answer)^2)),
-    percent_total_population = total / sum(total)
-  ) %>%
+    percent_total_population = total / sum(total),
+    # rename post-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Brod" ~ "Bosanski Brod",
+      "Doboj - Istok" ~	"Doboj East",
+      "Doboj - Jug" ~	"Doboj South",
+      "Foča-FBiH" ~	"Foča-Ustikolina",
+      "Foča-RS" ~	"Foča",
+      "Gornji Vakuf - Uskoplje" ~	"Gornji Vakuf-Uskoplje",
+      "Gradiška" ~ "Bosanska Gradiška",
+      "Istočno Novo Sarajevo" ~	"East New Sarajevo",
+      "Kneževo" ~	"Skender Vakuf / Kneževo",
+      "Kostajnica" ~ "Bosanska Kostajnica",
+      "Kozarska Dubica" ~	"Dubica",
+      "Pale-FBiH" ~	"Pale-Prača",
+      "Pale-RS" ~	"Pale",
+      .default = municipality
+    )) %>%
   dplyr::arrange(municipality)
 
 # write formatted data
-write.csv(census_data_2013, "Formatted Data/census_data_2013_formatted.csv")
+write.csv(census_data_2013, "Formatted Data/census_data_2013_formatted.csv", row.names = FALSE)
 
 ### 1997 Municipal Election Results Tally ----------------------------------------------------------
 election_tally <- readxl::read_xlsx("Data/bih_municipal_votes_97_tally.xlsx") %>%
@@ -89,34 +106,33 @@ election_tally <- readxl::read_xlsx("Data/bih_municipal_votes_97_tally.xlsx") %>
       municipality,
       "Stolac / Berkovići" ~ "Berkovići",
       "Bosansko Grahovo / Grahovo" ~ "Bosansko Grahovo",
-      "Bosanski Brod / Srpski Brod" ~ "Brod",
+      "Bosanski Brod / Srpski Brod" ~ "Bosanski Brod",
       "Orašje / Srpsko Orašje" ~ "Donji Žabar",
-      "Foča / Srbinje" ~ "Foča", # covers both Foča-RS and Foča-FBIH?
-      "Gornji Vakuf" ~ "Gornji Vakuf - Uskoplje",
-      "Bosanska Gradiška / Gradiška" ~ "Gradiška",
+      "Foča / Srbinje" ~ "Foča",
+      "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      "Bosanska Gradiška / Gradiška" ~ "Bosanska Gradiška",
       "Ilidža / Srpska Ilidža" ~ "Istočna Ilidža",
       "Drvar / Srpski Drvar" ~ "Istočni Drvar",
-      "Mostar / Srpski Mostar" ~ "Istočna Mostar",
+      "Mostar / Srpski Mostar" ~ "Istočni Mostar",
       "Stari Grad Sarajevo / Srpski Stari Grad" ~ "Istočni Stari Grad",
-      "Novo Sarajevo / Srpsko Novo Sarajevo" ~ "Istočno Novo Sarajevo",
+      "Novo Sarajevo / Srpsko Novo Sarajevo" ~ "East New Sarajevo",
       "Jajce / Jezero" ~ "Jezero",
-      "Skender Vakuf / Kneževo" ~ "Kneževo",
       "Bosanska Dubica / Kozarska Dubica" ~ "Dubica",
       "Bosanska Krupa / Krupa na Uni" ~ "Krupa na Uni",
-      "Kupres" ~ "Kupres-FBiH",
+      "Kupres" ~ "Kupres-FBIH",
       "Kupres / Srpski Kupres" ~ "Kupres-RS",
       "Bosanski Novi / Novi Grad" ~ "Novi Grad",
       "Goražde / Srpsko Goražde" ~ "Novo Goražde",
       "Kalesija / Osmaci" ~ "Osmaci",
       "Sanski Most / Srpski Sanski Most" ~ "Oštra Luka",
-      "Pale (RS)" ~ "Pale-RS", # covers both Pale-RS and Pale-FBIH?
+      "Pale (RS)" ~ "Pale",
       "Gradačac / Pelagićevo" ~ "Pelagićevo",
       "Bosanski Petrovac / Petrovac" ~ "Petrovac",
       "Gračanica / Petrovo" ~ "Petrovo",
       "Prozor / Prozor-Rama" ~ "Prozor-Rama",
       "Ključ / Ribnik" ~ "Ribnik",
       "Bosanski Šamac / Šamac" ~ "Šamac",
-      "Trnovo (FBIH)" ~ "Trnovo-FBiH",
+      "Trnovo (FBIH)" ~ "Trnovo-FBIH",
       "Trnovo (RS)" ~ "Trnovo-RS",
       "Odžak / Vukosavlje" ~ "Vukosavlje",
       # collapse portions of Mostar (FBIH) municipality
@@ -151,7 +167,7 @@ election_tally <- readxl::read_xlsx("Data/bih_municipal_votes_97_tally.xlsx") %>
   dplyr::arrange(municipality)
 
 # write formatted data
-write.csv(election_tally, "Formatted Data/election_tally_1997_formatted.csv")
+write.csv(election_tally, "Formatted Data/election_tally_1997_formatted.csv", row.names = FALSE)
 
 # post-war municipalities without data (collapsed within their pre-war municipality?):
 ## Doboj - Istok, Doboj - Jug, Dobretići, Domaljevac-Šamac, Foča-FBiH, Kostajnica, Milići,
@@ -253,7 +269,7 @@ seat_tally <- read.csv("Data/bih_municipal_elections_97_seat_allocation.csv") %>
   dplyr::arrange(municipality)
 
 # write formatted data
-write.csv(seat_tally, "Formatted Data/seat_tally_1997_formatted.csv")
+write.csv(seat_tally, "Formatted Data/seat_tally_1997_formatted.csv", row.names = FALSE)
 
 # post-war municipalities without data (collapsed within their pre-war municipality?):
 ## Doboj - Istok, Doboj - Jug, Dobretići, Domaljevac-Šamac, Foča-FBiH, Kostajnica, Milići,
@@ -280,11 +296,62 @@ death_data <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>%
                 polarization_cm, ethnic_dominance_cm) %>%
   dplyr::arrange(municipality)
 
-# write formatted data
-write.csv(death_data, "Formatted Data/deaths_per_municipality_formatted.csv")
+# create additional rows for new post-war municipalities
+death_data2 <- death_data %>%
+  dplyr::mutate(municipality = dplyr::case_match(
+    municipality,
+    "Bosanska Krupa" ~	"Bužim",
+    "Sanski Most" ~	"Oštra Luka",
+    "Ključ" ~	"Ribnik",
+    "Bosanski Petrovac" ~	"Petrovac",
+    "Drvar" ~	"Istočni Drvar",
+    "Kupres" ~	"Kupres-RS",
+    "Jajce" ~	"Jezero",
+    "Kneževo" ~	"Dobretići",
+    "Doboj" ~	"Doboj Jug",
+    "Gračanica" ~	"Petrovo",
+    "Gradačac" ~	"Pelagićevo",
+    "Odžak" ~	"Vukosavlje",
+    "Šamac" ~	"Domaljevac-Šamac",
+    "Orašje" ~	"Donji Žabar",
+    "Lopare" ~	"Čelić",
+    "Ugljevik" ~	"Teočak",
+    "Zvornik" ~	"Sapna",
+    "Kalesija" ~	"Osmaci",
+    "Trebinje" ~	"Ravno",
+    "Stolac" ~	"Berkovići",
+    "Mostar" ~	"Istočni Mostar",
+    "Trnovo" ~	"Trnovo-RS",
+    "Foča" ~	"Foča-Ustikolina",
+    "Goražde" ~	"Novo Goražde",
+    "Pale" ~	"Pale-Prača",
+    "Ilidža" ~	"Istočna Ilidža",
+    "Sarajevo Stari Grad" ~	"Istočno Stari Grad",
+    "Sarajevo Novo Sarajevo" ~	"East New Sarajevo",
+    "Bosanski Novi" ~	"Kostajnica",
+    "Tešanj" ~	"Usora",
+    "Vlasenica" ~	"Milići",
+    .default = NA
+  )) %>%
+  dplyr::filter(!is.na(municipality))
 
-### Nationalist Votes 1991 -------------------------------------------------------------------------
-nat_votes_1991 <- readxl::read_xlsx("Data/bih_parties_1997_leanings.xlsx") %>%
+death_data3 <- death_data %>%
+  dplyr::mutate(municipality = dplyr::case_match(
+    municipality,
+    "Bosanska Krupa" ~ "Krupa na Uni",
+    "Doboj" ~ "Doboj Istok",
+    .default = NA
+  )) %>%
+  dplyr::filter(!is.na(municipality))
+
+death_data <- death_data %>%
+  rbind(death_data2, death_data3)
+
+# write formatted data
+write.csv(death_data, "Formatted Data/deaths_per_municipality_formatted.csv", row.names = FALSE)
+
+### Nationalist Votes 1997 -------------------------------------------------------------------------
+nat_votes_1997 <- readxl::read_xlsx("Data/bih_parties_1997_leanings.xlsx") %>%
   dplyr::rename_with(tolower) %>%
   dplyr::full_join(election_tally, by = "party") %>%
   dplyr::filter(
@@ -310,4 +377,18 @@ nat_votes_1991 <- readxl::read_xlsx("Data/bih_parties_1997_leanings.xlsx") %>%
   dplyr::arrange(municipality)
 
 # write formatted data
-write.csv(nat_votes_1991, "Formatted Data/nationalist_votes_1991.csv")
+write.csv(nat_votes_1997, "Formatted Data/nationalist_votes_1997.csv", row.names = FALSE)
+
+### Voting Location 1997 ---------------------------------------------------------------------------
+voting_location_1997 <- readxl::read_xlsx("Data/bih_voting_location_1997.xlsx") %>%
+  dplyr::select(municipality = Municipality, votes_cast_in_district = NumInDist,
+                votes_cast_out_district = NumOutDist, total_votes_cast = TotalVotes) %>%
+  dplyr::mutate(
+    perc_cast_in = votes_cast_in_district / total_votes_cast,
+    perc_cast_out = votes_cast_out_district / total_votes_cast
+  ) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(voting_location_1997, "Formatted Data/voting_location_1997.csv", row.names = FALSE)
+
