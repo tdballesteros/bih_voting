@@ -28,7 +28,8 @@ bih_prewar_municipalities_shapefile <- bih_prewar_municipalities_shapefile %>%
   dplyr::mutate(
     mun_area = sf::st_area(geometry),
     mun_perimeter = sf::st_perimeter(geometry)
-  )
+  ) %>%
+  sf::st_make_valid()
 
 # write data
 sf::write_sf(bih_prewar_municipalities_shapefile, "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp")
@@ -55,13 +56,8 @@ bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_sha
     .default = NAME_3
   ))
 
-
-
-####################################################################################################
-
+#### add Usora -------------------------------------------------------------------------------------
 sf::sf_use_s2(FALSE) 
-
-# 1. Assume your input shapefile is named 'municipalities_sf'
 
 country_total <- bih_postwar_municipalities_shapefile %>%
   sf::st_union()
@@ -90,7 +86,8 @@ bih_usora_entry <- sf::st_difference(country_total, country_hole) %>%
   dplyr::rename(geometry = ncol(bih_usora_entry))
 
 bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_shapefile_formatted %>%
-  rbind(bih_usora_entry)
+  rbind(bih_usora_entry) %>%
+  sf::st_make_valid()
 
 sf::sf_use_s2(TRUE) 
 

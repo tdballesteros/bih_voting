@@ -276,7 +276,7 @@ write.csv(seat_tally, "Formatted Data/seat_tally_1997_formatted.csv", row.names 
 ## Pale-FBiH, Ravno, Sapna, Teočak, Usora
 
 ### Death Data -------------------------------------------------------------------------------------
-death_data <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>%
+death_data_original <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>%
   # rename variables
   dplyr::select(municipality = Municipality, fractionalization_cm = Fractionalization,
                 polarization_cm = Polarization, ethnic_dominance_cm = `Ethnic Dominance`,
@@ -297,7 +297,7 @@ death_data <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>%
   dplyr::arrange(municipality)
 
 # create additional rows for new post-war municipalities
-death_data2 <- death_data %>%
+death_data2 <- death_data_original %>%
   dplyr::mutate(municipality = dplyr::case_match(
     municipality,
     "Bosanska Krupa" ~	"Bužim",
@@ -335,7 +335,7 @@ death_data2 <- death_data %>%
   )) %>%
   dplyr::filter(!is.na(municipality))
 
-death_data3 <- death_data %>%
+death_data3 <- death_data_original %>%
   dplyr::mutate(municipality = dplyr::case_match(
     municipality,
     "Bosanska Krupa" ~ "Krupa na Uni",
@@ -344,11 +344,12 @@ death_data3 <- death_data %>%
   )) %>%
   dplyr::filter(!is.na(municipality))
 
-death_data <- death_data %>%
+death_data_postwar_municipalities <- death_data_original %>%
   rbind(death_data2, death_data3)
 
 # write formatted data
-write.csv(death_data, "Formatted Data/deaths_per_municipality_formatted.csv", row.names = FALSE)
+write.csv(death_data_original, "Formatted Data/deaths_per_municipality_formatted.csv", row.names = FALSE)
+write.csv(death_data_postwar_municipalities, "Formatted Data/deaths_per_postwar_municipality_formatted.csv", row.names = FALSE)
 
 ### Nationalist Votes 1997 -------------------------------------------------------------------------
 nat_votes_1997 <- readxl::read_xlsx("Data/bih_parties_1997_leanings.xlsx") %>%
