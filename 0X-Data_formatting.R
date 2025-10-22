@@ -50,6 +50,42 @@ census_data_1991 <- readxl::read_xlsx("Data/bih_census_1991.xlsx") %>%
 # write formatted data
 write.csv(census_data_1991, "Formatted Data/census_data_1991_formatted.csv", row.names = FALSE)
 
+### 1991 Census Data by Community ------------------------------------------------------------------
+census_data_1991_community <- readxl::read_xlsx("Data/Stanovništvo prema nacionalnom izjašnjavanju po mjesnim zajednicama 1991.xlsx") %>%
+  dplyr::filter(
+    # drop opština and country total rows
+    `Mjesne Zajednice` != "TOTAL",
+    # drop country total percentages row
+    !is.na(`Mjesne Zajednice`)
+    ) %>%
+  dplyr::select(municipality = Opština, community = `Mjesne Zajednice`, total = Ukupno,
+                muslims = Muslimani, serbs = Srbi, croats = Hrvati, yugoslavs = Jugosloveni,
+                others = Ostali) %>%
+  dplyr::mutate(
+    muslims_percent = muslims / total,
+    serbs_percent = serbs / total,
+    croats_percent = croats / total,
+    yugoslavs_percent = yugoslavs / total,
+    others_percent = others / total
+  ) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::mutate(population_percent_of_municipality = total / sum(total)) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+  # calculate polarization and fractionalization metrics
+  fractionalization = 1 - (muslims_percent^2 + serbs_percent^2 + croats_percent^2 +
+                             yugoslavs_percent^2 + others_percent^2),
+  polarization = 1 - 4 * ((muslims_percent * (0.5 - muslims_percent)^2) +
+                            (serbs_percent * (0.5 - serbs_percent)^2) +
+                            (croats_percent * (0.5 - croats_percent)^2) +
+                            (yugoslavs_percent * (0.5 - yugoslavs_percent)^2) +
+                            (others_percent * (0.5 - others_percent)^2))
+  ) %>%
+  dplyr::arrange(municipality, community)
+
+# write formatted data
+write.csv(census_data_1991_community, "Formatted Data/census_data_1991_community_formatted.csv", row.names = FALSE)
+
 ### 2013 Census Data -------------------------------------------------------------------------------
 census_data_2013 <- readxl::read_xlsx("Data/bih_census_2013.xlsx") %>%
   dplyr::rename_with(tolower) %>%
