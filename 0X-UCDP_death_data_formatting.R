@@ -6,7 +6,11 @@ library(mapview)
 library(tidyverse)
 
 ### load data --------------------------------------------------------------------------------------
+# UCDP dataset
 gede <- readxl::read_xlsx("/Users/timmyballesteros/Downloads/GEDEvent_v25_1.xlsx")
+
+# formatted 1991 census data
+census_data_1991 <- read.csv("Formatted Data/census_data_1991_formatted.csv")
 
 # load formatted shapefiles
 source("0X-Format_shapefiles.R")
@@ -69,7 +73,18 @@ gede_municipality_prewar_counts <- gede_municipality_prewar_assignment %>%
     low = sum(low, na.rm = TRUE)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::arrange(municipality)
+  dplyr::arrange(municipality) %>%
+  # add 1991 census data
+  dplyr::full_join(census_data_1991, by = "municipality") %>%
+  mutate(across(c(count_of_events, best, high, low), ~replace_na(.x, 0))) %>%
+  dplyr::mutate(
+    deaths_per_100000 = 100000 * best / total,
+    deaths_per_100000_high = 100000 * high / total,
+    deaths_per_100000_low = 100000 * low / total
+  ) %>%
+  as.data.frame() %>%
+  dplyr::select(municipality, count_of_events, best, high, low, deaths_per_100000,
+                deaths_per_100000_high, deaths_per_100000_low)
 
 # write formatted data
 write.csv(gede_municipality_prewar_counts,
@@ -103,7 +118,9 @@ gede_municipality_postwar_counts <- gede_municipality_postwar_assignment %>%
   ) %>%
   dplyr::ungroup() %>%
   dplyr::rename(municipality = NAME_3) %>%
-  dplyr::arrange(municipality)
+  dplyr::arrange(municipality) %>%
+  as.data.frame() %>%
+  dplyr::select(-geometry)
 
 # write formatted data
 write.csv(gede_municipality_postwar_counts,

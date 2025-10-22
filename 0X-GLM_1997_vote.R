@@ -97,6 +97,7 @@ census_data_1991 <- census_data_1991 %>%
   rbind(census_data_1991_2, census_data_1991_3)
 
 #### canton/entity data ----------------------------------------------------------------------------
+# Brčko district is coded as part of both RS and FBIH.
 canton_data <- bih_postwar_municipalities_shapefile_formatted %>%
   as.data.frame() %>%
   dplyr::select(municipality = NAME_3, entity = NAME_1, canton = NAME_2) %>%
@@ -108,8 +109,8 @@ canton_data <- bih_postwar_municipalities_shapefile_formatted %>%
       "Doboj South" ~ "Doboj Jug",
       .default = municipality
     ),
-    rs_municipality = ifelse(entity == "Repuplika Srpska", 1, 0),
-    fbih_municipality = ifelse(entity == "Federacija Bosna i Hercegovina", 1, 0)
+    rs_municipality = ifelse(entity == "Repuplika Srpska" | municipality == "Brčko", 1, 0),
+    fbih_municipality = ifelse(entity == "Federacija Bosna i Hercegovina"  | municipality == "Brčko", 1, 0)
   )
 
 #### death data ------------------------------------------------------------------------------------
@@ -163,7 +164,7 @@ df_fbih <- df %>%
 # A6 - Serb + Polarization
 # A1r = A1 - Republika Serbska
 # A1f = A1 - Federation
-...
+# ...
 
 model_a1 <- glm(`Non.Nationalist` ~ log(total) + percent_muslims + percent_yugoslavs +
                   percent_other + dist_hrv + dist_yug + dist_internal_border +
