@@ -13,7 +13,7 @@ gede <- readxl::read_xlsx("/Users/timmyballesteros/Downloads/GEDEvent_v25_1.xlsx
 census_data_1991 <- read.csv("Formatted Data/census_data_1991_formatted.csv")
 
 # load formatted shapefiles
-source("0X-Format_shapefiles.R")
+source("01-Format_shapefiles.R")
 
 ### format data ------------------------------------------------------------------------------------
 gede_bih <- gede %>%
@@ -27,8 +27,8 @@ gede_bih <- gede %>%
 
 gede_bih_geocoded <- gede_bih %>%
   dplyr::filter(
-    # filter out location precision of 5 (linear geographic feature) or 6 (country-level))
-    where_prec %in% c(1, 2)
+    # filter out location precision of 6 (country-level))
+    where_prec %in% c(1, 2, 5)
     ) %>%
   # convert to an sf object
   st_as_sf(

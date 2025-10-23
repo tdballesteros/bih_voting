@@ -223,7 +223,15 @@ df <- voting_data_1997 %>%
   dplyr::filter(!is.na(`Non.Nationalist`)) %>%
   dplyr::mutate(
     delta_fractionalization = fractionalization_2013 - fractionalization_1991,
-    delta_polarization = polarization_2013 - polarization_1991
+    delta_polarization = polarization_2013 - polarization_1991,
+    delta_bosniaks = percent_bosniaks_2013 - percent_muslims_1991,
+    delta_croats = percent_croats_2013 - percent_croats_1991,
+    delta_serbs = percent_serbs_2013 - percent_serbs_1991,
+    abs_delta_percent_changes = abs(delta_bosniaks) + abs(delta_croats) + abs(delta_serbs)
+  ) %>%
+  dplyr::rename(
+    split_by_iebl = `split by line`,
+    sarajevo_district = `sarajevo district`
   )
 
 df_rs <- df %>%
@@ -247,33 +255,35 @@ df_fbih <- df %>%
 
 # country-wide
 model_a1 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
-                  percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
-                  dist_internal_border + deaths_per_population + fractionalization_1991 +
-                  delta_fractionalization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out + mun_area,
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                      data = df, family = gaussian())
 summary(model_a1)
 car::vif(model_a1)
 
-cor(df$fractionalization_1991, df$fractionalization_2013)
+cor(df$dist_internal_border, df$split_by_iebl)
 
 # republika srpska
 model_a1r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
-                   percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
-                   dist_internal_border + deaths_per_population + fractionalization_1991 +
-                   delta_fractionalization + `split by line` +
-                   `sarajevo district` +
-                   perc_cast_out + mun_area,
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_rs, family = gaussian())
 summary(model_a1r)
 car::vif(model_a1r)
 
 # federation
 model_a1f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
-                   percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
-                   dist_internal_border + deaths_per_population + fractionalization_1991 +
-                   delta_fractionalization + `split by line` +
-                   `sarajevo district` + perc_cast_out + mun_area,
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_fbih, family = gaussian())
 summary(model_a1f)
 car::vif(model_a1f)
@@ -281,28 +291,34 @@ car::vif(model_a1f)
 #### A2 models -------------------------------------------------------------------------------------
 
 # republic wide
-model_a2 <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                  percent_other + dist_hrv + dist_yug + dist_internal_border +
-                  deaths_per_population + fractionalization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out,
+model_a2 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                 data = df, family = gaussian())
 summary(model_a2)
 car::vif(model_a2)
 
 # republika srpska
-model_a2r <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + fractionalization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
+model_a2r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_rs, family = gaussian())
 summary(model_a2r)
 car::vif(model_a2r)
 
 # federation
-model_a2f <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + fractionalization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
+model_a2f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_fbih, family = gaussian())
 summary(model_a2f)
 car::vif(model_a2f)
@@ -310,118 +326,131 @@ car::vif(model_a2f)
 #### A3 models -------------------------------------------------------------------------------------
 
 # republic wide
-model_a3 <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                  percent_other + dist_hrv + dist_yug + dist_internal_border +
-                  deaths_per_population + fractionalization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out,
+model_a3 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 +
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                 data = df, family = gaussian())
 summary(model_a3)
 car::vif(model_a3)
 
 # republika srpska
-model_a3r <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + fractionalization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
+model_a3r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_rs, family = gaussian())
 summary(model_a3r)
 car::vif(model_a3r)
 
 # federation
-model_a3f <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + fractionalization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
+model_a3f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
                  data = df_fbih, family = gaussian())
 summary(model_a3f)
 car::vif(model_a3f)
 
-#### A4 models -------------------------------------------------------------------------------------
-
-# country wide
-model_a4 <- glm(`Non.Nationalist` ~ log(total) + percent_muslims + percent_yugoslavs +
-                  percent_other + dist_hrv + dist_yug + dist_internal_border +
-                  deaths_per_population + polarization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out,
-                data = df, family = gaussian())
-summary(model_a4)
-car::vif(model_a4)
-
-# republika srpska
-model_a4r <- glm(`Non.Nationalist` ~ log(total) + percent_muslims + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_rs, family = gaussian())
-summary(model_a4r)
-car::vif(model_a4r)
-
-# federation
-model_a4f <- glm(`Non.Nationalist` ~ log(total) + percent_muslims + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_fbih, family = gaussian())
-summary(model_a4f)
-car::vif(model_a4f)
-
-#### A5 models -------------------------------------------------------------------------------------
-
-# country wide
-model_a5 <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                  percent_other + dist_hrv + dist_yug + dist_internal_border +
-                  deaths_per_population + polarization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out,
-                data = df, family = gaussian())
-summary(model_a5)
-car::vif(model_a5)
-
-# republika srpska
-model_a5r <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_rs, family = gaussian())
-summary(model_a5r)
-car::vif(model_a5r)
-
-# federation
-model_a5f <- glm(`Non.Nationalist` ~ log(total) + percent_croats + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_fbih, family = gaussian())
-summary(model_a5f)
-car::vif(model_a5f)
-
-#### A6 models -------------------------------------------------------------------------------------
-
-# country wide
-model_a6 <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                  percent_other + dist_hrv + dist_yug + dist_internal_border +
-                  deaths_per_population + polarization + fbih_municipality + `split by line` +
-                  `sarajevo district` + perc_cast_out,
-                data = df, family = gaussian())
-summary(model_a6)
-car::vif(model_a6)
-
-# republika srpska
-model_a6r <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_rs, family = gaussian())
-summary(model_a6r)
-car::vif(model_a6r)
-
-# federation
-model_a6f <- glm(`Non.Nationalist` ~ log(total) + percent_serbs + percent_yugoslavs +
-                   percent_other + dist_hrv + dist_yug + dist_internal_border +
-                   deaths_per_population + polarization + `split by line` +
-                   `sarajevo district` + perc_cast_out,
-                 data = df_fbih, family = gaussian())
-summary(model_a6f)
-car::vif(model_a6f)
+# #### A4 models -------------------------------------------------------------------------------------
+# 
+# # country wide
+# model_a4 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
+#                   percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                   dist_internal_border + deaths_per_population + polarization_1991 +
+#                   delta_polarization + fbih_municipality + `split by line` + `sarajevo district` +
+#                   perc_cast_out + mun_area,
+#                 data = df, family = gaussian())
+# summary(model_a4)
+# car::vif(model_a4)
+# 
+# # republika srpska
+# model_a4r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
+#                    percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                    dist_internal_border + deaths_per_population + polarization_1991 +
+#                    delta_polarization + `split by line` + `sarajevo district` + perc_cast_out +
+#                    mun_area,
+#                  data = df_rs, family = gaussian())
+# summary(model_a4r)
+# car::vif(model_a4r)
+# 
+# # federation
+# model_a4f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_muslims_1991 +
+#                    percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                    dist_internal_border + deaths_per_population + polarization_1991 +
+#                    delta_polarization + `split by line` + `sarajevo district` + perc_cast_out +
+#                    mun_area,
+#                  data = df_fbih, family = gaussian())
+# summary(model_a4f)
+# car::vif(model_a4f)
+# 
+# #### A5 models -------------------------------------------------------------------------------------
+# 
+# # country wide
+# model_a5 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+#                   percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                   dist_internal_border + deaths_per_population + polarization_1991 +
+#                   delta_polarization + fbih_municipality + `split by line` + `sarajevo district` +
+#                   perc_cast_out + mun_area,
+#                 data = df, family = gaussian())
+# summary(model_a5)
+# car::vif(model_a5)
+# 
+# # republika srpska
+# model_a5r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+#                    percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                    dist_internal_border + deaths_per_population + polarization_1991 +
+#                    delta_polarization + `split by line` + `sarajevo district` + perc_cast_out +
+#                    mun_area,
+#                  data = df_rs, family = gaussian())
+# summary(model_a5r)
+# car::vif(model_a5r)
+# 
+# # federation
+# model_a5f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_croats_1991 +
+#                    percent_yugoslavs_1991 + percent_other_1991 + dist_hrv + dist_yug +
+#                    dist_internal_border + deaths_per_population + polarization_1991 +
+#                    delta_polarization + `split by line` + `sarajevo district` + perc_cast_out +
+#                    mun_area,
+#                  data = df_fbih, family = gaussian())
+# summary(model_a5f)
+# car::vif(model_a5f)
+# 
+# #### A6 models -------------------------------------------------------------------------------------
+# 
+# # country wide
+# model_a6 <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 + percent_yugoslavs_1991 +
+#                   percent_other_1991 + dist_hrv + dist_yug + dist_internal_border +
+#                   deaths_per_population + polarization_1991 + delta_polarization +
+#                   fbih_municipality + `split by line` + `sarajevo district` + perc_cast_out +
+#                   mun_area,
+#                 data = df, family = gaussian())
+# summary(model_a6)
+# car::vif(model_a6)
+# 
+# # republika srpska
+# model_a6r <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 + percent_yugoslavs_1991 +
+#                    percent_other_1991 + dist_hrv + dist_yug + dist_internal_border +
+#                    deaths_per_population + polarization_1991 + delta_polarization +
+#                    `split by line` + `sarajevo district` + perc_cast_out + mun_area,
+#                  data = df_rs, family = gaussian())
+# summary(model_a6r)
+# car::vif(model_a6r)
+# 
+# # federation
+# model_a6f <- glm(`Non.Nationalist` ~ log(total_1991) + percent_serbs_1991 + percent_yugoslavs_1991 +
+#                    percent_other_1991 + dist_hrv + dist_yug + dist_internal_border +
+#                    deaths_per_population + polarization_1991 + delta_polarization +
+#                    `split by line` + `sarajevo district` + perc_cast_out + mun_area,
+#                  data = df_fbih, family = gaussian())
+# summary(model_a6f)
+# car::vif(model_a6f)
 
 ### GLM: nationalist vote share --------------------------------------------------------------------
 # B1 - Bosniak + Fractionalization
@@ -433,3 +462,108 @@ car::vif(model_a6f)
 # B1r = B1 - Republika Serbska
 # B1f = B1 - Federation
 # ...
+
+#### B1 models -------------------------------------------------------------------------------------
+
+# country-wide
+model_b1 <- glm(Nationalist ~ log(total_1991) + percent_muslims_1991 +
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                data = df, family = gaussian())
+summary(model_b1)
+car::vif(model_b1)
+
+# republika srpska
+model_b1r <- glm(Nationalist ~ log(total_1991) + percent_muslims_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_rs, family = gaussian())
+summary(model_b1r)
+car::vif(model_b1r)
+
+# federation
+model_b1f <- glm(Nationalist ~ log(total_1991) + percent_muslims_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_bosniaks + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_fbih, family = gaussian())
+summary(model_b1f)
+car::vif(model_b1f)
+
+#### B2 models -------------------------------------------------------------------------------------
+
+# republic wide
+model_b2 <- glm(Nationalist ~ log(total_1991) + percent_croats_1991 +
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                data = df, family = gaussian())
+summary(model_b2)
+car::vif(model_b2)
+
+# republika srpska
+model_b2r <- glm(Nationalist ~ log(total_1991) + percent_croats_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_rs, family = gaussian())
+summary(model_b2r)
+car::vif(model_b2r)
+
+# federation
+model_b2f <- glm(Nationalist ~ log(total_1991) + percent_croats_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_croats + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_fbih, family = gaussian())
+summary(model_b2f)
+car::vif(model_b2f)
+
+#### b3 models -------------------------------------------------------------------------------------
+
+# republic wide
+model_b3 <- glm(Nationalist ~ log(total_1991) + percent_serbs_1991 +
+                  percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                  dist_yug + abs_delta_percent_changes +
+                  # dist_internal_border +
+                  deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                  fbih_municipality + split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                data = df, family = gaussian())
+summary(model_b3)
+car::vif(model_b3)
+
+# republika srpska
+model_b3r <- glm(Nationalist ~ log(total_1991) + percent_serbs_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_rs, family = gaussian())
+summary(model_b3r)
+car::vif(model_b3r)
+
+# federation
+model_b3f <- glm(Nationalist ~ log(total_1991) + percent_serbs_1991 +
+                   percent_yugoslavs_1991 + percent_other_1991 + delta_serbs + dist_hrv +
+                   dist_yug + abs_delta_percent_changes +
+                   # dist_internal_border +
+                   deaths_per_population + fractionalization_1991 + delta_fractionalization +
+                   split_by_iebl + sarajevo_district + perc_cast_out + mun_area,
+                 data = df_fbih, family = gaussian())
+summary(model_b3f)
+car::vif(model_b3f)

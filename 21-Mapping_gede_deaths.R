@@ -19,6 +19,9 @@ source("01-Format_shapefiles.R")
 # IEBF shapefile
 iebf_shapefile <- sf::read_sf("Shape Files/internal_entity_division_shapefile.shp")
 
+# gede dataset
+source("~/R/bih_voting/03-UCDP_death_data_formatting.R")
+
 ### format data ------------------------------------------------------------------------------------
 # convert city coordinates data to sf object
 city_coords <- city_coords %>%
@@ -159,6 +162,29 @@ ucdp_deaths_absolute_prewar_municipalities_map <- ggplot2::ggplot() +
   ggplot2::theme_void()
 
 ucdp_deaths_absolute_prewar_municipalities_map
+
+# per capita + event points
+gede_bih_geocoded_formatted <- 
+
+ucdp_deaths_per_capita_prewar_municipalities_points_map <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = ucdp_deaths_prewar_municipality,
+    ggplot2::aes(fill = deaths_per_100000_logged)
+  ) +
+  ggplot2::scale_fill_gradient(
+    name = "Deaths per\n100,000",
+    breaks = logged_break_positions,
+    labels = final_labels,
+    low = "white",
+    high = "darkred",
+    na.value = "grey70"
+  ) +
+  ggplot2::geom_sf(
+    data = gede_bih_geocoded,
+    ggplot2::aes(size = log(best + 1))) +
+  ggplot2::theme_void()
+
+ucdp_deaths_per_capita_prewar_municipalities_points_map
 
 ### Post-War Municipalities ------------------------------------------------------------------------
 
