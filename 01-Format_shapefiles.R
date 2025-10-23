@@ -1,12 +1,15 @@
 
-# Format Andreas Berger's pre-war municipality shapefile with appended municipality names.
+# This file formats Andreas Berger's pre-war and the Global Administrative Areas 2015 (v2.8)'s
+# post-war municipalities shapefiles. Due to issues saving files using special characters in the
+# Serbo-Croatian Latin alphabet, this script is sourced at the start of scripts needing the
+# formatted shapefiles. These shapefiles are exported as part of this script, but municipality names
+# contain formatting errors.
 
 ### load libraries ---------------------------------------------------------------------------------
 library(sf)
 library(readxl)
 library(mapview)
 library(tidyverse)
-
 
 ### load data --------------------------------------------------------------------------------------
 # pre-war municipalities shapefile
@@ -89,12 +92,18 @@ bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_sha
   rbind(bih_usora_entry) %>%
   sf::st_make_valid()
 
-sf::sf_use_s2(TRUE) 
+sf::sf_use_s2(TRUE)
+
+bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_shapefile_formatted %>%
+  sf::st_make_valid() %>%
+  dplyr::mutate(
+    mun_area = sf::st_area(geometry),
+    mun_perimeter = sf::st_perimeter(geometry)
+    )
 
 # write data
 sf::write_sf(bih_postwar_municipalities_shapefile_formatted, "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp")
   
-
 
 
 

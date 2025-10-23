@@ -13,7 +13,7 @@ nat_votes_1997 <- read.csv("Formatted Data/nationalist_votes_1997.csv")
 city_coords <- readxl::read_xlsx("Data/city_coordinates.xlsx")
 
 # load formatted shapefiles
-source("0X-Format_shapefiles.R")
+source("01-Format_shapefiles.R")
 
 # IEBF shapefile
 iebf_shapefile <- sf::read_sf("Shape Files/internal_entity_division_shapefile.shp")

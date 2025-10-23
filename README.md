@@ -1,34 +1,39 @@
 
 Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia and Herzegovina’s 1997 Municipal Elections
 
+
 # Overview
-This project assesses the voting patterns in Bosnia and Herzegovina in the first election after the civil war (1991-1995).
+This project assesses the voting patterns in Bosnia and Herzegovina in the first local election after the Bosnian War (1992-1995).
+
 
 # Sources
 ## Shapefiles
-Post-war Bosnia and Herzegovina shapefiles are from the University of California, Berkeley and Museum of Vertebrate Zoology (2015) and the International Rice Research Institute and created by Robert J. Hijmans as part of the Global Administrative Areas 2015 (v2.8) dataset.
+Post-war Bosnia and Herzegovina shapefiles are from the University of California, Berkeley and Museum of Vertebrate Zoology (2015) and the International Rice Research Institute and created by Robert J. Hijmans as part of the Global Administrative Areas 2015 (v2.8) dataset. The Inter-Ethnic Boundary Line (IEBL) - the line demarcating Republika Srpska, the Federation, and Brčko District - is derived from the municipality-level shapefile.
 
-Datasets are available here:
+The datasets are available here:
 https://earthworks.stanford.edu/catalog/stanford-bt512fj0408
 https://earthworks.stanford.edu/catalog/stanford-nj241sn6981
 https://earthworks.stanford.edu/catalog/stanford-ws326vw2005
 https://earthworks.stanford.edu/catalog/stanford-xt594tq5034
 
-Pre-war Bosnia and Herzegovina shapefiles are from Andreas Berger (2012).
+The pre-war Bosnia and Herzegovina municipality shapefiles is from Andreas Berger (2012).
 
-Dataset is available here:
+The dataset is available here:
 https://www.andybeger.com/blog/2011-01-18-bosnia-1991-municipalities/
 
-## Census Data
-The 1991 census data comes from Bosnia and Herzegovina's 1991 census (Zavod za statistiku Bosne i Hercegovine, 1991), conducted by republic authorities as part of the 1991 Yugoslav census. The 2013 data comes from Bosnia and Herzegovina's 2013 census (Agencija za statistiku Bosne i Hercegovine, 2016). No census occurred between these dates.
+Modifications to these shapefiles are my own work.
 
-Settlement 1991 census data - 15.06.1992 10.Stanovništvo prema nacionalnom izjašnjavanju po mjesnim zajednicama: https://fzs.ba/index.php/popis-stanovnistva/popis-stanovnistva-1991-i-stariji/ 
+## Census Data
+The 1991 census data comes from Bosnia and Herzegovina's 1991 census (Zavod za statistiku Bosne i Hercegovine, 1991), conducted by republic-level authorities as part of the 1991 Yugoslav census. The 2013 data comes from Bosnia and Herzegovina's 2013 census (Agencija za statistiku Bosne i Hercegovine, 2016). No census occurred between these dates.
+
+The Population according to national declaration by local communities (Stanovništvo prema nacionalnom izjašnjavanju po mjesnim zajednicama) census data file is available here: https://fzs.ba/index.php/popis-stanovnistva/popis-stanovnistva-1991-i-stariji/ 
 
 ## Election Data
 Bosnia and Herzegovina's 1997 municipal election result data comes from the Central Election Commission (Centralna izborna komisija Bosne i Hercegovine, 2012).
 
 ## Death Data
 Geo-referenced death data comes from two sources. The first comes from the Research and Documentation Centre Sarajevo Database and Costalli & Moro (2012). The second comes from the UCDP Georeferenced Event Dataset (GED) Global version 25.1 (Davies, Pettersson, Sollenberg, and Öberg, 2025; Sundberg and Melander 2013).
+
 
 # Works Cited
 Agencija za statistiku Bosne i Hercegovine, (2016). Popis stanovništva, domaćinstava i stanova u Bosni I Hercegovini, 2013. Rezultati popisa [Cenzus of population, households and dwellings in Bosnia and Herzegovina, 2013: Final results]. Sarajevo, Bosnia and Herzegovina: Bosnia and Herzegovina.
