@@ -1,0 +1,163 @@
+---
+  title: "Results and Findings"
+  format: html
+  editor: visual
+---
+  
+```{r loading, echo = FALSE, warning=FALSE, message=FALSE}
+
+library(modelsummary)
+library(flextable)
+library(dplyr)
+
+# source GLM models
+source("~/R/bih_voting/11-GLM_1997_vote.R", echo = FALSE)
+
+# source population maps
+source("~/R/bih_voting/1X-Mapping_population.R", echo = FALSE)
+
+```
+
+## Overall Findings
+
+Models A1, A2, and A3 (see Table 1) assess vote proportions for non-nationalist parties across all municipalities in Bosnia and Herzegovina in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("A1" = model_a1, "A2" = model_a2, "A3" = model_a3), output = "flextable", stars = TRUE)`
+
+Models A1-RS, A2-RS, and A3-RS (see Table 2) assess vote proportions for non-nationalist parties across municipalities in Republika Srpska, including Brčko district, in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("A1-RS" = model_a1r, "A2-RS" = model_a2r, "A3-RS" = model_a3r), output = "flextable", stars = TRUE)`
+
+Models A1-FBiH, A2-FBiH, and A3-FBiH (see Table 3) assess vote proportions for non-nationalist parties across municipalities in the Federation of Bosnia and Herzegovina, including Brčko district, in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("A1" = model_a1f, "A2" = model_a2f, "A3" = model_a3f), output = "flextable", stars = TRUE)`
+
+Models B1, B2, and B3 (see Table 4) assess vote proportions for nationalist parties across all municipalities in Bosnia and Herzegovina in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("B1" = model_b1, "B2" = model_b2, "B3" = model_b3), output = "flextable", stars = TRUE)`
+
+Models B1-RS, B2-RS, and B3-RS (see Table 5) assess vote proportions for non-nationalist parties across municipalities in Republika Srpska, including Brčko district, in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("B1-RS" = model_b1r, "B2-RS" = model_b2r, "B3-RS" = model_b3r), output = "flextable", stars = TRUE)`
+
+Models B1-FBiH, B2-FBiH, and B3-FBiH (see Table 6) assess vote proportions for non-nationalist parties across municipalities in the Federation of Bosnia and Herzegovina, including Brčko district, in the 1997 municipal elections.
+
+`r modelsummary::modelsummary(list("B1-FBiH" = model_b1f, "B2-FBiH" = model_b2f, "B3-FBiH" = model_b3f), output = "flextable", stars = TRUE)`
+
+## Population
+
+Models A2, A3, A3-FBiH, B3, and B3-FBiH found the 1991 municipality population, logged scale, to be statistically significant at the 0.05 level, while models A1 and B2 found it to be significant at the 0.1 level.
+
+The results were inconsistent, with models A1, A2, B3-FBiH finding larger populations correlated with a decrease in the non-nationalist share of the vote. Models A3, A3-FBiH, B2, and B3, however found a positive correlation between population and non-nationalist vote shares.
+
+### Ethnic Group Proportions
+
+```{r ethinc_group_proportions, echo=FALSE}
+
+
+## YUGOSLAVS
+num_yugoslav <- sum(census_data_1991$yugoslavs)
+perc_yugoslav <- round(100 * sum(census_data_1991$yugoslavs) / sum(census_data_1991$total), 2)
+
+yug_pop_cor <- round(cor(df$`Percent Yugoslavs, 1991`, df$total_1991), 4)
+yug_pop_log_cor <- round(cor(df$`Percent Yugoslavs, 1991`, df$`Population 1991, logged`), 4)
+
+## OTHER
+num_other <- sum(census_data_1991$other)
+perc_other <- round(100 * sum(census_data_1991$other) / sum(census_data_1991$total), 2)
+
+```
+
+#### Muslims/Bosniaks
+
+**MAP X.** Percent Identifying as Muslim in 1991, by municipality
+
+```{r muslim_map, echo=FALSE}
+
+prewar_muslims
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+#### Croats
+
+**MAP X.** Percent Identifying as Croat in 1991, by municipality
+
+```{r croat_map, echo=FALSE}
+
+prewar_croats
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+#### Serbs
+**MAP X.** Percent Identifying as Serb in 1991, by municipality
+
+```{r serb_map, echo=FALSE}
+
+prewar_serbs
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+#### Yugoslavs
+People identifying as a pan-ethnic Yugoslav identity was limited even several generations after the formation of Yugoslavia, with only 8 pre-war municipalities having at least 10% of the population identifying as Yugoslav on the 1991 census (see Map X): Banja Luka, Bosanski Brod, Mostar, Sarajevo (Centar, Novo Sarajevo, Novi Grad), Tuzla, Zenica. Notably, these also correspond with some of the largest, most urbane communities in the country. Tuzla saw the largest proportion identify as Yugoslav, at just 16.7% of the population; Tuzla municipality had the 4th highest population in 1991. In total, `r num_yugoslav` people identified as Yugoslav, or `r perc_yugoslav`% of the population.
+
+**MAP X.** Percent Identifying as Yugoslav in 1991, by municipality
+
+```{r yugoslav_map, echo=FALSE}
+
+prewar_yugoslav
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+All country-wide and Federation-wide models found the pre-war proportion of the population identifying as "Yugoslav" to be statistically significant.
+
+Across all municipalities, each increase in the percentage of the population identifying as a Yugoslav resulted in an estimated 1.377 (A3) to 2.395 (A1) percentage point increase in the proportion of the vote towards non-nationalist parties. For municipalities in the Federation, only models A1-FBiH and A2-FBiH saw the percent of Yugoslavs as statistically significant at the 0.05 level, though model A3-FBiH still saw it significant at the 0.1 level. For Federation municipalities, each increase in the percentage of the population identifying as a Yugoslav resulted in an estimated 2.364 (A2-FBiH) to 3.485 (A1-FBiH) percentage point increase in the proportion of the vote towards non-nationalist parties. The proportion of Yugoslavs was not correlated to non-nationalist vote shares in Republika Srpska.
+
+A similar but reversed trend was identified for shares of nationalist votes. Models B1 and B2 identified similar magnitudes but with a negative correlation compared to models A1, A2, and A3. Interestingly, model B3 found percent Yugoslavs to be statistically significant, but saw increased portions of Yugoslavs correlated to an increased portion of nationlist votes. Models B1-FBiH and B2-FBiH found percent yugoslavs to be statistically significant at the 0.05 level, while model B3-FBiH found it significant at only the 0.1 level. Again, the magnitudes matched each model's non-nationalist model counterpart, only differing in direction.
+
+As mentioned before, higher proportions of people identified as Yugoslav in Bosnia and Herzegovina's cities than in towns or rural areas. The proportion of people identifying as Yugoslav was moderately correlated with both municipal population (cor = `r yug_pop_cor`) and the municipal population, log-scale (cor = `r yug_pop_log_cor`).
+
+#### Other Ethnic Groups
+
+The catch-all "other" ethnic group option comprised any individual not part of the three primary ethnicities comprising Bosnia and Herzegovina - Muslims, Croats, and Serbs - nor the pan-ethnic Yugoslav identity. The other identity comprised Jews, Roma, ethnic groups from elsewhere in Yugoslavia, and immigrant communities. Only `r num_other` individuals (`r perc_other`%) identified with this group.
+
+**MAP X.** Percent Identifying as Other ethnic groups in 1991, by municipality
+
+```{r other_map, echo=FALSE}
+
+prewar_other
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+No model found the percent of other ethnic groups to be statistically significant at the 0.05 level.
+
+### Change in Ethnic Group Proportions
+
+### Distance to Croatia and Yugoslavia
+
+### Deaths per Population
+
+Multiple models found a correlation between wartime deaths per pre-war municipal population and the proportion of nationalist and non-nationalist votes cast in 1997. Models A2, A1-FBiH, and A2-FBiH find greater proportions of deaths per capita resulted in lower proportions of non-nationalist vote shares. Similarly, model B2-FBiH found greater proportions of deaths per capita resulted in greater proportions of nationalist vote shares; models B2 and B1-FBiH found the same result, but were only statistically significant at the 0.1 level.
+
+Overall, municipalities that saw more deaths relative to their pre-war population were less likely to vote for non-nationalist parties and more likely to vote for nationalist parties. Notably, models excluding the Republika Srpska municipality Srebrenica found this relationship, as Srebrenica saw an elevated deaths per pre-war population metric due to many individuals fleeing from neighboring municipalities into the safe area of Srebrenica prior to being killed in the Srebrenica massacre.
+
+### Ethnic Fractionalization
+
+### FBiH Municipality
+
+### Sarajevo District
+
+Whether a municipality was part of the greater Sarajevo region was found to be correlated to the propotions of votes cast to nationalist parties, though only in Republika Srpska. These districts - East New Sarajevo, Istočna Ilidža, Istočni Stari Grad, Pale, and Trnovo-RS - were found to be more likely to vote for nationalist parties than other municipalities in Republika Srpska. Models B1-RS and B2-RS estimate municipalites that were in metro Sarajevo in Republika Srpska to vote an additional 0.164 (B1-RS) to 0.165 (B2-RS) percentage points towards nationalist parties, all else equal. Models B1-RS and B2-RS show statistical significance at the 0.1 level.
+
+### Votes Cast Outside of Municipality
+
+### Municiplality Area

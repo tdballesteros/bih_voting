@@ -27,7 +27,7 @@ municipality_metadata <- readxl::read_xlsx("Data/bih_postwar_municipality_metada
 voting_location_1997 <- read.csv("Formatted Data/voting_location_1997.csv")
 
 # load formatted shapefiles
-source("01-Format_shapefiles.R")
+source("01-Format_shapefiles.R", echo = FALSE)
 
 ### format data ------------------------------------------------------------------------------------
 #### census data 1991 ------------------------------------------------------------------------------
@@ -578,13 +578,13 @@ modelsummary(list("A1" = model_a1, "A2" = model_a2, "A3" = model_a3), output = "
 # A - Republika Srpska
 modelsummary(list("A1" = model_a1r, "A2" = model_a2r, "A3" = model_a3r), output = "markdown", stars = TRUE)
 # A - Federation
-modelsummary(list("A1" = model_a1r, "A2" = model_a2r, "A3" = model_a3r), output = "markdown", stars = TRUE)
+modelsummary(list("A1" = model_a1f, "A2" = model_a2f, "A3" = model_a3f), output = "markdown", stars = TRUE)
 
 # B - Entire Country
 modelsummary(list("B1" = model_b1, "B2" = model_b2, "B3" = model_b3), output = "markdown", stars = TRUE)
 # B - Republika Srpska
 modelsummary(list("B1" = model_b1r, "B2" = model_b2r, "B3" = model_b3r), output = "markdown", stars = TRUE)
 # B - Federation
-modelsummary(list("B1" = model_b1r, "B2" = model_b2r, "B3" = model_b3r), output = "markdown", stars = TRUE)
+modelsummary(list("B1" = model_b1f, "B2" = model_b2f, "B3" = model_b3f), output = "markdown", stars = TRUE)
 
 

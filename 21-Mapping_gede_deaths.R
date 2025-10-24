@@ -164,8 +164,6 @@ ucdp_deaths_absolute_prewar_municipalities_map <- ggplot2::ggplot() +
 ucdp_deaths_absolute_prewar_municipalities_map
 
 # per capita + event points
-gede_bih_geocoded_formatted <- 
-
 ucdp_deaths_per_capita_prewar_municipalities_points_map <- ggplot2::ggplot() +
   ggplot2::geom_sf(
     data = ucdp_deaths_prewar_municipality,

@@ -13,26 +13,57 @@ library(tidyverse)
 
 ### load data --------------------------------------------------------------------------------------
 # pre-war municipalities shapefile
-bih_prewar_municipalities_shapefile <- sf::st_read("Shape Files/prewar municipalities/AdminBound/BiH_municipalities.shp")
+bih_prewar_municipalities_shapefile <- sf::st_read("Shape Files/prewar municipalities/AdminBound/BiH_municipalities.shp", quiet = TRUE)
 
 # crosswalk for shapefile Id value and name of municipality
 bih_prewar_municipality_id_crosswalk <- readxl::read_xlsx("Data/bih_prewar_municipality_id_crosswalk.xlsx")
 
 # post-war municipality shapefile
-bih_postwar_municipalities_shapefile <- sf::st_read("Shape Files/admin3/BIH_adm3.shp")
+bih_postwar_municipalities_shapefile <- sf::st_read("Shape Files/admin3/BIH_adm3.shp", quiet = TRUE)
 
 # usora municipality shapefile
-bih_usora_shapefile <- sf::st_read("Shape Files/bih_usora_tesenj.shp")
+bih_usora_shapefile <- sf::st_read("Shape Files/bih_usora_tesenj.shp", quiet = TRUE)
 
 ### format prewar shapefile ------------------------------------------------------------------------
 bih_prewar_municipalities_shapefile <- bih_prewar_municipalities_shapefile %>%
   dplyr::left_join(bih_prewar_municipality_id_crosswalk, by = "Id") %>%
   dplyr::select(id = "Id", "municipality" = "Name", geometry) %>%
+  sf::st_make_valid()
+
+# Add Sarajevo Centar and Sarajevo Novi Grad
+
+# pull post-war Sarajevo Centar and Sarajevo Novi Grad shapes
+bih_sarajevo_postwar_centar <- bih_postwar_municipalities_shapefile %>%
+  dplyr::filter(NAME_3 == "Centar Sarajevo") %>%
+  dplyr::select(municipality = NAME_3) %>%
+  dplyr::mutate(
+    municipality = "Sarajevo Centar",
+    id = 108
+  )
+
+bih_sarajevo_postwar_novi_grad <- bih_postwar_municipalities_shapefile %>%
+  dplyr::filter(NAME_3 == "Novi Grad Sarajevo") %>%
+  dplyr::select(municipality = NAME_3) %>%
+  dplyr::mutate(
+    municipality = "Sarajevo Novi Grad",
+    id = 109
+  )
+
+# remove overlap with pre-war shapefile
+bih_prewar_removed_shapes <- sf::st_difference(bih_prewar_municipalities_shapefile,
+                                               bih_sarajevo_postwar_centar)
+
+bih_prewar_removed_shapes <- sf::st_difference(bih_prewar_removed_shapes,
+                                               bih_sarajevo_postwar_novi_grad)
+
+# append post-war shapefiles
+bih_prewar_municipalities_shapefile <- bih_prewar_removed_shapes %>%
+  dplyr::select(id, municipality, geometry) %>%
+  rbind(bih_sarajevo_postwar_centar, bih_sarajevo_postwar_novi_grad) %>%
   dplyr::mutate(
     mun_area = sf::st_area(geometry),
     mun_perimeter = sf::st_perimeter(geometry)
-  ) %>%
-  sf::st_make_valid()
+  )
 
 # write data
 sf::write_sf(bih_prewar_municipalities_shapefile, "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp")
@@ -85,7 +116,9 @@ bih_usora_entry <- sf::st_difference(country_total, country_hole) %>%
     ENGTYPE_3 = "Commune",
     NL_NAME_3 = NA,
     VARNAME_3 = NA
-    ) %>%
+    )
+
+bih_usora_entry <- bih_usora_entry %>%
   dplyr::rename(geometry = ncol(bih_usora_entry))
 
 bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_shapefile_formatted %>%
