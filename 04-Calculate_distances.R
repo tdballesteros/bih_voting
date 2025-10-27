@@ -7,7 +7,7 @@ library(tidyverse)
 
 ### load data --------------------------------------------------------------------------------------
 # load formatted shapefiles
-source("~/R/bih_voting/0X-Format_shapefiles.R", echo = FALSE)
+source("~/R/bih_voting/01-Format_shapefiles.R", echo = FALSE)
 
 # country outline
 bih_outline_shapefile <- sf::st_read("Shape Files/boundary/BIH_adm0.shp")
