@@ -1,9 +1,10 @@
 
 # This file formats Andreas Berger's pre-war and the Global Administrative Areas 2015 (v2.8)'s
-# post-war municipalities shapefiles. Due to issues saving files using special characters in the
-# Serbo-Croatian Latin alphabet, this script is sourced at the start of scripts needing the
-# formatted shapefiles. These shapefiles are exported as part of this script, but municipality names
-# contain formatting errors.
+# post-war municipalities shapefiles.
+
+# Due to issues saving files using special characters in the Serbo-Croatian Latin alphabet, this
+# script is sourced at the start of scripts needing the formatted shapefiles. These shapefiles are
+# exported as part of this script, but municipality names contain formatting errors.
 
 ### load libraries ---------------------------------------------------------------------------------
 library(sf)
@@ -13,16 +14,33 @@ library(tidyverse)
 
 ### load data --------------------------------------------------------------------------------------
 # pre-war municipalities shapefile
-bih_prewar_municipalities_shapefile <- sf::st_read("Shape Files/prewar municipalities/AdminBound/BiH_municipalities.shp", quiet = TRUE)
+bih_prewar_municipalities_shapefile <- sf::st_read(
+  "Shape Files/prewar municipalities/AdminBound/BiH_municipalities.shp",
+  quiet = TRUE
+  )
 
 # crosswalk for shapefile Id value and name of municipality
-bih_prewar_municipality_id_crosswalk <- readxl::read_xlsx("Data/bih_prewar_municipality_id_crosswalk.xlsx")
+bih_prewar_municipality_id_crosswalk <- readxl::read_xlsx(
+  "Data/bih_prewar_municipality_id_crosswalk.xlsx"
+  )
 
 # post-war municipality shapefile
-bih_postwar_municipalities_shapefile <- sf::st_read("Shape Files/admin3/BIH_adm3.shp", quiet = TRUE)
+bih_postwar_municipalities_shapefile <- sf::st_read(
+  "Shape Files/admin3/BIH_adm3.shp",
+  quiet = TRUE
+  )
+
+# postwar_alt <- sf::st_read("Shape Files/geoBoundaries-BIH-ADM3-all/geoBoundaries-BIH-ADM3.shp")
+# 
+# mapview(postwar_alt)
+# mapview(bih_postwar_municipalities_shapefile)
+
 
 # usora municipality shapefile
-bih_usora_shapefile <- sf::st_read("Shape Files/bih_usora_tesenj.shp", quiet = TRUE)
+bih_usora_shapefile <- sf::st_read(
+  "Shape Files/bih_usora_tesenj.shp",
+  quiet = TRUE
+  )
 
 ### format prewar shapefile ------------------------------------------------------------------------
 bih_prewar_municipalities_shapefile <- bih_prewar_municipalities_shapefile %>%
@@ -30,7 +48,8 @@ bih_prewar_municipalities_shapefile <- bih_prewar_municipalities_shapefile %>%
   dplyr::select(id = "Id", "municipality" = "Name", geometry) %>%
   sf::st_make_valid()
 
-# Add Sarajevo Centar and Sarajevo Novi Grad
+# Add approximated Sarajevo Centar and Sarajevo Novi Grad municipalities from the post-war
+# municipalities shapefile
 
 # pull post-war Sarajevo Centar and Sarajevo Novi Grad shapes
 bih_sarajevo_postwar_centar <- bih_postwar_municipalities_shapefile %>%
@@ -61,12 +80,15 @@ bih_prewar_municipalities_shapefile <- bih_prewar_removed_shapes %>%
   dplyr::select(id, municipality, geometry) %>%
   rbind(bih_sarajevo_postwar_centar, bih_sarajevo_postwar_novi_grad) %>%
   dplyr::mutate(
-    mun_area = sf::st_area(geometry),
-    mun_perimeter = sf::st_perimeter(geometry)
-  )
+    mun_area = units::set_units(sf::st_area(geometry), km^2),
+    mun_perimeter = units::set_units(sf::st_perimeter(geometry), km),
+  ) %>%
+  dplyr::select(id, municipality, mun_area, mun_perimeter, geometry)
 
 # write data
-sf::write_sf(bih_prewar_municipalities_shapefile, "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp")
+sf::write_sf(bih_prewar_municipalities_shapefile,
+             "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp",
+             layer_options = "ENCODING=UTF-8")
 
 ### format postwar shapefile -----------------------------------------------------------------------
 bih_tesenj_entry <- bih_postwar_municipalities_shapefile %>%
@@ -87,6 +109,17 @@ bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_sha
     NAME_3 == "Mostar" & NAME_1 == "Repuplika Srpska" ~ "Istočni Mostar",
     NAME_3 == "Trnovo" & NAME_1 == "Federacija Bosna i Hercegovina" ~ "Trnovo-FBIH",
     NAME_3 == "Trnovo" & NAME_1 == "Repuplika Srpska" ~ "Trnovo-RS",
+    # adjust names
+    NAME_3 == "Bosanska Gradiška" ~ "Gradiška",
+    NAME_3 == "Bosanska Kostajnica" ~ "Kostajnica",
+    NAME_3 == "Bosanski Brod" ~ "Brod",
+    NAME_3 == "Centar Sarajevo" ~ "Sarajevo Centar",
+    NAME_3 == "Doboj East" ~ "Doboj Istok",
+    NAME_3 == "Doboj South" ~ "Doboj Jug",
+    NAME_3 == "East New Sarajevo" ~ "Istočno Novo Sarajevo",
+    NAME_3 == "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+    NAME_3 == "Skender Vakuf / Kneževo" ~ "Skender Vakuf",
+    NAME_3 == "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
     .default = NAME_3
   ))
 
@@ -130,37 +163,13 @@ sf::sf_use_s2(TRUE)
 bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_shapefile_formatted %>%
   sf::st_make_valid() %>%
   dplyr::mutate(
-    mun_area = sf::st_area(geometry),
-    mun_perimeter = sf::st_perimeter(geometry)
-    )
+    mun_area = units::set_units(sf::st_area(geometry), km^2),
+    mun_perimeter = units::set_units(sf::st_perimeter(geometry), km)
+    ) %>%
+  dplyr::select(municipality = NAME_3, canton = NAME_2, entity = NAME_1, mun_area, mun_perimeter,
+                geometry)
 
 # write data
-sf::write_sf(bih_postwar_municipalities_shapefile_formatted, "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp")
-  
-
-
-
-# bih_prewar_shapefile <- sf::st_read("Shape Files/prewar municipalities/AdminBound/BiH_munic_area.shp")
-# 
-# plot_one_province <- function(shapefile = bih_prewar_shapefile, munid = 0){
-#   
-#   df <- shapefile %>%
-#     dplyr::mutate(
-#       color = ifelse(Id == munid, "blue", "gray")
-#     )
-#   
-#   
-#   map <- ggplot2::ggplot(data = df,
-#                          ggplot2::aes(fill = color)) +
-#     ggplot2::geom_sf() +
-#     # ggplot2::scale_fill_manual(values = color_palette) +
-#     ggplot2::theme_void()
-# 
-#   return(map)
-#   
-# }
-# 
-# plot_one_province(munid = 31)
-# 
-# mapview(bih_prewar_shapefile)
-
+sf::write_sf(bih_postwar_municipalities_shapefile_formatted,
+             "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+             layer_options = "ENCODING=UTF-8")

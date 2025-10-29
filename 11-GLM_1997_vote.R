@@ -26,8 +26,17 @@ municipality_metadata <- readxl::read_xlsx("Data/bih_postwar_municipality_metada
 # voting location 1997
 voting_location_1997 <- read.csv("Formatted Data/voting_location_1997.csv")
 
-# load formatted shapefiles
-source("01-Format_shapefiles.R", echo = FALSE)
+# load formatted prewar shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+)
+
+# load formatted postwar shapefile
+bih_postwar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+)
 
 ### format data ------------------------------------------------------------------------------------
 #### census data 1991 ------------------------------------------------------------------------------
@@ -210,26 +219,14 @@ voting_location_1997 <- voting_location_1997 %>%
   dplyr::select(municipality, votes_cast_in_district, votes_cast_out_district, total_votes_cast,
                 perc_cast_in, perc_cast_out, turnout_rate)
 
-#### municipality distances ------------------------------------------------------------------------
-municipality_distances <- municipality_distances %>%
-  # convert from m to km
-  dplyr::mutate(
-    dist_hrv = dist_hrv / 1000000,
-    dist_srb = dist_srb / 1000000,
-    dist_mne = dist_mne / 1000000,
-    dist_yug = dist_yug / 1000000,
-    dist_other_country = dist_other_country / 1000000,
-    dist_internal_border = dist_internal_border / 1000000
-    )
-
 #### shapefile -------------------------------------------------------------------------------------
 municipalities_data <- bih_postwar_municipalities_shapefile_formatted %>%
   as.data.frame() %>%
-  dplyr::select(municipality = NAME_3, mun_area_m = mun_area, mun_perimeter_m = mun_perimeter) %>%
   dplyr::mutate(
-    mun_area_km = mun_area_m / 1000000,
-    mun_perimeter_km = mun_perimeter_m / 1000000
-  )
+    mun_area = units::set_units(mun_area, km^2),
+    mun_perimeter = units::set_units(mun_perimeter, km)
+  ) %>%
+  dplyr::select(municipality = NAME_3, mun_area, mun_perimeter)
 
 census_data_2013 <- census_data_2013 %>%
   dplyr::mutate(
@@ -242,9 +239,8 @@ census_data_2013 <- census_data_2013 %>%
 
 municipalities_data <- municipalities_data %>%
   dplyr::full_join(census_data_2013, by = "municipality") %>%
-  dplyr::mutate(density_2013 = total_2013 / mun_area_km) %>%
-  dplyr::select(municipality, mun_area_m, mun_perimeter_m, mun_area_km, mun_perimeter_km,
-                density_2013)
+  dplyr::mutate(density_2013 = total_2013 / mun_area) %>%
+  dplyr::select(municipality, mun_area, mun_perimeter, density_2013)
 
 ### combine data -----------------------------------------------------------------------------------
 df <- voting_data_1997 %>%

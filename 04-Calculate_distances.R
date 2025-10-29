@@ -6,17 +6,23 @@ library(geodata)
 library(tidyverse)
 
 ### load data --------------------------------------------------------------------------------------
-# load formatted shapefiles
-source("~/R/bih_voting/01-Format_shapefiles.R", echo = FALSE)
+# load formatted prewar shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+  )
+
+# load formatted postwar shapefile
+bih_postwar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+  )
 
 # country outline
-bih_outline_shapefile <- sf::st_read("Shape Files/boundary/BIH_adm0.shp")
+bih_outline_shapefile <- sf::st_read("Shape Files/boundary/BIH_adm0.shp", quiet = TRUE)
 
 # post-war entity shapefile
-bih_postwar_entities_shapefile <- sf::st_read("Shape Files/admin1/BIH_adm1.shp")
-
-# post-war municipality shapefile
-# bih_postwar_municipalities_shapefile_formatted <- sf::st_read("Shape Files/admin3/BIH_adm3.shp")
+bih_postwar_entities_shapefile <- sf::st_read("Shape Files/admin1/BIH_adm1.shp", quiet = TRUE)
 
 # load shapefiles for countries surrounding Bosnia and Herzegovina
 hrv_shapefile <- geodata::gadm(country = "HRV", level = 0)
@@ -49,15 +55,15 @@ sf::sf_use_s2(TRUE)
 sf::write_sf(internal_lines, "Shape Files/internal_entity_division_shapefile.shp")
 
 # calculate distances from each municipality to HRV, SRB, MNE and rump YUG
-mun_distances <- bih_postwar_municipalities_shapefile_formatted %>%
+mun_distances <- bih_postwar_municipalities_shapefile %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
-    dist_hrv = sf::st_distance(geometry, sf::st_as_sf(hrv_shapefile)),
-    dist_srb = sf::st_distance(geometry, sf::st_as_sf(srb_shapefile)),
-    dist_mne = sf::st_distance(geometry, sf::st_as_sf(mne_shapefile)),
-    dist_yug = sf::st_distance(geometry, sf::st_as_sf(yug_shapefile)),
+    dist_hrv = units::set_units(sf::st_distance(geometry, sf::st_as_sf(hrv_shapefile))[,1], km),
+    dist_srb = units::set_units(sf::st_distance(geometry, sf::st_as_sf(srb_shapefile))[,1], km),
+    dist_mne = units::set_units(sf::st_distance(geometry, sf::st_as_sf(mne_shapefile))[,1], km),
+    dist_yug = units::set_units(sf::st_distance(geometry, sf::st_as_sf(yug_shapefile))[,1], km),
     dist_other_country = min(dist_hrv, dist_yug),
-    dist_internal_border = sf::st_distance(geometry, internal_lines)
+    dist_internal_border = units::set_units(sf::st_distance(geometry, internal_lines)[,1], km)
   ) %>%
   as.data.frame() %>%
   dplyr::select(municipality = NAME_3, dist_hrv, dist_srb, dist_mne, dist_yug, dist_other_country,
