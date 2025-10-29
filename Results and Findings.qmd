@@ -20,6 +20,9 @@ source("~/R/bih_voting/1X-Mapping_population.R", echo = FALSE)
 # source death maps
 source("~/R/bih_voting/2X-Mapping_death_data.R", echo = FALSE)
 
+# population model relationship graph
+source("~/R/bih_voting/XX-Population_relationship_graph.R", echo = FALSE)
+
 ```
 
 ## Overall Findings
@@ -48,23 +51,32 @@ Models B1-FBiH, B2-FBiH, and B3-FBiH (see Table 6) assess vote proportions for n
 
 `r modelsummary::modelsummary(list("B1-FBiH" = model_b1f, "B2-FBiH" = model_b2f, "B3-FBiH" = model_b3f), output = "flextable", stars = TRUE)`
 
-## Population
-Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people; Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people.
+### Population
+Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people.
 
-Models A2, A3, A3-FBiH, B3, and B3-FBiH found the 1991 municipality population, logged scale, to be statistically significant at the 0.05 level, while models A1 and B2 found it to be significant at the 0.1 level.
+Several models found statistically significant relations showing municipalities with larger pre-war populations were more likely to vote for nationalist parties and less likely to vote for for non-nationalist parties.
 
-The results were inconsistent, with models A1, A2, B3-FBiH finding larger populations correlated with a decrease in the non-nationalist share of the vote. Models A3, A3-FBiH, B2, and B3, however found a positive correlation between population and non-nationalist vote shares.
+Model A2 found this trend across all municipalities. Models A1 and A2-FBiH found the same trend, though only at the α = 0.1 confidence level. Figure X shows the modeled relationship between pre-war municipal population and predicted proportion of non-nationalist votes.
+
+**FIGURE X.** Modeled relationship of Pre-War Population on Proportion of Non-Nationationalist Votes
+```{r pop_relationship_graph, echo=FALSE, fig.align = 'center'}
+
+pop_relationship_graph
+
+```
+[*Notes: Model A2 found pre-war population, logged scale, to be statistically significant, while Models A1 and A2-FBiH only found it significant at the α = 0.1 confidence level. Source: Author calculations; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+Models B2 found the same trend in reverse: municipalities with larger pre-war populations were more likely to vote for nationalist political parties.
 
 ### Ethnic Group Proportions
 
 ```{r ethinc_group_proportions, echo=FALSE}
 
-
 ## YUGOSLAVS
 num_yugoslav <- sum(census_data_1991$yugoslavs)
 perc_yugoslav <- round(100 * sum(census_data_1991$yugoslavs) / sum(census_data_1991$total), 2)
 
-yug_pop_cor <- round(cor(df$`Percent Yugoslavs, 1991`, df$total_1991), 4)
+yug_pop_cor <- round(cor(df$`Percent Yugoslavs, 1991`, df$`Population 1991`), 4)
 yug_pop_log_cor <- round(cor(df$`Percent Yugoslavs, 1991`, df$`Population 1991, logged`), 4)
 
 ## OTHER
@@ -76,7 +88,7 @@ perc_other <- round(100 * sum(census_data_1991$other) / sum(census_data_1991$tot
 #### Muslims/Bosniaks
 
 **MAP X.** Percent Identifying as Muslim in 1991, by municipality
-```{r muslim_map, echo=FALSE}
+```{r muslim_map, echo=FALSE, fig.align = 'center'}
 
 prewar_muslims
 
@@ -86,7 +98,7 @@ prewar_muslims
 #### Croats
 
 **MAP X.** Percent Identifying as Croat in 1991, by municipality
-```{r croat_map, echo=FALSE}
+```{r croat_map, echo=FALSE, fig.align = 'center'}
 
 prewar_croats
 
@@ -95,7 +107,7 @@ prewar_croats
 
 #### Serbs
 **MAP X.** Percent Identifying as Serb in 1991, by municipality
-```{r serb_map, echo=FALSE}
+```{r serb_map, echo=FALSE, fig.align = 'center'}
 
 prewar_serbs
 
@@ -106,7 +118,7 @@ prewar_serbs
 People identifying as a pan-ethnic Yugoslav identity was limited even several generations after the formation of Yugoslavia, with only 8 pre-war municipalities having at least 10% of the population identifying as Yugoslav on the 1991 census (see Map X): Banja Luka, Bosanski Brod, Mostar, Sarajevo (Centar, Novo Sarajevo, Novi Grad), Tuzla, Zenica. Notably, these also correspond with some of the largest, most urbane communities in the country. Tuzla saw the largest proportion identify as Yugoslav, at just 16.7% of the population; Tuzla municipality had the 4th highest population in 1991. In total, `r num_yugoslav` people identified as Yugoslav, or `r perc_yugoslav`% of the population.
 
 **MAP X.** Percent Identifying as Yugoslav in 1991, by municipality
-```{r yugoslav_map, echo=FALSE}
+```{r yugoslav_map, echo=FALSE, fig.align = 'center'}
 
 prewar_yugoslav
 
@@ -126,7 +138,7 @@ As mentioned before, higher proportions of people identified as Yugoslav in Bosn
 The catch-all "other" ethnic group option comprised any individual not part of the three primary ethnicities comprising Bosnia and Herzegovina - Muslims, Croats, and Serbs - nor the pan-ethnic Yugoslav identity. The other identity comprised Jews, Roma, ethnic groups from elsewhere in Yugoslavia, and immigrant communities. Only `r num_other` individuals (`r perc_other`%) identified with this group.
 
 **MAP X.** Percent Identifying as Other ethnic groups in 1991, by municipality
-```{r other_map, echo=FALSE}
+```{r other_map, echo=FALSE, fig.align = 'center'}
 
 prewar_other
 
