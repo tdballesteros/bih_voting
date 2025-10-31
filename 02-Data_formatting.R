@@ -210,11 +210,13 @@ census_data_2013 <- readxl::read_xlsx("Data/bih_census_2013.xlsx") %>%
       "Foča-RS" ~ "Foča",
       "Gornji Vakuf - Uskoplje" ~ "Gornji Vakuf-Uskoplje",
       "Kneževo" ~ "Skender Vakuf",
+      "Kupres-FBiH" ~ "Kupres-FBIH",
       "Kozarska Dubica" ~ "Dubica",
       "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
       "Pale-FBiH" ~ "Pale-Prača",
       "Pale-RS" ~ "Pale",
       "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Trnovo-FBiH" ~ "Trnovo-FBIH",
       # "Brod" ~ "Bosanski Brod",
       # "Doboj - Istok" ~	"Doboj East",
       # "Doboj - Jug" ~	"Doboj South",
@@ -357,6 +359,7 @@ seat_tally <- read.csv("Data/bih_municipal_elections_97_seat_allocation.csv") %>
     voters = Voters,
     `SRS*` = `SRS....`
   ) %>%
+  dplyr::filter(!municipality %in% c("TOTAL", "")) %>%
   dplyr::mutate(
     # rename post-war municipalities to standardize names
     municipality = dplyr::case_match(
@@ -434,84 +437,16 @@ seat_tally <- read.csv("Data/bih_municipal_elections_97_seat_allocation.csv") %>
       "Zavidovici" ~ "Zavidovići",
       "Zepce" ~ "Žepče",
       "Zivinice" ~ "Živinice",
-      # "Banovici" ~ "Banovići",
-      # "Bihac" ~ "Bihać",
-      # "Bileca" ~ "Bileća",
-      # "Bosanska Dubica" ~ "Kozarska Dubica",
-      # "Bosanska Gradiska" ~ "Gradiška",
-      # "Bosanska Krupa RS" ~ "Krupa na Uni",
-      # "Bosanski Brod" ~ "Brod",
-      # "Bosanski Novi" ~ "Novi Grad",
-      # "Bosanski Petrovac RS" ~ "Petrovac",
-      # "Bosanski Samac" ~ "Šamac",
-      # "Busovaca" ~ "Busovača",
-      # "Brcko" ~ "Brčko",
-      # "Buzim" ~ "Bužim",
-      # "Cajnice" ~ "Čajniče",
-      # "Capljina" ~ "Čapljina",
-      # "Celinac" ~ "Čelinac",
-      # "Citluk" ~ "Čitluk",
-      # "Drvar RS" ~ "Istočni Drvar",
-      # "Foca" ~ "Foča-RS",
-      # "Glamoc" ~ "Glamoč",
-      # "Gorazde" ~ "Goražde",
-      # "Gorazde RS" ~ "Novo Goražde",
-      # "Gornji Vakuf" ~ "Gornji Vakuf - Uskoplje",
-      # "Gracanica" ~ "Gračanica",
-      # "Gracanica RS" ~ "Petrovo",
-      # "Gradacac" ~ "Gradačac",
-      # "Gradacac RS" ~ "Pelagićevo",
-      # "Hadzici" ~ "Hadžići",
-      # "Ilidza" ~ "Ilidža",
-      # "Ilidza Rs" ~ "Istočna Ilidža",
-      # "Ilijas" ~ "Ilijaš",
-      # "Jajce RS" ~ "Jezero",
-      # "Kalesija RS" ~ "Osmaci",
-      # "Kljuc" ~ "Ključ",
-      # "Kljuc" ~ "Ribnik",
-      # "Kotor Varos" ~ "Kotor Varoš",
-      # "Kresevo" ~ "Kreševo",
-      # "Kupres" ~ "Kupres-FBiH",
-      # "Kupres RS" ~ "Kupres-RS",
-      # "Laktasi" ~ "Laktaši",
-      # "Ljubuski" ~ "Ljubuški",
-      # "Lopare RS" ~ "Čelić",
-      # "Modrica" ~ "Modriča",
-      # "Mostar RS" ~ "Istočni Mostar",
-      # "Mrkonjić Grad" ~ "Mrkonjić Grad",
-      # "Novo Sarajevo RS" ~ "Istočno Novo Sarajevo",
-      # "Odzak" ~ "Odžak",
-      # "Odzak RS" ~ "Vukosavlje",
-      # "Orasje" ~ "Orašje",
-      # "Orasje RS" ~ "Donji Žabar",
       # "Pale" ~ "Pale-RS",
-      # "Posusje" ~ "Posušje",
-      # "Prozor" ~ "Prozor-Rama",
-      # "Sanski Most RS" ~ "Oštra Luka",
-      # "Sekovici" ~ "Šekovići",
-      # "Sipovo" ~ "Šipovo",
-      # "Siroki Brijeg" ~ "Široki Brijeg",
       # "Skender Vakuf" ~ "Kneževo",
       # "Stari Grad Sarajevo RS" ~ "Istočni Stari Grad",
-      # "Berkovici" ~ "Berkovići",
-      # "Tesanj" ~ "Tešanj",
-      # "Teslic" ~ "Teslić",
-      # "Trnovo" ~ "Trnovo-FBiH",
-      # "Trnovo RS" ~ "Trnovo-RS",
-      # "Vares" ~ "Vareš",
-      # "Velika Kladusa" ~ "Velika Kladuša",
-      # "Visegrad" ~ "Višegrad",
-      # "Vogosca" ~ "Vogošća",
-      # "Zavidovici" ~ "Zavidovići",
-      # "Zepce" ~ "Žepče",
-      # "Zivinice" ~ "Živinice",
-      # collapse portions of Mostar (FBIH) municipality
-      "Mostar Jug" ~ "Mostar",
-      "Mostar Jugoistok" ~ "Mostar",
-      "Mostar Jugozapad" ~ "Mostar",
-      "Mostar Sjever" ~ "Mostar",
-      "Mostar Stari Grad" ~ "Mostar",
-      "Mostar Zapad" ~ "Mostar",
+      # # collapse portions of Mostar (FBIH) municipality
+      # "Mostar Jug" ~ "Mostar",
+      # "Mostar Jugoistok" ~ "Mostar",
+      # "Mostar Jugozapad" ~ "Mostar",
+      # "Mostar Sjever" ~ "Mostar",
+      # "Mostar Stari Grad" ~ "Mostar",
+      # "Mostar Zapad" ~ "Mostar",
       .default = municipality
     )) %>%
   dplyr::arrange(municipality)
@@ -557,8 +492,6 @@ voting_location_1997 <- readxl::read_xlsx("Data/bih_voting_location_1997.xlsx") 
   dplyr::select(municipality = Municipality, votes_cast_in_district = NumInDist,
                 votes_cast_out_district = NumOutDist, total_votes_cast = TotalVotes) %>%
   dplyr::mutate(
-    perc_cast_in = votes_cast_in_district / total_votes_cast,
-    perc_cast_out = votes_cast_out_district / total_votes_cast,
     # rename post-war municipalities to standardize names
     municipality = dplyr::case_match(
       municipality,
@@ -569,16 +502,33 @@ voting_location_1997 <- readxl::read_xlsx("Data/bih_voting_location_1997.xlsx") 
       "Doboj-Jug" ~ "Doboj Jug",
       "Foča-FBiH" ~ "Foča-Ustikolina",
       "Istočna Mostar" ~ "Istočni Mostar",
+      "Kupres-FBiH" ~ "Kupres-FBIH",
       "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
       "Pale-FBiH" ~ "Pale-Prača",
       "Pale-RS" ~ "Pale",
       "Skender Vakuf / Kneževo" ~ "Skender Vakuf",
       "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Trnovo-FBiH" ~ "Trnovo-FBIH",
+      # collapse portions of Mostar (FBIH) municipality
+      "Mostar Jug" ~ "Mostar",
+      "Mostar Jugoistok" ~ "Mostar",
+      "Mostar Jugozapad" ~ "Mostar",
+      "Mostar Sjever" ~ "Mostar",
+      "Mostar Stari Grad" ~ "Mostar",
+      "Mostar Zapad" ~ "Mostar",
       .default = municipality
     )
   ) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(
+    votes_cast_in_district = sum(votes_cast_in_district, na.rm = TRUE),
+    votes_cast_out_district = sum(votes_cast_out_district, na.rm = TRUE),
+    total_votes_cast = sum(total_votes_cast, na.rm = TRUE),
+    perc_cast_in = votes_cast_in_district / total_votes_cast,
+    perc_cast_out = votes_cast_out_district / total_votes_cast,
+  ) %>%
+  dplyr::ungroup() %>%
   dplyr::arrange(municipality)
 
 # write formatted data
 write.csv(voting_location_1997, "Formatted Data/voting_location_1997.csv", row.names = FALSE)
-
