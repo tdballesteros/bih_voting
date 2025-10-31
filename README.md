@@ -10,6 +10,9 @@ This project assesses the voting patterns in Bosnia and Herzegovina in the first
 ## Shapefiles
 Post-war Bosnia and Herzegovina shapefiles are from the University of California, Berkeley and Museum of Vertebrate Zoology (2015) and the International Rice Research Institute and created by Robert J. Hijmans as part of the Global Administrative Areas 2015 (v2.8) dataset. The Inter-Ethnic Boundary Line (IEBL) - the line demarcating Republika Srpska, the Federation, and Brčko District - is derived from the municipality-level shapefile.
 
+new: 
+https://data.humdata.org/dataset/geoboundaries-admin-boundaries-for-bosnia-and-herzegovina
+
 The datasets are available here:
 https://earthworks.stanford.edu/catalog/stanford-bt512fj0408
 https://earthworks.stanford.edu/catalog/stanford-nj241sn6981
