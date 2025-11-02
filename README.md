@@ -37,6 +37,9 @@ Bosnia and Herzegovina's 1997 municipal election result data comes from the Cent
 ## Death Data
 Geo-referenced death data comes from two sources. The first comes from the Research and Documentation Centre Sarajevo Database and Costalli & Moro (2012). The second comes from the UCDP Georeferenced Event Dataset (GED) Global version 25.1 (Davies, Pettersson, Sollenberg, and Öberg, 2025; Sundberg and Melander 2013).
 
+## Minefield data
+https://www.icrc.org/sites/default/files/external/doc/en/assets/files/other/silent-menace-bosnia-herzegovina-57jp32-010298.pdf
+
 
 # Works Cited
 Agencija za statistiku Bosne i Hercegovine, (2016). Popis stanovništva, domaćinstava i stanova u Bosni I Hercegovini, 2013. Rezultati popisa [Cenzus of population, households and dwellings in Bosnia and Herzegovina, 2013: Final results]. Sarajevo, Bosnia and Herzegovina: Bosnia and Herzegovina.

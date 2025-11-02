@@ -1,109 +1,109 @@
 "municipality","count_of_events","best","high","low"
 "Banja Luka",3,10,10,10
 "Banovići",14,18,18,18
-"Bihać",445,2537,2773,2530
+"Bihać",451,2623,3009,2532
 "Bijeljina",1,1,1,1
-"Bosanska Gradiška",4,11,11,9
 "Bosanska Krupa",252,792,944,783
-"Bosanski Brod",137,808,837,808
 "Bosanski Petrovac",8,194,289,194
-"Bosansko Grahovo",36,117,181,117
-"Bratunac",78,626,720,626
+"Bosansko Grahovo",36,116,343,116
+"Bratunac",75,568,645,568
 "Breza",6,8,8,8
-"Brčko",404,4981,4993,4840
+"Brod",137,808,837,808
+"Brčko",407,4984,5062,4843
 "Bugojno",99,697,704,684
-"Busovača",58,227,247,222
+"Busovača",60,228,249,223
 "Bužim",5,11,111,11
 "Cazin",126,342,527,339
 "Derventa",86,557,587,476
-"Doboj",360,1243,1517,1193
-"Doboj East",1,12,12,12
-"Doboj South",2,7,7,7
+"Doboj",363,1272,1546,1222
+"Doboj Jug",1,2,2,2
 "Domaljevac-Šamac",1,1,1,1
-"Donji Vakuf",45,130,430,95
+"Donji Vakuf",46,141,441,106
 "Drvar",6,20,20,20
 "Dubica",5,58,115,58
-"East New Sarajevo",17,139,151,128
 "Fojnica",87,316,316,274
 "Foča",16,103,104,103
-"Foča-Ustikolina",3,37,37,37
-"Glamoč",17,63,63,63
+"Foča-Ustikolina",3,28,28,28
+"Glamoč",18,64,78,64
 "Goražde",364,2461,2924,2208
 "Gornji Vakuf-Uskoplje",216,749,749,698
-"Gradačac",242,995,1006,994
+"Gradačac",240,991,1002,990
+"Gradiška",4,11,11,9
 "Gračanica",29,47,50,47
-"Hadžići",6,79,79,79
-"Ilidža",19,183,185,120
-"Ilijaš",27,76,78,76
+"Hadžići",4,46,46,46
+"Ilidža",21,216,218,153
+"Ilijaš",28,77,79,77
 "Istočna Ilidža",2,2,3,2
 "Istočni Stari Grad",2,31,201,21
-"Jablanica",85,326,326,326
+"Jablanica",83,322,322,322
 "Jajce",134,775,778,736
-"Kakanj",26,167,167,167
+"Kakanj",27,170,170,170
 "Kalesija",129,452,557,419
-"Kalinovik",20,118,377,75
+"Kalinovik",65,199,238,198
 "Kiseljak",117,325,380,325
 "Kladanj",23,57,57,54
 "Ključ",33,397,397,349
-"Konjic",176,512,655,510
+"Konjic",119,403,546,381
 "Kreševo",52,131,134,123
 "Kupres-FBIH",34,132,132,97
-"Livno",24,43,43,43
-"Lopare",7,22,98,12
-"Lukavac",3,7,7,7
-"Maglaj",166,616,627,559
+"Livno",27,43,293,43
+"Lopare",32,193,488,145
+"Lukavac",12,68,68,68
+"Maglaj",174,733,831,573
 "Milići",1,3,3,3
-"Modriča",55,230,230,230
-"Mostar",464,2711,3040,2484
+"Modriča",58,237,237,237
+"Mostar",493,2808,3207,2581
 "Mrkonjić Grad",5,292,295,292
 "Nevesinje",58,370,370,370
 "Novi Grad",63,153,153,151
-"Novi Grad Sarajevo",2,103,103,103
-"Novi Travnik",21,58,62,58
+"Novi Travnik",20,57,61,57
 "Novo Goražde",3,6,11,6
-"Novo Sarajevo",728,3753,4621,3413
+"Novo Sarajevo",727,3751,4619,3411
 "Odžak",7,38,58,38
-"Olovo",47,151,151,151
+"Olovo",49,154,154,154
 "Orašje",147,349,349,327
 "Osmaci",1,4,4,4
-"Pale",1,6,6,6
-"Pelagićevo",1,3,3,3
-"Petrovo",10,140,144,20
+"Pale",2,18,18,18
+"Petrovo",9,137,141,17
 "Posušje",2,59,59,9
 "Prijedor",95,3254,3258,1255
-"Prozor-Rama",49,237,237,227
+"Prozor-Rama",50,243,243,233
+"Ravno",1,1,1,1
 "Rogatica",194,1273,1316,1222
-"Sanski Most",59,746,746,599
+"Rudo",1,4,4,4
+"Sanski Most",60,746,770,599
 "Sapna",2,1,76,1
-"Skender Vakuf / Kneževo",2,8,15,8
+"Sarajevo Novi Grad",18,141,153,130
+"Skender Vakuf",2,8,15,8
 "Sokolac",3,3,3,3
-"Srebrenica",357,15215,15401,15176
-"Stolac",16,52,52,52
+"Srebrenica",362,15315,15501,15276
+"Stolac",15,46,46,46
 "Teočak",5,11,211,11
-"Teslić",194,463,523,463
-"Tešanj",251,510,534,510
+"Teslić",199,585,653,515
+"Tešanj",251,513,537,513
 "Tomislavgrad",1,12,12,12
-"Travnik",382,1866,2298,1836
+"Travnik",390,1888,2328,1858
 "Trebinje",34,108,108,108
-"Trnovo-FBIH",2,0,74,0
-"Trnovo-RS",92,378,478,348
-"Tuzla",182,763,1015,673
-"Usora",4,18,23,18
-"Vareš",67,291,291,226
+"Trnovo-FBIH",108,430,786,358
+"Trnovo-RS",1,0,38,0
+"Tuzla",155,677,764,587
+"Usora",5,7,12,7
+"Vareš",66,288,288,223
 "Velika Kladuša",302,1128,1192,1101
 "Visoko",7,9,10,9
 "Vitez",286,1552,1609,1542
 "Višegrad",29,135,135,85
 "Vlasenica",10,51,477,51
-"Vogošća",4,27,30,7
+"Vogošća",6,130,133,110
 "Vukosavlje",47,111,111,111
-"Zavidovići",143,505,569,505
-"Zenica",90,243,249,237
-"Zvornik",215,1566,1650,1566
+"Zavidovići",142,503,567,503
+"Zenica",91,255,869,249
+"Zvornik",218,1616,1704,1616
 "Čajniče",7,66,66,66
-"Čapljina",36,84,84,84
+"Čapljina",37,90,90,90
 "Čelinac",1,3,3,3
+"Čelić",5,12,13,12
 "Šamac",35,105,105,105
-"Žepče",106,440,544,438
-"Živinice",12,150,205,112
-NA,9,133,142,133
+"Žepče",105,439,543,437
+"Živinice",1,1,1,1
+NA,3,40,62,40

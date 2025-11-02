@@ -15,6 +15,18 @@ census_data_1991 <- read.csv("Formatted Data/census_data_1991_formatted.csv")
 # load formatted shapefiles
 source("01-Format_shapefiles.R")
 
+# load formatted prewar shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_prewar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+)
+
+# load formatted postwar shapefile
+bih_postwar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+)
+
 ### format data ------------------------------------------------------------------------------------
 gede_bih <- gede %>%
   dplyr::filter(
@@ -52,12 +64,13 @@ sum(gede_bih_geocoded$best, na.rm = FALSE)
 
 ### prewar municipality mapping --------------------------------------------------------------------
 # confirm CRSs match
-sf::st_crs(gede2)$proj4string
+sf::st_crs(gede_bih_geocoded)$proj4string
 sf::st_crs(bih_prewar_municipalities_shapefile)$proj4string
+# both WGS84
 
 # spatial join
 gede_municipality_prewar_assignment <- sf::st_join(
-  gede2,
+  gede_bih_geocoded,
   bih_prewar_municipalities_shapefile,
   join = st_within,
   left = TRUE
@@ -65,6 +78,7 @@ gede_municipality_prewar_assignment <- sf::st_join(
 
 # collapse by municipality
 gede_municipality_prewar_counts <- gede_municipality_prewar_assignment %>%
+  dplyr::rename(municipality = mncplty) %>%
   dplyr::group_by(municipality) %>%
   dplyr::summarise(
     count_of_events = n(),
@@ -92,24 +106,26 @@ write.csv(gede_municipality_prewar_counts,
           row.names = FALSE)
 
 ### postwar municipality mapping -------------------------------------------------------------------
-bih_postwar_municipalities_shapefile_formatted <- bih_postwar_municipalities_shapefile_formatted %>%
+bih_postwar_municipalities_shapefile <- bih_postwar_municipalities_shapefile %>%
   sf::st_make_valid()
 
 # confirm CRSs match
-sf::st_crs(gede2)$proj4string
-sf::st_crs(bih_postwar_municipalities_shapefile_formatted)$proj4string
+sf::st_crs(gede_bih_geocoded)$proj4string
+sf::st_crs(bih_postwar_municipalities_shapefile)$proj4string
+# both WGS84
 
 # spatial join
 gede_municipality_postwar_assignment <- sf::st_join(
-  gede2,
-  bih_postwar_municipalities_shapefile_formatted,
+  gede_bih_geocoded,
+  bih_postwar_municipalities_shapefile,
   join = st_within,
   left = TRUE
 )
 
 # collapse by municipality
 gede_municipality_postwar_counts <- gede_municipality_postwar_assignment %>%
-  dplyr::group_by(NAME_3) %>%
+  dplyr::rename(municipality = mncplty) %>%
+  dplyr::group_by(municipality) %>%
   dplyr::summarise(
     count_of_events = n(),
     best = sum(best, na.rm = TRUE),
@@ -117,7 +133,6 @@ gede_municipality_postwar_counts <- gede_municipality_postwar_assignment %>%
     low = sum(low, na.rm = TRUE)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::rename(municipality = NAME_3) %>%
   dplyr::arrange(municipality) %>%
   as.data.frame() %>%
   dplyr::select(-geometry)

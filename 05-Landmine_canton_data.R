@@ -67,7 +67,7 @@ fbih_area <- bih_postwar_municipalities_shapefile %>%
   as.data.frame() %>%
   dplyr::full_join(canton_area_formatted, by = "canton")
 
-### minefields -------------------------------------------------------------------------------
+### minefields 1 -----------------------------------------------------------------------------------
 # landmines
 landmines1 <- landmines %>%
   dplyr::select(canton = `Federation:`, minefields = Minefields) %>%
@@ -99,37 +99,4 @@ landmines1 <- landmines1 %>%
 
 # write formatted data
 write.csv(landmines1, "Formatted Data/landmines_1997.csv", row.names = FALSE)
-
-### minefields -------------------------------------------------------------------------------
-# landmines
-landmines2 <- landmines %>%
-  dplyr::select(canton = `Federation:`, minefields = Minefields) %>%
-  replace(is.na(.), 0) %>%
-  dplyr::mutate(canton = ifelse(canton == "Republika Srpska:", "Republika Srpska", canton)) %>%
-  dplyr::filter(canton != "Total:") %>%
-  dplyr::full_join(canton_area, by = "canton") %>%
-  dplyr::mutate(
-    minefields_per_sq_km = minefields / canton_area
-  )
-
-# replace Republika Srpska-wide estimate with canton entries
-
-# pull rs density estimate
-rs_minefield_density_est <- landmines$minefields_per_sq_km[landmines$canton == "Republika Srpska"]
-
-landmines_rs_cantons <- data.frame(
-  canton = c("Banja Luka", "Bijeljina", "Brčko", "Doboj", "Foča", "Istočno Sarajevo",
-             "Trebinje", "Vlasenica"),
-  minefields_per_sq_km = rep(rs_minefield_density_est, 8)
-)
-
-# append data
-landmines <- landmines %>%
-  dplyr::select(canton, minefields_per_sq_km) %>%
-  dplyr::filter(canton != "Republika Srpska") %>%
-  rbind(landmines_rs_cantons) %>%
-  dplyr::arrange(canton)
-
-# write formatted data
-write.csv(landmines, "Formatted Data/landmines_1997.csv", row.names = FALSE)
 
