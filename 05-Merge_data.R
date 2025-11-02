@@ -3,6 +3,7 @@
 
 ### load libraries ---------------------------------------------------------------------------------
 library(sf)
+library(jsonlite)
 library(readxl)
 library(openxlsx)
 library(dplyr)
@@ -164,3 +165,48 @@ openxlsx::write.xlsx(
   prewar_data_assigned_to_postwar,
   "Formatted Data/data_prewar_assigned_postwar.xlsx"
   )
+
+### create shapefile versions ----------------------------------------------------------------------
+prewar_data_shapefile <- bih_prewar_municipalities_shapefile %>%
+  dplyr::select(Municipality = mncplty, geometry) %>%
+  dplyr::full_join(prewar_data, by = "Municipality") %>%
+  dplyr::relocate(geometry, .after = last_col())
+
+# write data
+sf::write_sf(prewar_data_shapefile,
+             "Shape Files/prewar_data_shapefile.shp",
+             layer_options = "ENCODING=UTF-8")
+
+jsonlite::write_json(prewar_data_shapefile,
+                     "Shape Files/prewar_data_shapefile.json",
+                     pretty = TRUE)
+
+postwar_data_shapefile <- bih_postwar_municipalities_shapefile %>%
+  dplyr::select(Municipality = mncplty, geometry) %>%
+  dplyr::full_join(postwar_data, by = "Municipality") %>%
+  dplyr::relocate(geometry, .after = last_col())
+
+# write data
+sf::write_sf(postwar_data_shapefile,
+             "Shape Files/postwar_data_shapefile.shp",
+             layer_options = "ENCODING=UTF-8")
+
+jsonlite::write_json(postwar_data_shapefile,
+                     "Shape Files/postwar_data_shapefile.json",
+                     pretty = TRUE)
+
+postwar_data_expanded_shapefile <- bih_postwar_municipalities_shapefile %>%
+  dplyr::select(Municipality = mncplty, geometry) %>%
+  dplyr::full_join(prewar_data_assigned_to_postwar, by = "Municipality") %>%
+  dplyr::full_join(postwar_data, by = "Municipality") %>%
+  dplyr::relocate(geometry, .after = last_col())
+
+# write data
+sf::write_sf(postwar_data_expanded_shapefile,
+             "Shape Files/postwar_data_expanded_shapefile.shp",
+             layer_options = "ENCODING=UTF-8")
+
+jsonlite::write_json(postwar_data_expanded_shapefile,
+                     "Shape Files/postwar_data_expanded_shapefile.json",
+                     pretty = TRUE)
+
