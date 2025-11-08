@@ -233,10 +233,10 @@ model_b1 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                   `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                   `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                  `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                  `Municipality Area, Post-War Logged` + `Federation Municipality` +
-                  `Sarajevo District` + `Muslim Population Percentage, 1991` +
-                  `Change in % Bosniaks, 1991 to 2013`,
+                  `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                  `Change in Population` + `Municipality Area, Post-War Logged` +
+                  `Federation Municipality` + `Sarajevo District` +
+                  `Muslim Population Percentage, 1991` + `Change in % Bosniaks, 1991 to 2013`,
                 data = df, family = gaussian())
 summary(model_b1)
 car::vif(model_b1)
@@ -249,9 +249,10 @@ model_b1r <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Muslim Population Percentage, 1991` + `Change in % Bosniaks, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Muslim Population Percentage, 1991` +
+                   `Change in % Bosniaks, 1991 to 2013`,
                  data = df_rs, family = gaussian())
 summary(model_b1r)
 car::vif(model_b1r)
@@ -264,9 +265,10 @@ model_b1f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Muslim Population Percentage, 1991` + `Change in % Bosniaks, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Muslim Population Percentage, 1991` +
+                   `Change in % Bosniaks, 1991 to 2013`,
                  data = df_fbih, family = gaussian())
 summary(model_b1f)
 car::vif(model_b1f)
@@ -281,10 +283,10 @@ model_b2 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                   `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                   `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                  `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                  `Municipality Area, Post-War Logged` + `Federation Municipality` +
-                  `Sarajevo District` + `Croat Population Percentage, 1991` +
-                  `Change in % Croats, 1991 to 2013`,
+                  `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                  `Change in Population` + `Municipality Area, Post-War Logged` +
+                  `Federation Municipality` + `Sarajevo District` +
+                  `Croat Population Percentage, 1991` + `Change in % Croats, 1991 to 2013`,
                 data = df, family = gaussian())
 summary(model_b2)
 car::vif(model_b2)
@@ -297,9 +299,10 @@ model_b2r <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Croat Population Percentage, 1991` + `Change in % Croats, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Croat Population Percentage, 1991` +
+                   `Change in % Croats, 1991 to 2013`,
                  data = df_rs, family = gaussian())
 summary(model_b2r)
 car::vif(model_b2r)
@@ -312,9 +315,10 @@ model_b2f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Croat Population Percentage, 1991` + `Change in % Croats, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Croat Population Percentage, 1991` +
+                   `Change in % Croats, 1991 to 2013`,
                  data = df_fbih, family = gaussian())
 summary(model_b2f)
 car::vif(model_b2f)
@@ -329,10 +333,10 @@ model_b3 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                   `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                   `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                  `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                  `Municipality Area, Post-War Logged` + `Federation Municipality` +
-                  `Sarajevo District` + `Serb Population Percentage, 1991` +
-                  `Change in % Serbs, 1991 to 2013`,
+                  `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                  `Change in Population` + `Municipality Area, Post-War Logged` +
+                  `Federation Municipality` + `Sarajevo District` +
+                  `Serb Population Percentage, 1991` + `Change in % Serbs, 1991 to 2013`,
                 data = df, family = gaussian())
 summary(model_b3)
 car::vif(model_b3)
@@ -345,9 +349,10 @@ model_b3r <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Serb Population Percentage, 1991` + `Change in % Serbs, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Serb Population Percentage, 1991` +
+                   `Change in % Serbs, 1991 to 2013`,
                  data = df_rs, family = gaussian())
 summary(model_b3r)
 car::vif(model_b3r)
@@ -360,9 +365,10 @@ model_b3f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                    `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                    `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                   `Distance to IEBL, Post-War` + `Population, 1991 Logged` +
-                   `Municipality Area, Post-War Logged` + `Sarajevo District` +
-                   `Serb Population Percentage, 1991` + `Change in % Serbs, 1991 to 2013`,
+                   `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
+                   `Change in Population` + `Municipality Area, Post-War Logged` +
+                   `Sarajevo District` + `Serb Population Percentage, 1991` +
+                   `Change in % Serbs, 1991 to 2013`,
                  data = df_fbih, family = gaussian())
 summary(model_b3f)
 car::vif(model_b3f)

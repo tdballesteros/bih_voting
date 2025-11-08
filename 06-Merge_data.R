@@ -113,7 +113,7 @@ postwar_data <- bih_postwar_municipalities_shapefile %>%
   dplyr::arrange(municipality) %>%
   dplyr::select(
     Municipality = municipality, Canton = canton, Entity = entity,
-    `Sarajevo District` = sarajevo_district, `Split by IEBL` = split_by_iebl,
+    `Sarajevo District` = sarajevo_district, `Municipal Borders Modified` = split_by_iebl,
     `Municipality Area, Post-War` = mun_area, `Municipality Perimeter, Post-War` = mun_perimeter,
     `Population, 1991 Redistributed` = redist_population, `Population, 2013` = total,
     `Bosniak Population, 2013` = bosniak, `Croat Population, 2013` = croat,
