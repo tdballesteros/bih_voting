@@ -1,5 +1,5 @@
 
-# calculate estimates for minefield prevelance in 1997
+# calculate estimates for minefield prevalence in 1997
 
 ### load libraries ---------------------------------------------------------------------------------
 library(readxl)
@@ -32,15 +32,15 @@ canton_area <- bih_postwar_municipalities_shapefile %>%
   ) %>%
   as.data.frame() %>%
   dplyr::mutate(
-    # Brčko is grouped in Republika Srpska as it is not included in the canton-level data
-    entity = ifelse(
-      canton %in% c("Banja Luka", "Bijeljina", "Brčko", "Doboj", "Foča", "Istočno Sarajevo",
-                    "Trebinje", "Vlasenica"),
-      "Republika Srpska",
-      "FBIH"
-      )
-    ) %>%
-  dplyr::mutate(canton = ifelse(entity == "Republika Srpska", "Republika Srpska", canton)) %>%
+    # add entity information
+    entity = dplyr::case_when(
+      canton %in% c("Banja Luka", "Bijeljina", "Doboj", "Foča", "Istočno Sarajevo", "Trebinje",
+                    "Vlasenica") ~ "Republika Srpska",
+      canton == "Brčko" ~ "Brćko",
+      .default = "FBIH"
+      ),
+    # replace canton names in Republika Srpska with "Republika Srpska" to facilitate collapsing
+    canton = ifelse(entity == "Republika Srpska", "Republika Srpska", canton)) %>%
   dplyr::group_by(canton) %>%
   dplyr::summarise(
     canton_area = sum(canton_area),
@@ -85,16 +85,45 @@ landmines1 <- landmines %>%
 rs_minefield_density_est <- landmines1$minefields_per_sq_km[landmines1$canton == "Republika Srpska"]
 
 landmines_rs_cantons <- data.frame(
-  canton = c("Banja Luka", "Bijeljina", "Brčko", "Doboj", "Foča", "Istočno Sarajevo",
+  canton = c("Banja Luka", "Bijeljina", "Doboj", "Foča", "Istočno Sarajevo",
              "Trebinje", "Vlasenica"),
-  minefields_per_sq_km = rep(rs_minefield_density_est, 8)
+  minefields_per_sq_km = rep(rs_minefield_density_est, 7)
 )
 
 # append data
 landmines1 <- landmines1 %>%
   dplyr::select(canton, minefields_per_sq_km) %>%
-  dplyr::filter(canton != "Republika Srpska") %>%
-  rbind(landmines_rs_cantons) %>%
+  dplyr::filter(!canton %in% c("Republika Srpska", "Brčko")) %>%
+  rbind(landmines_rs_cantons)
+
+# estimate Brčko
+# 59.6 sq. km in Brčko are suspected areas - 12.04% of territory
+# 6.36% estimate in FBiH and 1.71% in Republika Srpska
+
+# Bosnia-wide estimate of 3 million landmines; 152 mines per square mile
+
+# divide 3 million landmines from number of minefields in data to get estimate of mines per
+# minefield
+total_minefields <- sum(landmines$Minefields, na.rm = TRUE)
+average_mines_per_minefield = 3000000 / total_minefields
+
+# estimated 152 mines per square mile
+# convert to sq km
+mines_per_sq_km_est <- 152 / 2.59
+
+# pull Brčko size in sq km
+brcko_area <- canton_area$canton_area[canton_area$canton == "Brčko"]
+
+brcko_mine_estimate <- mines_per_sq_km_est * brcko_area
+brcko_minefield_estimate <- brcko_mine_estimate / average_mines_per_minefield
+brcko_minefield_density_estimate <- units::set_units(as.numeric(brcko_minefield_estimate / brcko_area), 1/km^2)
+
+# add Brčko estimate
+landmines1 <- landmines1 %>%
+  rbind(data.frame(
+    canton = "Brčko",
+    minefields_per_sq_km = brcko_minefield_density_estimate
+  )) %>%
   dplyr::arrange(canton)
 
 # write formatted data

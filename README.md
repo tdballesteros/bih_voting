@@ -40,6 +40,8 @@ Geo-referenced death data comes from two sources. The first comes from the Resea
 ## Minefield data
 https://www.icrc.org/sites/default/files/external/doc/en/assets/files/other/silent-menace-bosnia-herzegovina-57jp32-010298.pdf
 
+brčko estimate - https://commons.lib.jmu.edu/cgi/viewcontent.cgi?article=2386&context=cisr-journal
+
 
 # Works Cited
 Agencija za statistiku Bosne i Hercegovine, (2016). Popis stanovništva, domaćinstava i stanova u Bosni I Hercegovini, 2013. Rezultati popisa [Cenzus of population, households and dwellings in Bosnia and Herzegovina, 2013: Final results]. Sarajevo, Bosnia and Herzegovina: Bosnia and Herzegovina.

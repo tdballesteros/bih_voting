@@ -38,6 +38,9 @@ bih_postwar_municipalities_shapefile <- sf::read_sf(
 # 2013 census data
 census_data_2013 <- read.csv("Formatted Data/census_data_2013_formatted.csv")
 
+# 1991 census data applied to post-war municipalities
+census_data_1991_redist <- read.csv("Formatted Data/census_data_1991_postwar_municipalities.csv")
+
 # nationalist/non-nationalist 1997 vote proportions
 nationalist_votes <- read.csv("Formatted Data/nationalist_votes_1997.csv")
 
@@ -102,6 +105,7 @@ postwar_data <- bih_postwar_municipalities_shapefile %>%
                 mun_area = mun_are,
                 mun_perimeter = mn_prmt) %>%
   dplyr::full_join(census_data_2013, by = "municipality") %>%
+  dplyr::full_join(census_data_1991_redist, by = "municipality") %>%
   dplyr::full_join(nationalist_votes, by = "municipality") %>%
   dplyr::full_join(voting_location, by = "municipality") %>%
   dplyr::full_join(mun_distances_postwar, by = "municipality") %>%
@@ -111,10 +115,10 @@ postwar_data <- bih_postwar_municipalities_shapefile %>%
     Municipality = municipality, Canton = canton, Entity = entity,
     `Sarajevo District` = sarajevo_district, `Split by IEBL` = split_by_iebl,
     `Municipality Area, Post-War` = mun_area, `Municipality Perimeter, Post-War` = mun_perimeter,
-    `Population, 2013` = total, `Bosniak Population, 2013` = bosniak,
-    `Croat Population, 2013` = croat, `Serb Population, 2013` = serb,
-    `Not Declared Population, 2013` = not.declared, `Other Population, 2013` = other,
-    `No Answer Population, 2013` = no.answer,
+    `Population, 1991 Redistributed` = redist_population, `Population, 2013` = total,
+    `Bosniak Population, 2013` = bosniak, `Croat Population, 2013` = croat,
+    `Serb Population, 2013` = serb, `Not Declared Population, 2013` = not.declared,
+    `Other Population, 2013` = other, `No Answer Population, 2013` = no.answer,
     `Bosniak Population Percentage, 2013` = percent_bosniaks,
     `Croat Population Percentage, 2013` = percent_croats,
     `Serb Population Percentage, 2013` = percent_serbs,

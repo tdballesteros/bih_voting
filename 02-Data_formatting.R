@@ -54,6 +54,74 @@ census_data_1991 <- readxl::read_xlsx("Data/bih_census_1991.xlsx") %>%
 # write formatted data
 write.csv(census_data_1991, "Formatted Data/census_data_1991_formatted.csv", row.names = FALSE)
 
+#### 1991 Census Data by Post-War Municipality -----------------------------------------------------
+census_data_1991_postwar_new <- readxl::read_xlsx("Data/Avdić, Mirić, Gekić, and Gekić data.xlsx",
+                                              skip = 1) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names
+    Municipality = dplyr::case_match(
+      Municipality,
+      "Domaljevac Šamac" ~ "Domaljevac-Šamac",
+      "Foča (FBiH)" ~ "Foča-Ustikolina",
+      "Trnovo (FBiH)" ~ "Trnovo-FBIH",
+      "Pale (FBiH)" ~ "Pale-Prača",
+      "Kupres (RS)" ~ "Kupres-RS",
+      .default = Municipality
+      )) %>%
+  dplyr::select(`Postwar Municipality` = `Municipality`, `Population 1991`) %>%
+  # manually add Bužim, Kostajnica, and Milići
+  rbind(tibble(
+    `Postwar Municipality` = c("Bužim", "Kostajnica", "Milići"),
+    `Population 1991` = c(16940, 6231, 16038)
+  )) %>%
+  dplyr::left_join(readxl::read_xlsx("Data/bih_municipality_reorg_crosswalk.xlsx"),
+                   by = "Postwar Municipality")
+
+# create version to merge with pre-war census data
+census_data_1991_new_municipalities_to_merge <- census_data_1991_postwar_new %>%
+  dplyr::select(municipality = `Prewar Municipality`, population_to_subtract = `Population 1991`) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(population_to_subtract = sum(population_to_subtract)) %>%
+  dplyr::ungroup()
+
+# create version to append to pre-war census data
+census_data_1991_new_municipalities_to_append <- census_data_1991_postwar_new %>%
+  dplyr::select(municipality = `Postwar Municipality`, redist_population = `Population 1991`)
+
+census_data_1991_postwar <- census_data_1991 %>%
+  dplyr::select(municipality, population = total) %>%
+  dplyr::left_join(census_data_1991_new_municipalities_to_merge, by = "municipality") %>%
+  dplyr::mutate(
+    population_to_subtract = ifelse(is.na(population_to_subtract), 0, population_to_subtract),
+    population = population - population_to_subtract
+    ) %>%
+  dplyr::select(municipality, redist_population = population) %>%
+  rbind(census_data_1991_new_municipalities_to_append) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Bosanska Dubica" ~ "Dubica",
+      "Bosanska Gradiška" ~ "Gradiška",
+      "Bosanski Brod" ~ "Brod",
+      "Bosanski Novi" ~ "Novi Grad",
+      "Bosanski Šamac" ~ "Šamac",
+      "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      "Kupres" ~ "Kupres-FBIH",
+      "Prozor" ~ "Prozor-Rama",
+      "Sarajevo Novo Sarajevo" ~ "Novo Sarajevo",
+      "Sarajevo Vogošća" ~ "Vogošća",
+      "Trnovo" ~ "Trnovo-RS",
+      .default = municipality
+      ))
+
+# write formatted data
+write.csv(
+  census_data_1991_postwar,
+  "Formatted Data/census_data_1991_postwar_municipalities.csv",
+  row.names = FALSE
+  )
+
 #### 1991 Census Data by Community -----------------------------------------------------------------
 census_data_1991_community <- readxl::read_xlsx(
   "Data/Stanovništvo prema nacionalnom izjašnjavanju po mjesnim zajednicama 1991.xlsx"
@@ -171,8 +239,6 @@ death_data_original <- readxl::read_xlsx("Data/deaths_per_municipality.xlsx") %>
 # write formatted data
 write.csv(death_data_original, "Formatted Data/deaths_per_municipality_formatted.csv", row.names = FALSE)
 # write.csv(death_data_postwar_municipalities, "Formatted Data/deaths_per_postwar_municipality_formatted.csv", row.names = FALSE)
-
-
 
 ### Post-War Data ----------------------------------------------------------------------------------
 # This section formats data that is from after the 1992-1995 war or is based upon the post-war
