@@ -21,6 +21,7 @@ population_effect_df <- data.frame(
   # calculate means of all variables
   dplyr::mutate(
     `Population, 1991 Logged` = log(`Population, 1991`),
+    `Population, 1991 Redistributed Logged` = mean(df$`Population, 1991 Redistributed Logged`),
     `Yugoslav Population Percentage, 1991` = mean(df$`Yugoslav Population Percentage, 1991`),
     `Other Population Percentage, 1991` = mean(df$`Other Population Percentage, 1991`),
     `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` = mean(df$`Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013`),
@@ -42,7 +43,8 @@ population_effect_df <- data.frame(
     `Croat Population Percentage, 1991` = mean(df$`Croat Population Percentage, 1991`),
     `Change in % Croats, 1991 to 2013` = mean(df$`Change in % Croats, 1991 to 2013`),
     `Serb Population Percentage, 1991` = mean(df$`Serb Population Percentage, 1991`),
-    `Change in % Serbs, 1991 to 2013` = mean(df$`Change in % Serbs, 1991 to 2013`)
+    `Change in % Serbs, 1991 to 2013` = mean(df$`Change in % Serbs, 1991 to 2013`),
+    `Change in Population` = mean(df$`Change in Population`)
   )
 
 # A1

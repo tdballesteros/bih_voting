@@ -20,15 +20,25 @@ source("~/R/bih_voting/23-Mapping_population.R", echo = FALSE)
 # source death maps
 source("~/R/bih_voting/25-Mapping_death_data.R", echo = FALSE)
 
-# population model relationship graph
+# source population model relationship graph
 source("~/R/bih_voting/26-Population_relationship_graph.R", echo = FALSE)
+
+# source death data comparison graph
+source("~/R/bih_voting/27-Death_data_comparison.R", echo = FALSE)
 
 ```
 
 ## Introduction
+Democratic elections in post-conflict settings are seen as pivotal in shifting away from partisan violence to non-violent competition of power through electoral politics. Parties that contest and succeed in elections, however, are frequently those organised through established communities; following a conflict, this means the combatant organisations will have a leg up in organisational capacity and recognition needed to succeed in elections.^[Lyons, T., (2004). Post-conflict elections and the process of demilitarizing politics: the role of electoral administration. Democratization. 11(3), 36-62. Reilly, B., (2002). Elections in Post-Conflict Scenarios: Constraints and Dangers. International Peacekeeping. 9(2), 118-139.] Additionally, identities that were once fluid or not divisive frequently harden during and following a conflict.^[Hadzic, D., Carlson, D. and M. Tavits, (2017). How Exposure to Violence Affects Ethnic Voting. British Journal of Political Science. 50, 345-362.] While the exact relationship between conflict and the solidifying of identities has yet to be determined, by the end of the conflict citizens are largely split along the divisions of the conflict.
+
+Taken together, political parties forming from – or indeed just the rebranding of – militant groups have an advantage over other groups in campaigning and communities will have polarized views of the identity-based political parties. Often this results in victories for ethnic politics following an election, particularly in countries with little prior experience with democracy.
+
+Ethnic parties – or parties with any identitarian focus – however, do not obtain all the votes. Nor do they receive equal support from all parts of society. Non-ethnic parties – parties campaigning along the traditional left-right divide or for specific issues – often see support from particular groups in society or within a confined geographic region, while support from the population at large is essentially absent.
+
+To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality^[*Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
 
 ## Methodology and Research Questions
-To address what factors impact a municipality's^[*Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.] proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.^[Centralna izborna komisija Bosne i Hercegovine, (2012). 1997 Municipal Election Final Results [online]. Centralna izborna komisija Bosne i Hercegovine. [Accessed 13 February 2020].]
+To address what factors impact a municipality's proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.^[Centralna izborna komisija Bosne i Hercegovine, (2012). 1997 Municipal Election Final Results [online]. Centralna izborna komisija Bosne i Hercegovine. [Accessed 13 February 2020].]
 
 I classify political parties as "nationalist" and "non-nationalist", as well as "other" and "independent", based on research by Pugh and Cobble on Bosnian municipal elections.^[Pugh, M. and M. Cobble, (2001). Non-Nationalist Voting in Bosnian Municipal Elections: Implications for Democracy and Peacebuilding. Journal of Peace Research. 38(1), 27-47.] Parties appealing to a particular ethnic group and promoting that group’s rights to the exclusion of the rights of others were coded as nationalist. Modifications were made such that parties appealing to an ethnic base to promote ethnic rights in a pluralistic society were coded as non-nationalist parties. This is particularly important in several municipalities in Canton 10, where parties such as Zavičaj and Za Drvar appealed to displaced Serbs and promoted their rights but did not campaign for the discrimination against non-Serbs.^[Wilkinson, T., (1998). Symbol of Hope in a Land of Hate [online]. Los Angeles Times. [Accessed 16 April 2020].] As such, “nationalist parties” refers to those that promote a sole identity group to the exclusion of the rights of others. “Non-nationalist parties,” on the other hand, refers to a wider range of parties, ranging from those that promote specific interests, those that campaign on the left-right political and those that campaign to specific national communities within the context of a pluralist country. Only parties that saw at least a modest amount of support were coded, leaving independents and small parties uncoded.
 
@@ -40,7 +50,7 @@ The division of Bosnia and Herzegovina into two entities by the Inter-Entity Bou
 
 $H_{1b}$: Municipalities more proximate to the IEBL will see decreased shares of votes for non-nationalist parties.
 
-Distances are calculated from the closest point in the municipality to the second geographic feature, such as the IEBL. A binary dummy variable is used to indicate whether an općina was formed from the division of a pre-war općina by the IEBL.
+Distances are calculated from the closest point in the municipality to the second geographic feature, such as the IEBL. A binary dummy variable is used to indicate whether a municipality was formed from the division of a pre-war municipality by the IEBL.
 
 The literature places a heavy focus on the ethnic composition of voting districts in explaining support for ethnic parties. The exact relationship is not clear, but homogeneous areas are perceived as to not feel threatened by other ethnic groups taking power and as such are potentially less inclined to support diversionary politics. In the case of post-war elections, and especially in the case of Bosnia and Herzegovina, this theory weighs too heavily on the localized governance aspect. Another perspective is that areas with greater heterogeneity will be less inclined to support zero-sum politics as they live in closer proximity to the “others” they would be in essence voting against. As such, it is hypothesized that more heterogeneous areas will see less nationalistic votes.
 
@@ -50,11 +60,11 @@ The war drastically changed the ethnic composition of many municipalities, which
 
 $H_{2b}$: Municipalities that were more ethnically heterogeneous after the war will see increased shares of votes for non-nationalist parties.
 
-To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization mesurement is taken from Alesina et al.^[Alesina, A. et al., (2003). Fractionalization. Journal of Economic Growth. 8(2), 155-194.] and Fearon^[Fearon, J., (2003). Ethnic and Cultural Diversity by Country. Journal of Economic Growth. 8(2), 195-222.], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country’s fractionalization as
+To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization measurement is taken from Alesina et al.^[Alesina, A. et al., (2003). Fractionalization. Journal of Economic Growth. 8(2), 155-194.] and Fearon^[Fearon, J., (2003). Ethnic and Cultural Diversity by Country. Journal of Economic Growth. 8(2), 195-222.], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country’s fractionalization as
 
 $Fractionalization = 1-\sum_{i=1}^{N} {p_{i}^{2}}$
 
-where *p* is the percentage of the population of the *i*^th ethnic group in the country and *N* is the total number of ethnic groups in the country.
+where $p$ is the percentage of the population of the $i^{th}$ ethnic group in the country and $N$ is the total number of ethnic groups in the country.
 
 Measurements for ethnic fractionalization are included based on the 1991 and 2013 census results. The former measures the pre-war ethnic composition of municipalities, while the latter assumes that the relative distributions of ethnic groups within municipalities from the immediate post-war perior remain roughly consistent over the next two decades until the 2013 census, with most of the movement of the population occurring during the war.
 
@@ -66,11 +76,11 @@ $H_{3}$: More urban municipalities will vote in a larger proportion for non-nati
 
 Population from the 1991 census is used for each municipality; while the war did see large amounts of displacement, populations still had belief in the implementation of the right to return promises stated in the Dayton Agreement, many individuals voted absentee in their pre-war municipality and the population sizes relative to each other are unlikely to have drastically changed. A binary variable is also included to indicate whether the municipality is one of the 10 pre-war municipalities comprising the city of Sarajevo.
 
-Intensity of conflict is hypothesized to result an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits’s^[Hadzic, D., Carlson, D. and M. Tavits, (2017). How Exposure to Violence Affects Ethnic Voting. British Journal of Political Science. 50, 345-362.] work on conflict cementing ethnic identities. Those that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
+Intensity of conflict is hypothesized to result an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits’s^[Hadzic, Carlson and Tavits 2017] work on conflict cementing ethnic identities. Those that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
 
 $H_{4a}$: Municipalities that saw greater violence during the war will see lower portions of votes go to non-nationalist parties.
 
-Data on deaths per population for each municipality is included as a proxy for the degree of violence in each locale. The data is from Costalli and Moro^[Costalli, S. and F. Moro, (2012). Ethnicity and strategy in the Bosnian civil war: Explanations for the severity of violence in Bosnian municipalities. Journal of Peace Research. 49(6), 801-815.], who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo. A second source of deaths comes from Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.^[Davies, S., Pettersson, T., Sollenberg, M., & Öberg, M. (2025). Organized violence 1989–2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4). Sundberg, Ralph and Erik Melander (2013) Introducing the UCDP Georeferenced Event Dataset. Journal of Peace Research 50(4).]
+Data on deaths per population for each municipality is included as a proxy for the degree of violence in each locale. The data is from Costalli and Moro^[Costalli, S. and F. Moro, (2012). Ethnicity and strategy in the Bosnian civil war: Explanations for the severity of violence in Bosnian municipalities. Journal of Peace Research. 49(6), 801-815.], who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo. A second source of deaths comes from Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.^[Davies, S., Pettersson, T., Sollenberg, M., & Öberg, M. (2025). Organized violence 1989–2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4). Sundberg, R. and E. Melander (2013) Introducing the UCDP Georeferenced Event Dataset. Journal of Peace Research 50(4).]
 
 Little research has been done on displaced persons’ voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic^[Stefanovic, D. and N. Loizides, (2015). The role of remote voting in encouraging return. Forced Migration Review. 50, 39-41.]. Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,^[Zic, B., (2017). The Political Impact of Displacement: Wartime IDPs, Religiosity, and Post-War Politics in Bosnia. Politics and Religion. 10(4), 862-886.] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
 
@@ -162,31 +172,101 @@ cat('</details>')
 
 ```
 
-### Population
+### Deaths per Population
+The Bosnian War was deadly, particularly on civilians. While the exact degree of severity remains unknown, estimates for the number of total fatalities from the Bosnian War are approximately 100,000 deaths, approximately 2.3% of the pre-war population. Some estimates give vastly different results, though these were typically produced within the first decade following the war; death estimates have ranged from 25,000 to 329,000.^[Nilsen, K.A., (2004). "102.000 drept i Bosnia" [102,000 killed in Bosnia]. NRK. https://www.nrk.no/urix/102.000-drept-i-bosnia-1.585120. [Accessed 2 November 2025]] This speaks nothing for the number of injured, the countless families forced to flee their homes, those who lost loved ones in the violence, and the immense cultural heritage targeted and sometimes erased.
 
-Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people.
+Fatalities remain one of the most accessible metrics of violence resulting from conflict. While it in and of itself may represent a small portion of people who suffered due to conflict, deaths remain a good proxy for overall violence within the war. Casualties, particularly among combatants, likely correlate strongly with locations of fatalities. Fatalities also likely depict areas of increased fighting, which would relate to forced civilian displacement.
 
-Several models found statistically significant relations showing municipalities with larger pre-war populations were more likely to vote for nationalist parties and less likely to vote for for non-nationalist parties.
+As previously stated, an estimated 100,000 people died in the Bosnian War. These estimates do vary: The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.^[Ball, P., Tabeau, E. & P. Verwimp. (2007). The Bosnian Book of Dead: Assessment of the Database (Full Report). Households in Conflict Network. https://hrdag.org/wp-content/uploads/2013/02/rdn5.pdf. [Accessed 2 November 2025]] This figure was increased to 101,040 in the final 2012 release of the report.^[Sito-Sucic, D. and M. Robinson. (2012). "After years of toil, book names Bosnian war dead". Reuters. https://www.reuters.com/article/us-bosnia-dead-idUSBRE91E0J220130215/. [Accessed 2 November 2025]] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.^[Zwierzchowski, J. and E. Tabeau. (2010). The 1992-95 War in Bosnia and Herzegovina: Census-Based Multiple System Estimation of Casualties' Undercount. Conference Paper for the International Research Workshop on ‘The Global Costs of Conflict’. https://www.icty.org/x/file/About/OTP/War_Demographics/en/bih_casualty_undercount_conf_paper_100201.pdf] Applying the 1991 Bosnian Census data to Costalli and Moro's pre-war municipality proportion of population deaths, their dataset contains an estimated 95,088 deaths, all attributed to specific pre-war municipalities. The UCDP's Georeferenced Event Dataset Global, version 25.1, which features geo-referenced incident-level data with fatality estimates, contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate).
 
-Model A2 found this trend across all municipalities. Models A1 and A2-FBiH found the same trend, though only at the α = 0.1 confidence level. Figure X shows the modeled relationship between pre-war municipal population and predicted proportion of non-nationalist votes.
+Though the overall estimated number of deaths differ significantly, the impact on the model would only be impacted by differing distributions of deaths by municipality. Assessing proportions of total deaths by municipality in Costalli and Moro's dataset and the UCDP GED dataset's best estimate, 21 pre-war municipalities have differences in the proportion of total deaths between the two sources of 1 percentage point or more. Srebrenica far and away saw the biggest difference: Costalli and Moro attributed 8.1% of deaths to Srebrenica, while UCDP attributed 24.2% (21.8% to 26.1% using low and high estimates), or a percentage difference of 16 percentage points. Brčko, Sarajevo Novo Sarajevo, Bihać, and Goražde also saw differences greater than 2 percentage points. Figure X shows municipalities who saw greater than 1 percentage point difference in their proportion of fatalities between the two datasets, with bands for UCDP's low and high estimates shown in gray.
 
-**FIGURE X.** Modeled relationship of Pre-War Population on Proportion of Non-Nationationalist Votes
+**FIGURE X.** Proportion of Total Deaths in Costalli and Moro and UCDP, by Select Municipality
+```{r death_comparison, echo=FALSE, warning=FALSE, fig.align = 'center'}
 
-```{r pop_relationship_graph, echo=FALSE, warning=FALSE, fig.align = 'center'}
+#death_perc_of_total_plot
+plotly
 
-cowplot::plot_grid(pop_relationship_graph_nonnationalist,
-                   pop_relationship_graph_nationalist,
+```
+[*Notes: Municipalities displayed are pre-war municipalities. Error bars for UCDP estimates depict calculations based on the low and high death estimates; the best death estimate proportion does not necessarily fall between proportions calculated using the low and high death estimates. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+Map X shows differences in the percent of deaths between the two data sources for all municipalities.
+
+**FIGURE X.** Comparison of Proportion of Total Deaths by Costalli and Moro vs. UCDP, by Municipality
+```{r death_comparison_map, echo=FALSE, warning=FALSE, fig.align = 'center'}
+
+death_perc_comparison_map_plotly
+
+```
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Positive values indicate Costalli and Moro has a higher proportion of overall deaths for that municipality, while negative values indicate UCDP does. Values closer to white indicate the two data sources attribute similar proportions of overall deaths to the municipality; it does not indicate the same number of deaths. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+The five pre-war municipalities that saw the most absolute number of deaths were Srebrenica (7,711 deaths), Prijedor (5,201), Zvornik (4,127), Bratunac (3,604), and Sarajevo Novi Grad (3,151), which combined account for an estimated 25% of all deaths in the war. Based on pre-war populations, the pre-war municipalities that saw the highest proporitons of death relative to population were Srebrenica (21.0% of the municipality's pre-war population), Bratunac (10.7%), Rogatica (9.2%), Vlasenica (8.6%), and Višegrad (8.3%). These counts are based on the location of death, not where the individuals lived. As such, places like Srebrenica that saw large numbers of individuals who lived in other municipalities die did not necessarily see the highest proportion of their pre-war population die, but rather saw the highest proportion of people die in the municipality relative to their pre-war population. Map X shows pre-war municipalities by the absolute number of deaths (left) and the number of deaths relative to the pre-war population (right), with the five municipalities with the highest values highlighted.
+
+**MAP X.** Deaths and Deaths per 100,000 Pre-War Population, by municipality
+```{r death_maps, echo=FALSE, warning=FALSE, fig.align = 'center'}
+
+cowplot::plot_grid(deaths_absolute_prewar_municipalities_map,
+                   deaths_per_capita_prewar_municipalities_map,
                    ncol = 2)
 
 ```
+[*Notes: Municipalities shown are pre-war municipalities. The municipalites with the top five highest death counts (left) and deaths per 100,000 (right) are labeled and outlined in black. Source: Costalli & Moro 2012; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
-[*Notes: Models A2 and B2 found pre-war population, logged scale, to be statistically significant, while Model A1 only found it significant at the α = 0.1 confidence level. Source: Author calculations; Bosnia Central Election Commission, 1991.*]{style="font-size: 0.75em;"}
+Multiple models found a correlation between wartime deaths per pre-war municipal population and the proportion of nationalist and non-nationalist votes cast in 1997. Models A2 and A2-FBiH found higher proportions of deaths relative to pre-war population to correlate to lower proportions of non-nationalist votes cast in the municipality. Models B2 and B2-FBiH found complementary results, with higher proportions of deaths correlating to a higher proportion of votes being cast for nationalist political parties. 
+Overall, higher rates of fatalities lead to more nationalist voting patterns. These findings, however, were not found in Republika Srpska.
 
-Models B2 found the same trend in reverse: municipalities with larger pre-war populations were more likely to vote for nationalist political parties.
+### Minefield Prevelance
+The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a specific canton or Republika Srpska. Map X shows the estimated minefield density (estimated number of minefields per square kilometer) per canton, Brčko district, and Republika Srpska.
 
-### Ethnic Group Proportions
+**MAP X.** Estimated Minefield Density, by Canton
+```{r minefield_maps, echo=FALSE, warning=FALSE, fig.align = 'center'}
 
+minefield_density_canton_map
+
+```
+[*Notes: Cantons and Brčko district shown; Republika Srpska estimates only available at an entity level. Source: ICRC 1998; Bolton 2003; United Nations 1997.*]{style="font-size: 0.75em;"}
+
+Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
+
+Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, and B3 all found higher densities correlated to lower proportions of votes for nationalist parties; Model B1-FBiH found the reverse relationship, with higher minefield densities correlated to the municipality receiving a higher share of votes for nationalist parties.
+
+### Ethnic Fractionalization
+Pre-war ethnic fractionalization, as an operationalization of ethnic diversity, was found to correlate to post-war voting patterns.
+
+Models A1, A2, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores — a more heterogeneous society — were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses — the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment — to be statistically significant; model A3 found an increase in ethnic fractionalization correlated to higher proportions of votes for non-nationalist political parties.
+
+Overall, more diverse pre-war municipalities saw higher rates of voting for nationalist political parties, even when controlling for levels of violence in the communities. This appears to be true primarily for Federation municipalities. While the evidence is limited, it appears municipalities who gained diversity - or at least loss diversity relatively less than other municipalities - following the war were less inclined to vote for nationalist parties. Only 13 of the 130 municipalities who participated in the 1997 elections saw increased ethnic diversity from 1997 to 2013.
+
+### Votes Cast Outside of Municipality
+The Bosnian War saw an estimated half the population be displaced, either internally or internationally as refugees.
+Originally set for early 1996, municipal elections were delayed multiple times due to uncovered voter registration fraud. Even with the delays putting the elections just short of two years after the signing of the Dayton Agreement, freedom of movement remained restricted; this denial of a civil right had significant implications for elections at local levels.^[https://www.govinfo.gov/content/pkg/GOVPUB-Y4_SE2-PURL-LPS767/pdf/GOVPUB-Y4_SE2-PURL-LPS767.pdf]  Due to the mass displacement during the war and very real continued displacement of large portions of the population, multiple registraction options were permitted:
+* Individuals could register in the municipality they resided prior to 1991.
+* Internally displaced individuals could choose to register in the municipality they were displaced to, if they were residing their prior to August 1996 and had documentary proof.
+* Internationally-displaced refugees could choose to register in a municipality of intended future residence.
+
+Ultimately, just over 1/5 of the votes cast came from voters located outside the municipality they were voting in. Berkovići, Petrovo, and Donji Žabar — all in Republika Srpska — saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality. 
+
+The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1-FBiH and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
+
+### Turnout Rate
+A municipality's turnout rate — based on the number of votes registered to vote in the municipality — was found to correlate to nationalist voting patterns. Models A3, A1-RS, A2-RS, and A3-RS all found higher turnout to be correlated with a lower proportion of votes going to non-nationalist parties. Model A1-FBiH found the opposite: higher turnout resulted in proportionally more votes going towards non-nationalist parties. Models B3, B1-RS, B2-RS, and B3-RS found higher turnout correlated to higher proportions of votes going to nationalist candidates.
+
+While it initially seems there might be some contradictory results among the models, it appears that the relationship between turnout rates and nationalist voting patterns may be distinct and opposite between municipalities in the Federation and in Republika Srpska. All Republika Srpska models found turnout rates to be statistically significant, while the relationship appears to be weaker in the Federation as only one model found turnout rates to be statistically significant.
+
+### Ethnic Group Prevalence
 ```{r ethinc_group_proportions, echo=FALSE}
+
+## BOSNIAKS
+num_muslim <- sum(census_data_1991$muslim)
+perc_muslim <- round(100 * sum(census_data_1991$muslim) / sum(census_data_1991$total), 0)
+
+## CROAT
+num_croat <- sum(census_data_1991$croat)
+perc_croat <- round(100 * sum(census_data_1991$croat) / sum(census_data_1991$total), 0)
+
+## SERB
+num_serb <- sum(census_data_1991$serb)
+perc_serb <- round(100 * sum(census_data_1991$serb) / sum(census_data_1991$total), 0)
 
 ## YUGOSLAVS
 num_yugoslav <- sum(census_data_1991$yugoslavs)
@@ -201,7 +281,14 @@ perc_other <- round(100 * sum(census_data_1991$other) / sum(census_data_1991$tot
 
 ```
 
+
+Bosnia and Herzegovina consists of three main ethnoreligious groups: Bosniaks (also referred to as Muslims), Croats, and Serbs. Pre-war, a pan-Yugoslav identity was also present. Groups outside these were and continue to be classified as an "Other" ethnicity, particularly in political contexts where there are restrictions based on ethnicity for some post-war roles, such as the tripartite presidency. Pre-war, `r perc_muslim`% of the population identified as Muslim, `r perc_croat`% as Croat, and `r perc_serb`% as Serb, with the rest identifying as Yugoslav or another ethnicity.
+
+These three ethnic groups were not spread evenly across the country. Many municipalities saw large proportions of two or even three ethnic groups, while others were dominated by a single group. Regions of the country were dominated by a single ethnic group, such as Muslims in the northwestern portions of Bosanska Krajina or Serbs in Donji Kraji.
+
 #### Muslims/Bosniaks
+
+No model found either the proportion of Muslims in the pre-war municipality or the change in the percentage of Muslims comprising the municipality from the 1991 to 2013 censuses to correlated to the proportion of votes cast in the 1997 municipal election.
 
 **MAP X.** Percent Identifying as Muslim in 1991, by municipality
 
@@ -215,6 +302,12 @@ prewar_muslims
 
 #### Croats
 
+A substantial majority of the pre-war Croats living in territory that ended within the Federation.
+
+Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger voteshares for nationalist parties. Several populations in the region of highest Croat concentration — along the border with Croatia's Dalmatian Coast — saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
+
+None of the models found the change in proportion of Croats between 1991 and 2013 to be correlated with 1997 voting patterns.
+
 **MAP X.** Percent Identifying as Croat in 1991, by municipality
 
 ```{r croat_map, echo=FALSE, fig.align = 'center'}
@@ -227,6 +320,8 @@ prewar_croats
 
 #### Serbs
 
+Unlike the proportion of Croats, a higher pre-war proportion of Serbs in a municipality correlated to more non-nationalist voting, primarily within the Federation. Models A3 and A3-FBiH found both higher percentage of Serbs in the pre-war municipality and an increase in the relative proportions of Serbs between 1991 and 2013 to be correlated with higher rates of non-nationalist voting. Models B3 and B3-FBiH found lower proportions of Serbs in pre-war municipalities and an increase of Serbs' relative proportion within municipalities to be correlated with lower rates of nationalist voting. These findings were not found in Republika Srpska, which was dominated by a single ethnicity, unlike the Federation.
+
 **MAP X.** Percent Identifying as Serb in 1991, by municipality
 
 ```{r serb_map, echo=FALSE, fig.align = 'center'}
@@ -238,7 +333,6 @@ prewar_serbs
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
 #### Yugoslavs
-
 People identifying as a pan-ethnic Yugoslav identity was limited even several generations after the formation of Yugoslavia, with only 8 pre-war municipalities having at least 10% of the population identifying as Yugoslav on the 1991 census (see Map X): Banja Luka, Bosanski Brod, Mostar, Sarajevo (Centar, Novo Sarajevo, Novi Grad), Tuzla, Zenica. Notably, these also correspond with some of the largest, most urbane communities in the country. Tuzla saw the largest proportion identify as Yugoslav, at just 16.7% of the population; Tuzla municipality had the 4th highest population in 1991. In total, `r num_yugoslav` people identified as Yugoslav, or `r perc_yugoslav`% of the population.
 
 **MAP X.** Percent Identifying as Yugoslav in 1991, by municipality
@@ -251,11 +345,9 @@ prewar_yugoslav
 
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
-All country-wide and Federation-wide models found the pre-war proportion of the population identifying as "Yugoslav" to be statistically significant.
+All country-wide and Federation-wide models found the pre-war proportion of the population identifying as "Yugoslav" to be statistically significant, with larger proportions of Yugoslavs in the pre-war municipality correlating to greater shares of the vote going towards non-nationalist parties and lesser shares towards nationalist parties.
 
-Across all municipalities, each increase in the percentage of the population identifying as a Yugoslav resulted in an estimated 1.377 (A3) to 2.395 (A1) percentage point increase in the proportion of the vote towards non-nationalist parties. For municipalities in the Federation, only models A1-FBiH and A2-FBiH saw the percent of Yugoslavs as statistically significant at the 0.05 level, though model A3-FBiH still saw it significant at the 0.1 level. For Federation municipalities, each increase in the percentage of the population identifying as a Yugoslav resulted in an estimated 2.364 (A2-FBiH) to 3.485 (A1-FBiH) percentage point increase in the proportion of the vote towards non-nationalist parties. The proportion of Yugoslavs was not correlated to non-nationalist vote shares in Republika Srpska.
-
-A similar but reversed trend was identified for shares of nationalist votes. Models B1 and B2 identified similar magnitudes but with a negative correlation compared to models A1, A2, and A3. Interestingly, model B3 found percent Yugoslavs to be statistically significant, but saw increased portions of Yugoslavs correlated to an increased portion of nationlist votes. Models B1-FBiH and B2-FBiH found percent yugoslavs to be statistically significant at the 0.05 level, while model B3-FBiH found it significant at only the 0.1 level. Again, the magnitudes matched each model's non-nationalist model counterpart, only differing in direction.
+The proportion of Yugoslavs was not correlated to non-nationalist vote shares in Republika Srpska.
 
 As mentioned before, higher proportions of people identified as Yugoslav in Bosnia and Herzegovina's cities than in towns or rural areas. The proportion of people identifying as Yugoslav was moderately correlated with both municipal population (cor = `r yug_pop_cor`) and the municipal population, log-scale (cor = `r yug_pop_log_cor`).
 
@@ -273,55 +365,42 @@ prewar_other
 
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
-No model found the percent of other ethnic groups to be statistically significant at the 0.05 level.
-
-### Change in Ethnic Group Proportions
+No model found either the proportion of Other ethnic groups in the pre-war municipality to be correlated to the proportion of votes cast in the 1997 municipal election.
 
 ### Distance to Croatia and Yugoslavia
 None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
 
-Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A1-RS, and A2-RS found municipalities further away from Yugoslavia to be more likely to vote for non-nationalist parties. Model A2-FBiH found the opposite result: municipalities a greater distance from Yugoslavia were less likely to vote for non-nationalist parties.
+Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Model A1 found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B1-RS, and B2-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
 
-Models B1, B1-FBiH, B2-FBiH, and B3-FBiH found municipalities a greater distance from Yugoslavia to be less likely to vote for nationalist parties, though models B1-RS and B2-RS found the opposite result: municipalities further from Yugoslavia were more likely to vote for nationalist parties.
+It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
 
-It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Given Yugoslavia housed the majority of ethnic Serbs in pre-breakup Yugoslavia and government officials and individuals from Yugoslavia supported Serb-aligned militants in the Bosnian War, it makes sense that the Serb-dominated Republika Srpska and the Croat- and Bosniak-majority Federation would view proximity to Yugoslavia differently.
-
-### Deaths per Population
-Estimates on the number of dead in the Bosnian War remain varied. Modern estimates range from approximately 90,000 to 120,000, though estimates dating back to the immediate aftermath of the war have ranged from 25,000 to 329,000 fatalities.^[Nilsen, K.A., (2004). "102.000 drept i Bosnia" [102,000 killed in Bosnia]. NRK. https://www.nrk.no/urix/102.000-drept-i-bosnia-1.585120. [Accessed 2 November 2025]]
-
-Based on Costalli and Moro's pre-war municipality proportion of population deaths and the 1991 Bosnian census, approximately 95,088 people died in the Bosnian War. UCDP's Georeferenced Event Dataset Global, version 25.1, estimates 63,535 deaths, of which 63,229 are geocoded. The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.^[Ball, P., Tabeau, E. & P. Verwimp. (2007). The Bosnian Book of Dead: Assessment of the Database (Full Report). Households in Conflict Network. https://hrdag.org/wp-content/uploads/2013/02/rdn5.pdf. [Accessed 2 November 2025]] This figure was increased to 101,040 in the final 2012 release of the report.^[Sito-Sucic, D. and M. Robinson. (2012). "After years of toil, book names Bosnian war dead". Reuters. https://www.reuters.com/article/us-bosnia-dead-idUSBRE91E0J220130215/. [Accessed 2 November 2025]] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.^[Zwierzchowski, J. and E. Tabeau. (2010). The 1992-95 War in Bosnia and Herzegovina: Census-Based Multiple System Estimation of Casualties' Undercount. Conference Paper for the International Research Workshop on ‘The Global Costs of Conflict’. https://www.icty.org/x/file/About/OTP/War_Demographics/en/bih_casualty_undercount_conf_paper_100201.pdf]
-
-The five pre-war municipalities that saw the most absolute number of deaths were Srebrenica (7,711 deaths), Prijedor (5,201), Zvornik (4,127), Bratunac (3,604), and Sarajevo Novi Grad (3,151), which combined account for an estimated 25% of all deaths in the war. Based on pre-war populations, the pre-war municipalities that saw the highest proporitons of death relative to population were Srebrenica (21.0% of the municipality's pre-war population), Bratunac (10.7%), Rogatica (9.2%), Vlasenica (8.6%), and Višegrad (8.3%). These counts are based on the location of death, not where the individuals lived. As such, places like Srebrenica that saw large numbers of individuals who lived in other municipalities die did not necessarily see the highest proportion of their pre-war population die, but rather saw the highest proportion of people die in the municipality relative to their pre-war population. Map X shows pre-war municipalities by the absolute number of deaths (left) and the number of deaths relative to the pre-war population (right), with the five municipalities with the highest values highlighted.
-
-**MAP X.** Deaths and Deaths per 100,000 Pre-War Population, by municipality
-
-```{r death_maps, echo=FALSE, warning=FALSE, fig.align = 'center'}
-
-cowplot::plot_grid(deaths_absolute_prewar_municipalities_map,
-                   deaths_per_capita_prewar_municipalities_map,
-                   ncol = 2)
-
-```
-
-[*Notes: Municipalities shown are pre-war municipalities. The municipalites with the top five highest death counts (left) and deaths per 100,000 (right) are labeled and outlined in black. Source: Costalli & Moro 2012; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
-
-Multiple models found a correlation between wartime deaths per pre-war municipal population and the proportion of nationalist and non-nationalist votes cast in 1997, though the results are contractictive. Models A2 and A2-FBiH found a higher proportion of deaths relative to pre-war population to correlate to lower proportions of non-nationalist votes cast. Models B2-FBiH and B3-FBiH found higher proportions of death relative to pre-war population correlated to lower proportions of votes for nationalist parties.
-
-### Minefield Prevelance
-The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a canton or Republika Srpska. Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
-
-Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, and B3 all found higher densities correlated to lower proportions of votes for nationalist parties; Model B1-FBiH found the reverse relationship, with higher minefield densities correlated to the municipality receiving a higher share of votes for nationalist parties.
-
-### Ethnic Fractionalization
-Models found both the ethnic fractionalization index score based on the 1991 population and the change in the ethnic fractionalization index between the 1991 and 2013 censuses to be correlated with proporiton of nationalist and non-nationalist votes in municipalities in 1997. Models A1, A2, A1-FBiH, A2-FBiH, and A3-FBiH found higher ethnic fractionalization scores - more ethnically heterogenous municipalities - to be less likely to vote for non-nationalist candidates. Models A1, A2, and A3 also found municipalities with a higher change in the ethnic fractionalization index - increase in ethnic heterogeneity from before to after the war - to be less likely to vote for non-nationalist parties.
-
-Models for the nationalist share of the vote saw conflicting results: Models B1 and B2, containing all municipalities, saw increased ethnic fractionalization scores correlated with higher proportions of votes going to nationalist parties. All three Federation-specific models, on the other hand, saw higher levels of ethnic fractionalization correlated with lower proportions of votes being cast for nationalist parties. Model B3 saw municiaplities with a higher change in the ethnic fractionalization index - increase in ethnic heterogeneity from before to after the war - to be less likely to vote for nationalist parties.
-
-### Sarajevo District
+### Sarajevo Municipalities
 Fifteen post-war municipalities were classified as part of Greater Sarajevo:  Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
 
-Only Model B3 found whether the municipality is part of Greater Sarajevo to be statistically significant, with the model finding post-war municipalities part of Sarajevo to be more likely to vote for nationalist political parties.
+None of the models found Sarajevo municipalities to have statistically significant differences from non-Sarajevo municipalities.
 
-### Votes Cast Outside of Municipality
+### Population
+Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
+
+Several models found the size of the pre-war population to be correlated with 1997 voting patterns. Model A3 found a larger pre-war population correlated with a higher share of non-nationalist votes, while model B3 found larger populations connected to less votes being cast for nationalist parties.
+
+Change in population between the 1991 and 2013 census was also found to correlate to voting patterns. Model A2 found higher increases in population to correlate to a lower proportion of votes to be cast to non-nationalist parties, while model B2 found higher decreases in population to relate to higher rates of voting for nationalist parties.
+
+<!-- Model A2 found this trend across all municipalities. Models A1 and A2-FBiH found the same trend, though only at the α = 0.1 confidence level. Figure X shows the modeled relationship between pre-war municipal population and predicted proportion of non-nationalist votes. -->
+
+<!-- **FIGURE X.** Modeled relationship of Pre-War Population on Proportion of Non-Nationationalist Votes -->
+
+<!-- ```{r pop_relationship_graph, echo=FALSE, warning=FALSE, fig.align = 'center'} -->
+
+<!-- cowplot::plot_grid(pop_relationship_graph_nonnationalist, -->
+<!--                    pop_relationship_graph_nationalist, -->
+<!--                    ncol = 2) -->
+
+<!-- ``` -->
+
+<!-- [*Notes: Models A2 and B2 found pre-war population, logged scale, to be statistically significant, while Model A1 only found it significant at the α = 0.1 confidence level. Source: Author calculations; Bosnia Central Election Commission, 1991.*]{style="font-size: 0.75em;"} -->
 
 ### Municiplality Area
+
+
+
