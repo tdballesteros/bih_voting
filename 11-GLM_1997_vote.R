@@ -38,7 +38,7 @@ df <- postwar_data %>%
       `Serb Population Percentage, 1991`,
     `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` = abs(`Change in % Bosniaks, 1991 to 2013`) +
       abs(`Change in % Croats, 1991 to 2013`) + abs(`Change in % Serbs, 1991 to 2013`),
-    `Turnout Rate, 1997` = `Total Votes Cast, 1997` / `Population, 1991`,
+    `Turnout Rate, 1997` = `Total Votes Cast, 1997` / `Population, 1991 Redistributed`,
     `Estimated Number of Minefields` = `Minefield Density` * `Municipality Area, Post-War`,
     `Municipality Area, Pre-War Logged` = log(`Municipality Area, Pre-War`),
     `Municipality Area, Post-War Logged` = log(`Municipality Area, Post-War`)

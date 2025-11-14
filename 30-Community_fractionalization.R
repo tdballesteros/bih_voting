@@ -72,7 +72,6 @@ fractionalization_df <- rbind(municipality_fractionalization, community_fraction
   dplyr::mutate(total_log = ifelse(group == "Community", log(total)/25, 1)) %>%
   dplyr::arrange(group)
 
-
 fract_graph <- ggplot2::ggplot() +
   ggplot2::geom_point(
     data = fractionalization_df,
@@ -83,28 +82,6 @@ fract_graph <- ggplot2::ggplot() +
   ) +
   ggplot2::scale_color_manual(values = c("black", "blue")) +
   ggplot2::lims(x = c(0, 1))
+
 fract_graph
-
-
-
-  ggplot2::scale_fill_gradient(
-    name = "Deaths",
-    breaks = logged_break_positions,
-    labels = final_labels,
-    low = "white",
-    high = "darkred",
-    na.value = "grey70"
-  ) +
-  ggplot2::geom_sf(data = deaths_postwar_municipalities_top5_abs_shapefile, color = "black", size = 0.75) +
-  ggplot2::geom_sf_label(data = deaths_postwar_municipalities_top5_abs_shapefile,
-                         ggplot2::aes(label = municipality),
-                         color = "black",
-                         fill = "white",
-                         label.padding = unit(0.15, "lines"),
-                         show.legend = "point",
-                         size = 2.5) +
-  ggplot2::geom_sf(data = iebf_shapefile, color = "darkblue", size = 0.5) +
-  ggplot2::theme_void()
-
-ucdp_deaths_absolute_postwar_municipalities_map
 

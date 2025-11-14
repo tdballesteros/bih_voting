@@ -43,9 +43,25 @@ Ethnic parties – or parties with any identitarian focus – however, do not ob
 To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality^[*Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
 
 ## Election Background
-Voter registration, specifically ensuring a lack of fraud in voters registering for a specific municipality, was a major challenge for what ended up being two elections in the aftermath of the Bosnian War: the general elections and the municipal elections. The general elections included votes for the ethnically-balanced tripartite presidency, in which one Bosniak, on Croat, and one Serb was elected to the Presidency; the House of Representatives, national legislature; and entity- and canton-level offices. The Dayton Agreement mandated this to occur within six months of the signing of the agreement (taken as 14 December 1995, the ceremonial signing date), or within nine months at the latest upon the Organization for Security and Co-operation in Europe's (OSCE) recommendation.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date (“Election Day”) six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." https://www.ohr.int/dayton-peace-agreement/annex-3/] Municipal elections were local elections covering municipal-level offices; the Dayton Agreement only stated these elections were to be held "as soon as possible".
 
-The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities. As such, the Dayton Agreement stipulated multiple places for individuals to register: (1) where the individual had lived in 1991; (2) where the individual now resided; or (3) where they intended to live in the future.^[Commission on Security and Cooperation in Europe, 1997.]
+### The Dayton Agreement
+The Dayton Agreement^[Formally the General Framework Agreement for Peace in Bosnia and Herzegovina.] featured guarantees for elections across Bosnia at national, entity, canton, and municipal levels very quickly after the end of the Bosnian War. The Dayton Agreement set national, entity, and cantonal office elections to be held six months after the signing of the agreement,^[The signing of the Dayton Agreement and its immediate entry into force is taken as 14 December 1994, the date of the formal signing in Paris, France. Parties to the conflict initially signed the agreement on 21 November 1995 at the Wright-Patterson Air Force Base outside Dayton, Ohio.] extendable by the Organization for Security and Co-operation in Europe's (OSCE) to "no later than nine months" if they determine delays necessary.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date (“Election Day”) six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." https://www.ohr.int/dayton-peace-agreement/annex-3/] International and domestic stakeholders had less urgency for municipal-level elections.
+
+The Dayton Agreement additionally set out initial voter eligibility rules, emphasizing the right of refugees to participate in the elections.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article IV. "Voters. Any citizen of Bosnia and Herzegovina aged 18 or older whose name appears on the 1991 census for Bosnia and Herzegovina shall be eligible, in accordance with electoral rules and regulations, to vote. A citizen who no longer lives in the municipality in which he or she resided in 1991 shall, as a general rule, be expected to vote, in person or by absentee ballot, in that municipality, provided that the person is determined to have been registered in that municipality as confirmed by the local election commission and the Provisional Election Commission.Such a citizen may, however, apply to the Commission to cast his or her ballot elsewhere. The exercise of a refugee’s right to vote shall be interpreted as confirmation of his or her intention to return to Bosnia and Herzegovina. By Election Day, the return of refugees should already be underway, thus allowing many to participate in person in elections in Bosnia and Herzegovina. The Commission may provide in the electoral rules and regulations for citizens not listed in the 1991 census to vote." https://www.ohr.int/dayton-peace-agreement/annex-3/] The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities, emphasizing the importance to establish fair and just protocols for these individuals to vote. For the 1996 elections, individuals had multiple options for in which municipality to register: (1) as a general rule, where the individual had lived at the time of the 1991 census, regardless of their current residence; (2) where the individual now resided; or (3) where they intended to live in the future.^[Commission on Security and Cooperation in Europe, 1997.]
+
+### Implementing Dayton: The 1996 General Elections
+Michel Foucault stated "politics is war by other means."^[Foucault, 2003.] The war's belligerents may have laid down their arms - or at least transitioned away from armed conflict - but they were still seeking to achieve the same goals as they had been over the previous four years. With the rules of the elections laid out in the Dayton Agreement, the Provisional Election Commission, and the OSCE, belligerents in the war transitioned to politics to cement their victories gained during the war. And these groups would take any advantage they could to win.
+
+
+
+
+
+
+
+Voter registration, specifically ensuring a lack of fraud in voters registering for a specific municipality, was a major challenge for what ended up being two elections in the aftermath of the Bosnian War: the general elections and the municipal elections. The general elections included votes for the ethnically-balanced tripartite presidency, in which one Bosniak, on Croat, and one Serb was elected to the Presidency; the House of Representatives, national legislature; and entity- and canton-level offices.
+
+<!-- Municipal elections were local elections covering municipal-level offices; the Dayton Agreement only stated these elections were to be held "as soon as possible". -->
+
 
 Initially, the Provisional Election Commission attempted to have themselves and the government update voter rolls. This lead to efforts by multiple government actors - mainly but not exclusively relating to registering Serb voters^[Bureau of Democracy, Human Rights, and Labor, 1998.] - to influence voter registry and municipality of registration to manipulate local elections and cement the demographic changes realized by the war. Brčko, the district not within either Republika Srpska or the Federation, was particularly impacted.
 
@@ -290,17 +306,17 @@ minefield_density_canton_map
 
 Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
 
-Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, and B3 all found higher densities correlated to lower proportions of votes for nationalist parties; Model B1-FBiH found the reverse relationship, with higher minefield densities correlated to the municipality receiving a higher share of votes for nationalist parties.
+Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, B3, B1-FBiH, and B3-FBiH all found higher densities correlated to lower proportions of votes for nationalist parties.
 
 ### Ethnic Fractionalization
 Pre-war ethnic fractionalization, as an operationalization of ethnic diversity, was found to correlate to post-war voting patterns.
 
-Models A1, A2, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores — a more heterogeneous society — were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses — the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment — to be statistically significant; model A3 found an increase in ethnic fractionalization correlated to higher proportions of votes for non-nationalist political parties.
+Models A1, A2, A3, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores — a more heterogeneous society — were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses — the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment — to be statistically significant; model A3 found an increase in ethnic fractionalization — the municipality became more diverse — correlated to higher proportions of votes for non-nationalist political parties.
 
 Overall, more diverse pre-war municipalities saw higher rates of voting for nationalist political parties, even when controlling for levels of violence in the communities. This appears to be true primarily for Federation municipalities. While the evidence is limited, it appears municipalities who gained diversity - or at least loss diversity relatively less than other municipalities - following the war were less inclined to vote for nationalist parties. Only 13 of the 130 municipalities who participated in the 1997 elections saw increased ethnic diversity from 1997 to 2013.
 
 ### Votes Cast Outside of Municipality
-In the end, just over one-fifth of all votes cast came from absentee voters. This means absentee voters voted at lower rates than those who were living within the muncipality they registered. Berkovići, Petrovo, and Donji Žabar — all in Republika Srpska — saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality. 
+Just over one-fifth of all votes cast came from absentee voters. This means absentee voters voted at lower rates than those who were living within the muncipality they registered. Berkovići, Petrovo, and Donji Žabar — all in Republika Srpska — saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality. 
 
 The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1-FBiH and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
 
@@ -316,9 +332,7 @@ turnout_graph
 ```
 [*Notes: Municipalities depicted are post-war municipalities. Brčko district is included in both Republika Srpska and the Federation. Turnout rates are calculated based on pre-war population counts and include all persons, including those not eligible to vote, such as minors. Source: Bosnia's Central Election Commission, 2012.*]{style="font-size: 0.75em;"}
 
-A municipality's turnout rate — based on the number of votes registered to vote in the municipality — was found to correlate to nationalist voting patterns. Models A3, A1-RS, A2-RS, and A3-RS all found higher turnout to be correlated with a lower proportion of votes going to non-nationalist parties. Model A1-FBiH found the opposite: higher turnout resulted in proportionally more votes going towards non-nationalist parties. Models B3, B1-RS, B2-RS, and B3-RS found higher turnout correlated to higher proportions of votes going to nationalist candidates.
-
-While it initially seems there might be some contradictory results among the models, it appears that the relationship between turnout rates and nationalist voting patterns may be distinct and opposite between municipalities in the Federation and in Republika Srpska. All Republika Srpska models found turnout rates to be statistically significant, while the relationship appears to be weaker in the Federation as only one model found turnout rates to be statistically significant.
+A municipality's turnout rate — based on the number of votes registered to vote in the municipality — was found to correlate to nationalist voting patterns. Model A2 found a higher turnout rate correlated with a lower proportion of votes being cast for non-nationalist parties. Models B1, B2, and B3 found higher turnout rates correlated with higher proportions of votes for nationalist political parties.
 
 ### Ethnic Group Prevalence
 ```{r ethinc_group_proportions, echo=FALSE}
@@ -368,7 +382,6 @@ prewar_muslims
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
 #### Croats
-
 A substantial majority of the pre-war Croats living in territory that ended within the Federation.
 
 Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger voteshares for nationalist parties. Several populations in the region of highest Croat concentration — along the border with Croatia's Dalmatian Coast — saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
@@ -386,7 +399,6 @@ prewar_croats
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
 #### Serbs
-
 Unlike the proportion of Croats, a higher pre-war proportion of Serbs in a municipality correlated to more non-nationalist voting, primarily within the Federation. Models A3 and A3-FBiH found both higher percentage of Serbs in the pre-war municipality and an increase in the relative proportions of Serbs between 1991 and 2013 to be correlated with higher rates of non-nationalist voting. Models B3 and B3-FBiH found lower proportions of Serbs in pre-war municipalities and an increase of Serbs' relative proportion within municipalities to be correlated with lower rates of nationalist voting. These findings were not found in Republika Srpska, which was dominated by a single ethnicity, unlike the Federation.
 
 **MAP X.** Percent Identifying as Serb in 1991, by municipality
@@ -437,38 +449,28 @@ No model found either the proportion of Other ethnic groups in the pre-war munic
 ### Distance to Croatia and Yugoslavia
 None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
 
-Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Model A1 found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B1-RS, and B2-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
+Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A3, A1-RS, A2-RS, and A3-RS found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B3, B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
 
 It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
 
 ### Sarajevo Municipalities
 Fifteen post-war municipalities were classified as part of Greater Sarajevo:  Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
 
-None of the models found Sarajevo municipalities to have statistically significant differences from non-Sarajevo municipalities.
+Model A3 found municipalities comprising metropolitan Sarajevo to be less likely to have voted for non-nationalist candidates. Models B3, B1-RS, B2-RS, and B3-RS found Sarajevo municipalities to correspond to higher proportions of votes being cast for nationalist candidates.
 
 ### Population
 Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
 
-Several models found the size of the pre-war population to be correlated with 1997 voting patterns. Model A3 found a larger pre-war population correlated with a higher share of non-nationalist votes, while model B3 found larger populations connected to less votes being cast for nationalist parties.
-
-Change in population between the 1991 and 2013 census was also found to correlate to voting patterns. Model A2 found higher increases in population to correlate to a lower proportion of votes to be cast to non-nationalist parties, while model B2 found higher decreases in population to relate to higher rates of voting for nationalist parties.
-
-<!-- Model A2 found this trend across all municipalities. Models A1 and A2-FBiH found the same trend, though only at the α = 0.1 confidence level. Figure X shows the modeled relationship between pre-war municipal population and predicted proportion of non-nationalist votes. -->
-
-<!-- **FIGURE X.** Modeled relationship of Pre-War Population on Proportion of Non-Nationationalist Votes -->
-
-<!-- ```{r pop_relationship_graph, echo=FALSE, warning=FALSE, fig.align = 'center'} -->
-
-<!-- cowplot::plot_grid(pop_relationship_graph_nonnationalist, -->
-<!--                    pop_relationship_graph_nationalist, -->
-<!--                    ncol = 2) -->
-
-<!-- ``` -->
-
-<!-- [*Notes: Models A2 and B2 found pre-war population, logged scale, to be statistically significant, while Model A1 only found it significant at the α = 0.1 confidence level. Source: Author calculations; Bosnia Central Election Commission, 1991.*]{style="font-size: 0.75em;"} -->
+None of the models found pre-war population or the change in population between 1991 and 2013 to be statistically significant.
 
 ### Municiplality Area
+Post-war municipal areas were found to correlate with voting patterns. Models A1, A2, A1-FBiH, and A3-FBiH found voters in larger municipalities were more likely to vote proportionally more for non-nationalist voting parties. Models B1, B2, B1-FBiH, and B3-FBiH found larger municipalities saw lower proportions of nationalist voting shares.
 
+## Conclusion
+
+...
+
+Multiple factors were found to have strong connections with voting intentionality in only Republika Srpska or the Federation. Voters faced different incentives in how to vote within these two entities, and certain factors appear to have only been significant influences within one entity or the other. Influencing factors therefore cannot solely be assessed at the country-wide level; local levels must be assessed in addition, particularly when the levels correspond to military frontiers and sides of the war.
 
 ## Works Cited
 
@@ -489,6 +491,8 @@ Costalli, S. and F. Moro, (2012). Ethnicity and strategy in the Bosnian civil wa
 Davies, S., Pettersson, T., Sollenberg, M., and M. Öberg, (2025). Organized violence 1989–2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4).
 
 Fearon, J., (2003). Ethnic and Cultural Diversity by Country. Journal of Economic Growth. 8(2), 195-222.
+
+Foucault, M. (2003). Society Must Be Defended: Lectures at the Collège de France, 1975–1976. Translated by D. Macey. New York: Picador.
 
 General Framework Agreement for Peace in Bosnia and Herzegovina, (1995). https://www.ohr.int/dayton-peace-agreement/.
 
