@@ -53,8 +53,11 @@ mun_distances_postwar <- read.csv("Formatted Data/postwar_municipality_distances
 # post-war municipality metadata
 postwar_metadata <- readxl::read_xlsx("Data/bih_postwar_municipality_metadata.xlsx")
 
-# minefields
+# minefields 1997
 landmines <- read.csv("Formatted Data/landmines_1997.csv")
+
+# minefields 2004
+landmines2 <- read.csv("Formatted Data/landmines_2004.csv")
 
 ### merge data -------------------------------------------------------------------------------------
 # prewar
@@ -110,6 +113,7 @@ postwar_data <- bih_postwar_municipalities_shapefile %>%
   dplyr::full_join(voting_location, by = "municipality") %>%
   dplyr::full_join(mun_distances_postwar, by = "municipality") %>%
   dplyr::left_join(landmines, by = "canton") %>%
+  dplyr::left_join(landmines2, by = "municipality") %>%
   dplyr::arrange(municipality) %>%
   dplyr::select(
     Municipality = municipality, Canton = canton, Entity = entity,
@@ -142,7 +146,9 @@ postwar_data <- bih_postwar_municipalities_shapefile %>%
     `Distance to Montenegro, Post-War` = dist_mne, `Distance to Yugoslavia, Post-War` = dist_yug,
     `Distance to Another Country, Post-War` = dist_other_country,
     `Distance to IEBL, Post-War` = dist_internal_border,
-    `Minefield Density` = minefields_per_sq_km
+    `Minefield Density` = minefields_per_sq_km,
+    `Minefield Area` = minefield_area,
+    `Minefield Percentage of Municipalty` = minefield_perc
   ) %>%
   dplyr::mutate(
     # code binaries for entities - Brčko is coded as belonging to both

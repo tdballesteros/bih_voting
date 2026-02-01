@@ -1,0 +1,262 @@
+---
+title: "01-Format_Shapefiles"
+format: html
+---
+
+This file formats Andreas Berger's pre-war and geoBoundaries's post-war municipalities shape files and saves them as .gpkg files.
+
+## Loading
+
+```{r}
+#| label: load-libraries
+#| echo: FALSE
+
+library(sf)
+library(readxl)
+library(mapview)
+library(units)
+library(tidyverse)
+
+```
+
+```{r}
+#| label: load-data
+#| echo: FALSE
+
+# Pre-War Municipalities Shapefile
+# Source: Andreas Beger, 2008
+bih_prewar_municipalities_shapefile <- sf::st_read(
+  "../Shape Files/Raw Shapefiles/prewar municipalities/AdminBound/BiH_municipalities.shp",
+  quiet = TRUE
+  )
+
+# Post-War Municipalities Shapefile
+# Source: geoBoundaries, 2020
+bih_postwar_municipalities_shapefile <- sf::st_read(
+  "../Shape Files/Raw Shapefiles/geoBoundaries-BIH-ADM3-all/geoBoundaries-BIH-ADM3.shp",
+  quiet = TRUE
+  )
+
+# crosswalk for shapefile Id value and name of municipality
+bih_prewar_municipality_id_crosswalk <- readxl::read_xlsx(
+  "../Data/bih_prewar_municipality_id_crosswalk.xlsx"
+  )
+
+# post-war municipality metadata
+postwar_municipality_data <- readxl::read_xlsx("../Data/bih_postwar_municipality_metadata.xlsx")
+
+```
+
+## Format Post-War Municipalities Shapefile
+
+```{r}
+#| label: format-postwar-municipalities-shapefile
+#| echo: FALSE
+
+bih_postwar_municipalities_shapefile <- bih_postwar_municipalities_shapefile %>%
+  sf::st_make_valid() %>%
+  dplyr::rename(municipality = shapeName) %>%
+  dplyr::mutate(
+    # remove extra whitespace on either end of any strings and replace internal whitespace with
+    # standard space character
+    municipality = stringr::str_squish(municipality),
+    # rename municipalities to standardize names
+    municipality = dplyr::case_when(
+      municipality == "Brcko District" ~ "Brčko",
+      municipality == "Centar" ~ "Sarajevo Centar",
+      municipality == "Doboj East" ~ "Doboj Istok",
+      municipality == "Kneževo" ~ "Skender Vakuf",
+      municipality == "Kozarska Dubica" ~ "Dubica",
+      municipality == "Kupra na Uni" ~ "Krupa na Uni",
+      municipality == "Kupres" ~ "Kupres-RS",
+      municipality == "Kupres (BiH)" ~ "Kupres-FBIH",
+      municipality == "Novi Grad" &
+        shapeID == "43093233B94913651340481" ~ "Sarajevo Novi Grad",
+      municipality == "Republika Srpska" ~ "Višegrad",
+      municipality == "Stari Grad" ~ "Sarajevo Stari Grad",
+      municipality == "Trnovo (BiH)" ~ "Trnovo-FBIH",
+      municipality == "Trnovo (RS)" ~ "Trnovo-RS",
+      municipality == "Ustiprača" ~ "Novo Goražde",
+      .default = municipality
+    ),
+    # calculate municipality area and perimeter based on shapefile
+    mun_area = units::set_units(sf::st_area(geometry), km^2),
+    mun_perimeter = units::set_units(sf::st_perimeter(geometry), km)
+    ) %>%
+  # merge in post-war municipality metadata
+  dplyr::full_join(postwar_municipality_data, by = "municipality") %>%
+  # remove extra whitespace on either end of any strings and replace internal whitespace with
+  # standard space character
+  dplyr::mutate(
+    canton = stringr::str_squish(canton),
+    entity = stringr::str_squish(entity),
+  ) %>%
+  # rename, reorder, and select variables
+  dplyr::select(municipality, canton, entity, sarajevo_district = `sarajevo district`,
+                split_by_iebl = `split by line`, mun_area, mun_perimeter, geometry) %>%
+  # arrange by municipality name
+  dplyr::arrange(municipality)
+
+# write data
+sf::write_sf(
+  obj = bih_postwar_municipalities_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/bih_postwar_municipalities_shapefile_formatted.gpkg" #,
+  # layer_options = "ENCODING=UTF-8"
+  )
+
+```
+
+## Format Post-War Cantons Shapefile
+
+```{r}
+#| label: format-postwar-cantons-shapefile
+#| echo: FALSE
+
+bih_postwar_cantons_shapefile <- bih_postwar_municipalities_shapefile %>%
+  sf::st_make_valid() %>%
+  dplyr::group_by(canton, entity) %>%
+  dplyr::summarise(
+    geometry = sf::st_union(geometry)
+    ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    # calculate canton area and perimeter based on shapefile
+    canton_area = units::set_units(sf::st_area(geometry), km^2),
+    canton_perimeter = units::set_units(sf::st_perimeter(geometry), km)
+    ) %>%
+  # rename, reorder, and select variables
+  dplyr::select(canton, entity, canton_area, canton_perimeter, geometry) %>%
+  # arrange by canton name
+  dplyr::arrange(canton)
+
+# write data
+sf::write_sf(
+  obj = bih_postwar_cantons_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/bih_postwar_cantons_shapefile_formatted.gpkg" #,
+  #layer_options = "ENCODING=UTF-8"
+  )
+
+```
+
+## Format Post-War Entities Shapefile
+
+```{r}
+#| label: format-postwar-entities-shapefile
+#| echo: FALSE
+
+bih_postwar_entities_shapefile <- bih_postwar_municipalities_shapefile %>%
+  sf::st_make_valid() %>%
+  dplyr::group_by(entity) %>%
+  dplyr::summarise(
+    geometry = sf::st_union(geometry)
+    ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    # calculate entity area and perimeter based on shapefile
+    entity_area = units::set_units(sf::st_area(geometry), km^2),
+    entity_perimeter = units::set_units(sf::st_perimeter(geometry), km)
+    ) %>%
+  # rename, reorder, and select variables
+  dplyr::select(entity, entity_area, entity_perimeter, geometry) %>%
+  # arrange by canton name
+  dplyr::arrange(entity)
+
+# write data
+sf::write_sf(
+  obj = bih_postwar_entities_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/bih_postwar_entities_shapefile_formatted.gpkg" #,
+  # layer_options = "ENCODING=UTF-8"
+  )
+
+```
+
+## Format Post-War Inter-Ethnic Boundary Line Shapefile
+```{r}
+#| label: format-iebl-shapefile
+#| echo: FALSE
+
+# Create a shapefile of the Inter-Ethnic Boundary Line (IEBL), the internal divisions between entities (and between entities and Brčko District). This shapefile does not include Bosnia and Herzegovina's external boundaries.
+
+sf::sf_use_s2(FALSE) 
+country_outline_line <- sf::st_boundary(sf::st_union(bih_postwar_entities_shapefile))
+all_boundaries <- sf::st_boundary(bih_postwar_entities_shapefile)
+internal_divisions_sfc <- sf::st_difference(all_boundaries, country_outline_line)
+internal_lines <- internal_divisions_sfc %>%
+  sf::st_union() %>%
+  sf::st_cast("LINESTRING") %>%
+  sf::st_union() %>%
+  sf::st_sf() 
+sf::sf_use_s2(TRUE)
+
+# write shapefile data
+sf::write_sf(
+  obj = internal_lines,
+  dsn = "../Shape Files/Formatted Shape Files/iebl_shapefile_formatted.gpkg"
+  )
+
+```
+
+## Format Pre-War Municipalities Shapefile
+```{r}
+#| label: format-prewar-municipalities-shapefile
+#| echo: FALSE
+
+bih_prewar_municipalities_shapefile <- bih_prewar_municipalities_shapefile %>%
+  # merge in the ID crosswalk
+  dplyr::left_join(bih_prewar_municipality_id_crosswalk, by = "Id") %>%
+  # drop unneeded variables
+  dplyr::select(id = "Id", "municipality" = "Name", geometry) %>%
+  sf::st_make_valid() %>%
+  # remove extra whitespace on either end of any strings and replace internal whitespace with
+  # standard space character
+  dplyr::mutate(municipality = stringr::str_squish(municipality))
+
+# This shapefile is missing the Sarajevo Centar and Sarajevo Novi Grad municipalities. Add an
+# approximated Sarajevo Centar and Sarajevo Novi Grad municipalities from the post-war
+# municipalities shapefile.
+
+# pull post-war Sarajevo Centar and Sarajevo Novi Grad shapes
+bih_sarajevo_postwar_centar <- bih_postwar_municipalities_shapefile %>%
+  dplyr::filter(municipality == "Sarajevo Centar") %>%
+  dplyr::mutate(id = 108) %>%
+  dplyr::select(id, municipality, geometry)
+
+bih_sarajevo_postwar_novi_grad <- bih_postwar_municipalities_shapefile %>%
+  dplyr::filter(municipality == "Sarajevo Novi Grad") %>%
+  dplyr::mutate(id = 109) %>%
+  dplyr::select(id, municipality, geometry)
+
+# remove overlap with pre-war shapefile
+bih_prewar_removed_shapes <- sf::st_difference(
+  bih_prewar_municipalities_shapefile,
+  bih_sarajevo_postwar_centar
+  )
+
+bih_prewar_removed_shapes <- sf::st_difference(
+  bih_prewar_removed_shapes,
+  bih_sarajevo_postwar_novi_grad
+  )
+
+# append post-war shapefiles
+bih_prewar_municipalities_shapefile <- bih_prewar_removed_shapes %>%
+  dplyr::select(id, municipality, geometry) %>%
+  # add the approximated municipalities
+  rbind(bih_sarajevo_postwar_centar, bih_sarajevo_postwar_novi_grad) %>%
+  # calculate area and perimeter
+  dplyr::mutate(
+    mun_area = units::set_units(sf::st_area(geometry), km^2),
+    mun_perimeter = units::set_units(sf::st_perimeter(geometry), km),
+  ) %>%
+  # drop unneeded variables
+  dplyr::select(id, municipality, mun_area, mun_perimeter, geometry) %>%
+  # arrange by municipality name
+  dplyr::arrange(municipality)
+
+# write data
+sf::write_sf(
+  obj = bih_prewar_municipalities_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/bih_prewar_municipalities_shapefile_formatted.gpkg" # ,
+  # layer_options = "ENCODING=UTF-8"
+  )
+
+```

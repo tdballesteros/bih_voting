@@ -1,0 +1,341 @@
+---
+title: "03-Merge_Data"
+format: html
+---
+
+This script loads all data formatted in 02-Format_Data.qmd and compiles it into three datasets:
+(1) Pre-War data - data compiled by pre-war municipalities
+(2) Post-War data - data compiled by post-war municipalities
+(3) Pre-War data assigned to post-war municipalities - data compiled at a pre-war municipal level assigned to post-war municipalities; this version will have the same data for municipalities that were originally one municipality and sums will not add up to the full value due to double counting
+
+## Loading
+```{r}
+#| label: load-libraries
+#| echo: FALSE
+
+library(sf)
+library(jsonlite)
+library(readxl)
+library(openxlsx)
+library(dplyr)
+
+```
+
+```{r}
+#| label: load-data
+#| echo: FALSE
+
+### PRE-WAR DATA ###
+
+# shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_prewar_municipalities_shapefile_formatted.gpkg",
+  quiet = TRUE
+  )
+
+# 1991 census data
+census_data_1991 <- read.csv("../Formatted Data/census_data_1991_formatted.csv")
+
+# death data
+death_data_cm <- read.csv("../Formatted Data/deaths_per_municipality_formatted.csv")
+
+# municipality distances
+mun_distances_prewar <- read.csv("../Formatted Data/prewar_municipality_distances.csv")
+
+# pre-war x post-war municipality crosswalk
+municipality_crosswalk <- readxl::read_xlsx("../Data/bih_municipality_reorg_crosswalk.xlsx")
+
+# gede deaths pre-war municipalities
+gede_municipality_prewar_counts <- read.csv("../Formatted Data/ucdp_deaths_prewar_municipality_formatted.csv")
+
+### POST-WAR DATA ###
+
+# shapefile
+bih_postwar_municipalities_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_postwar_municipalities_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# 2013 census data
+census_data_2013 <- read.csv("../Formatted Data/census_data_2013_formatted.csv")
+
+# 1991 census data applied to post-war municipalities
+census_data_1991_redist <- read.csv("../Formatted Data/census_data_1991_postwar_municipalities.csv")
+
+# nationalist/non-nationalist 1997 vote proportions
+nationalist_votes <- read.csv("../Formatted Data/nationalist_votes_1997.csv")
+
+# 1997 voting location
+voting_location <- read.csv("../Formatted Data/voting_location_1997.csv")
+
+# municipality distances
+mun_distances_postwar <- read.csv("../Formatted Data/postwar_municipality_distances.csv")
+
+# post-war municipality metadata
+postwar_metadata <- readxl::read_xlsx("../Data/bih_postwar_municipality_metadata.xlsx")
+
+# minefields 2004
+bih_minefields_2004_perc_area <- read.csv("../Formatted Data/landmines_2004.csv")
+
+gede_municipality_postwar_counts <- read.csv("../Formatted Data/ucdp_deaths_postwar_municipality_formatted.csv")
+
+### POST-WAR CANTON DATA ###
+
+# shapefile
+bih_postwar_cantons_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_postwar_cantons_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# minefields 1997
+landmines1 <- read.csv("../Formatted Data/landmines_1997.csv")
+
+# minefields 2004
+bih_minefields_2004_perc_canton_area <- read.csv("../Formatted Data/landmines_2004_canton.csv")
+
+```
+
+## Pre-War Data
+```{r}
+#| label: prewar-data
+#| echo: FALSE
+
+prewar_data_shapefile <- bih_prewar_municipalities_shapefile %>%
+  # merge in 1991 census data
+  dplyr::full_join(census_data_1991, by = "municipality") %>%
+  # merge in death data from c&m
+  dplyr::full_join(death_data_cm, by = "municipality") %>%
+  # merge in death data from udcp
+  dplyr::full_join(gede_municipality_prewar_counts, by = "municipality") %>%
+  # merge in municipal distances from neighboring countries / iebl
+  dplyr::full_join(mun_distances_prewar, by = "municipality") %>%
+  # select relevant variables and rename to be publication-ready names
+  dplyr::select(
+    Municipality = municipality,
+    `Municipality Area, Pre-War` = mun_area,
+    `Municipality Perimeter, Pre-War` = mun_perimeter,
+    `Population, 1991` = population,
+    `Muslim Population, 1991` = muslims,
+    `Croat Population, 1991` = croats,
+    `Serb Population, 1991` = serbs,
+    `Yugoslav Population, 1991` = yugoslavs,
+    `Other Population, 1991` = other,
+    `Muslim Population Percentage, 1991` = percent_muslims,
+    `Croat Population Percentage, 1991` = percent_croats,
+    `Serb Population Percentage, 1991` = percent_serbs,
+    `Yugoslav Population Percentage, 1991` = percent_yugoslavs,
+    `Other Population Percentage, 1991` = percent_other,
+    `Ethnic Fractionalization, 1991` = fractionalization,
+    `Ethnic Polarization, 1991` = polarization,
+    `Percent of Population, 1991` = percent_total_population,
+    `Deaths per Population` = deaths_per_population,
+    `Number of Deaths` = deaths_count,
+    `Count of Events` = count_of_events,
+    `Number of Deaths, best estimate` = best,
+    `Number of Deaths, high estimate` = high,
+    `Number of Deaths, low estimate` = low,
+    `Deaths per 100,000, UCDP` = deaths_per_100000,
+    `Deaths per 100,000, high, UCDP` = deaths_per_100000_high,
+    `Deaths per 100,000, low, UCDP` = deaths_per_100000_low,
+    `Ethnic Dominance` = ethnic_dominance_cm,
+    `Distance to Croatia, Pre-War` = dist_hrv,
+    `Distance to Serbia, Pre-War` = dist_srb,
+    `Distance to Montenegro, Pre-War` = dist_mne,
+    `Distance to Yugoslavia, Pre-War` = dist_yug,
+    `Distance to Another Country, Pre-War` = dist_other_country,
+    `Distance to IEBL, Pre-War` = dist_internal_border
+  ) %>%
+  # arrange by municipality name
+  dplyr::arrange(Municipality)
+
+# create df version of the data
+prewar_data <- prewar_data_shapefile %>%
+  as.data.frame() %>%
+  dplyr::select(-geom)
+
+# write shapefile data
+sf::write_sf(
+  obj = prewar_data_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/prewar_data.gpkg"
+  )
+
+# write formatted data
+openxlsx::write.xlsx(
+  x = prewar_data,
+  file = "../Formatted Data/data_prewar.xlsx"
+)
+
+```
+
+# Post-War Data
+```{r}
+#| label: postwar-data
+#| echo: FALSE
+
+postwar_data_shapefile <- bih_postwar_municipalities_shapefile %>%
+  # drop unneeded variables
+  dplyr::select(-c(canton, entity, sarajevo_district, split_by_iebl)) %>%
+  # merge in post-war municipality metadata
+  dplyr::full_join(postwar_metadata, by = "municipality") %>%
+  # merge in 2013 census data
+  dplyr::full_join(census_data_2013, by = "municipality") %>%
+  # merge in 1991 census data, by 2013 municipality
+  dplyr::full_join(census_data_1991_redist, by = "municipality") %>%
+  # merge in received nationalist voting data
+  dplyr::full_join(nationalist_votes, by = "municipality") %>%
+  # merge in voting location data
+  dplyr::full_join(voting_location, by = "municipality") %>%
+  # merge in municipal distances from neighboring countries / iebl
+  dplyr::full_join(mun_distances_postwar, by = "municipality") %>%
+  # merge in landmine 2004 data
+  dplyr::left_join(landmines2, by = "municipality") %>%
+  # select relevant variables and rename to be publication-ready names
+  dplyr::select(
+    Municipality = municipality,
+    Canton = canton,
+    Entity = entity,
+    `Sarajevo District` = `sarajevo district`,
+    `Municipal Borders Modified` = `split by line`,
+    `Municipality Area, Post-War` = mun_area,
+    `Municipality Perimeter, Post-War` = mun_perimeter,
+    `Population, 1991 Redistributed` = redist_population,
+    `Population, 2013` = population,
+    `Bosniak Population, 2013` = bosniak,
+    `Croat Population, 2013` = croat,
+    `Serb Population, 2013` = serb,
+    `Not Declared Population, 2013` = not_declared,
+    `Other Population, 2013` = other,
+    `No Answer Population, 2013` = no_answer,
+    `Bosniak Population Percentage, 2013` = percent_bosniak,
+    `Croat Population Percentage, 2013` = percent_croat,
+    `Serb Population Percentage, 2013` = percent_serb,
+    `Not Declared Population Percentage, 2013` = percent_not_declared,
+    `Other Population Percentage, 2013` = percent_other,
+    `No Answer Population Percentage, 2013` = percent_no_answer,
+    `Ethnic Fractionalization, 2013` = fractionalization,
+    `Ethnic Polarization, 2013` = polarization,
+    `Percent of Population, 2013` = percent_total_population,
+    `Proportion of Votes for Nationalist Parties, 1997` = Nationalist,
+    `Proportion of Votes for Non-Nationalist Parties, 1997` = Non.Nationalist,
+    `Proportion of Votes for Independent Parties, 1997` = Independent,
+    `Proportion of Votes for Other Parties, 1997` = Other,
+    `Proportion of Invalid Ballots, 1997` = Invalid.Ballot,
+    `Number of Votes Cast In-District, 1997` = votes_cast_in_district,
+    `Number of Votes Cast Out-District, 1997` = votes_cast_out_district,
+    `Total Votes Cast, 1997` = total_votes_cast,
+    `Proportion of Votes Cast In-District, 1997` = perc_cast_in,
+    `Proportion of Votes Cast Out-District, 1997` = perc_cast_out,
+    `Distance to Croatia, Post-War` = dist_hrv,
+    `Distance to Serbia, Post-War` = dist_srb,
+    `Distance to Montenegro, Post-War` = dist_mne,
+    `Distance to Yugoslavia, Post-War` = dist_yug,
+    `Distance to Another Country, Post-War` = dist_other_country,
+    `Distance to IEBL, Post-War` = dist_internal_border,
+    `Minefield Area` = minefield_area,
+    `Minefield Percentage of Municipalty` = minefield_perc
+  ) %>%
+  # code binaries for entities - Brčko is coded as belonging to both
+  dplyr::mutate(
+    `Republika Srpska Municipality` = ifelse(Entity %in% c("Republika Srpska", "Brčko"), 1, 0),
+    `Federation Municipality` = ifelse(Entity != "Republika Srpska", 1, 0),
+  ) %>%
+  dplyr::arrange(Municipality)
+
+# create df version of the data
+postwar_data <- postwar_data_shapefile %>%
+  as.data.frame() %>%
+  dplyr::select(-geom)
+
+# write shapefile data
+sf::write_sf(
+  obj = postwar_data_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/postwar_data.gpkg"
+  )
+
+# write formatted data
+openxlsx::write.xlsx(
+  x = postwar_data,
+  file = "../Formatted Data/data_postwar.xlsx"
+)
+
+```
+
+## Post-War Canton Data
+```{r}
+#| label: postwar-canton-data
+#| echo: FALSE
+
+postwar_canton_data_shapefile <- bih_postwar_cantons_shapefile %>%
+  # remove extra whitespace on either end of any strings and replace internal whitespace with
+  # standard space character
+  dplyr::mutate(
+    canton = stringr::str_squish(canton),
+    entity = stringr::str_squish(entity)
+  ) %>%
+  # merge in landmine 1997 data
+  dplyr::full_join(landmines1, by = "canton") %>%
+  # merge in landmine 2004 data
+  dplyr::full_join(bih_minefields_2004_perc_canton_area, by = "canton") %>%
+  # select relevant variables and rename to be publication-ready names
+  dplyr::select(
+    Canton = canton,
+    Entity = entity,
+    `Canton Area, Post-War` = canton_area,
+    `Canton Perimeter, Post-War` = canton_perimeter,
+    `Minefields per Sq. km, Canton` = minefields_per_sq_km,
+    `Minefield Area, Canton` = minefield_area,
+    `Minefield Percentage of Canton` = minefield_perc
+  ) %>%
+  dplyr::arrange(Canton)
+
+# create df version of the data
+postwar_canton_data <- postwar_canton_data_shapefile %>%
+  as.data.frame() %>%
+  dplyr::select(-geom)
+
+# write shapefile data
+sf::write_sf(
+  obj = postwar_canton_data_shapefile,
+  dsn = "../Shape Files/Formatted Shape Files/postwar_canton_data.gpkg"
+  )
+
+# write formatted data
+openxlsx::write.xlsx(
+  x = postwar_canton_data,
+  file = "../Formatted Data/data_postwar_canton.xlsx"
+)
+
+```
+
+# Pre-War Data Assigned to Post-War Municipalities
+```{r}
+#| label: prewar-data-postwar-municipalities
+#| echo: FALSE
+
+prewar_data_assigned_to_postwar_shapefile <- bih_postwar_municipalities_shapefile %>%
+  # as.data.frame() %>%
+  dplyr::select(Municipality = municipality) %>%
+  # merge in pre- and post-war municipality crosswalk
+  dplyr::full_join(municipality_crosswalk,
+                   dplyr::join_by("Municipality" == "Postwar Municipality")) %>%
+  # merge in pre-war data
+  dplyr::full_join(prewar_data, dplyr::join_by("Prewar Municipality" == "Municipality"))
+  
+# create df version of the data
+prewar_data_assigned_to_postwar <- prewar_data_assigned_to_postwar_shapefile %>%
+  as.data.frame() %>%
+  dplyr::select(-geom)
+
+# write shapefile data
+sf::write_sf(
+  obj = prewar_data_assigned_to_postwar,
+  dsn = "../Shape Files/Formatted Shape Files/prewar_assigned_to_postwar_data.gpkg"
+  )
+
+# write formatted data
+openxlsx::write.xlsx(
+  prewar_data_assigned_to_postwar,
+  "../Formatted Data/data_prewar_assigned_postwar.xlsx"
+  )
+
+```

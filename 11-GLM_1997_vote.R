@@ -10,6 +10,7 @@ prewar_data <- readxl::read_xlsx("Formatted Data/data_prewar.xlsx")
 
 # post-war data
 postwar_data <- readxl::read_xlsx("Formatted Data/data_postwar.xlsx")
+postwar_canton_data <- readxl::read_xlsx("Formatted Data/data_postwar_canton.xlsx")
 
 # pre-war data assigned to post-war municipalities
 prewar_data_assigned_to_postwar <- readxl::read_xlsx(
@@ -18,10 +19,13 @@ prewar_data_assigned_to_postwar <- readxl::read_xlsx(
 
 ### combine data -----------------------------------------------------------------------------------
 df <- postwar_data %>%
+  dplyr::full_join(postwar_canton_data, by = "Canton") %>%
   dplyr::full_join(prewar_data_assigned_to_postwar, by = "Municipality") %>%
   dplyr::filter(!is.na(`Proportion of Votes for Non-Nationalist Parties, 1997`)) %>%
   dplyr::mutate(
     `Population Density, 1991` = `Population, 1991` / `Municipality Area, Pre-War`,
+    `Population Density, 1991 Redistributed` = `Population, 1991 Redistributed` / `Municipality Area, Post-War`,
+    `Population Density, 1991 Redistributed Logged` = log(`Population Density, 1991 Redistributed`),
     `Population, 1991 Logged` = log(`Population, 1991`),
     `Population, 1991 Redistributed Logged` = log(`Population, 1991 Redistributed`),
     `Population, 2013 Logged` = log(`Population, 2013`),
@@ -38,8 +42,8 @@ df <- postwar_data %>%
       `Serb Population Percentage, 1991`,
     `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` = abs(`Change in % Bosniaks, 1991 to 2013`) +
       abs(`Change in % Croats, 1991 to 2013`) + abs(`Change in % Serbs, 1991 to 2013`),
-    `Turnout Rate, 1997` = `Total Votes Cast, 1997` / `Population, 1991`,
-    `Estimated Number of Minefields` = `Minefield Density` * `Municipality Area, Post-War`,
+    `Turnout Rate, 1997` = `Total Votes Cast, 1997` / `Population, 1991 Redistributed`,
+    `Estimated Number of Minefields` = `Minefields per Sq. km, Canton` * `Municipality Area, Post-War`,
     `Municipality Area, Pre-War Logged` = log(`Municipality Area, Pre-War`),
     `Municipality Area, Post-War Logged` = log(`Municipality Area, Post-War`)
     )
@@ -49,6 +53,34 @@ df_rs <- df %>%
 
 df_fbih <- df %>%
   dplyr::filter(`Federation Municipality` == 1)
+
+
+# correlation matrix
+cor_matrix <- cor(df %>%
+                    dplyr::select(
+      `Deaths per Population`, `Minefields per Sq. km, Canton`, `Ethnic Fractionalization, 1991`,
+      `Change in Ethnic Fractionalization, 1991 to 2013`,
+      `Proportion of Votes Cast Out-District, 1997`, `Turnout Rate, 1997`,
+      `Yugoslav Population Percentage, 1991`, `Other Population Percentage, 1991`,
+      `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013`,
+      `Distance to Croatia, Post-War`, `Distance to Yugoslavia, Post-War`,
+      `Distance to IEBL, Post-War`, `Population Density, 1991 Redistributed Logged`,
+      `Population, 1991 Redistributed Logged`, `Change in Population`, `Federation Municipality`,
+      `Sarajevo District`, `Muslim Population Percentage, 1991`,
+      `Change in % Bosniaks, 1991 to 2013`, `Croat Population Percentage, 1991`,
+      `Change in % Croats, 1991 to 2013`, `Serb Population Percentage, 1991`,
+      `Change in % Serbs, 1991 to 2013`
+        ))
+  
+# NOTE: var1-var2 and var2-var1 will both be listed
+cor_matrix_long <- cor_matrix %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("var1") %>%
+  tidyr::pivot_longer(2:(ncol(cor_matrix) + 1), names_to = "var2", values_to = "correlation") %>%
+  # drop rows where var1 == var2 (diaginal in the correlation matrix)
+  dplyr::filter(var1 != var2) %>%
+  # create absolute correlation, so both high and low correlation extremes can be seen together
+  dplyr::mutate(cor_abs = abs(correlation))
 
 ### GLM: non-nationalist vote share ----------------------------------------------------------------
 # A1 - Bosniak + Fractionalization
@@ -65,15 +97,18 @@ df_fbih <- df %>%
 
 # all municipalities
 model_a1 <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` +
+                  # `Minefields per Sq. km, Canton` +
+                  `Minefield Percentage of Municipalty` +
+                  `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
                   `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                   `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                  `Distance to IEBL, Post-War` + `Population, 1991 Redistributed Logged` +
-                  `Change in Population` + `Municipality Area, Post-War Logged` +
-                  `Federation Municipality` + `Sarajevo District` +
+                  `Distance to IEBL, Post-War` + `Population Density, 1991 Redistributed Logged` +
+                  `Population, 1991 Redistributed Logged` + `Change in Population` +
+                  `Federation Municipality` + `Sarajevo District` + 
                   `Muslim Population Percentage, 1991` + `Change in % Bosniaks, 1991 to 2013`,
                 data = df, family = gaussian()
 )
@@ -82,7 +117,9 @@ car::vif(model_a1)
 
 # Republika Srpska
 model_a1r <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` +
+                   `Minefield Percentage of Municipalty` +
+                   `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -98,7 +135,10 @@ car::vif(model_a1r)
 
 # Federation
 model_a1f <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` +
+                   # `Minefields per Sq. km, Canton` +
+                   `Minefield Percentage of Municipalty` +
+                   `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -116,7 +156,7 @@ car::vif(model_a1f)
 
 # all municipalities
 model_a2 <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -148,7 +188,7 @@ car::vif(model_a2r)
 
 # Federation
 model_a2f <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -166,7 +206,7 @@ car::vif(model_a2f)
 
 # all municipalities
 model_a3 <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -198,7 +238,7 @@ car::vif(model_a3r)
 
 # Federation
 model_a3f <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -227,7 +267,7 @@ car::vif(model_a3f)
 
 # country-wide
 model_b1 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -259,7 +299,7 @@ car::vif(model_b1r)
 
 # federation
 model_b1f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -277,7 +317,7 @@ car::vif(model_b1f)
 
 # republic wide
 model_b2 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -309,7 +349,7 @@ car::vif(model_b2r)
 
 # federation
 model_b2f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -327,7 +367,7 @@ car::vif(model_b2f)
 
 # republic wide
 model_b3 <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                  `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                  `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
@@ -359,7 +399,7 @@ car::vif(model_b3r)
 
 # federation
 model_b3f <- glm(`Proportion of Votes for Nationalist Parties, 1997` ~
-                   `Deaths per Population` + `Minefield Density` + `Ethnic Fractionalization, 1991` +
+                   `Deaths per Population` + `Minefields per Sq. km, Canton` + `Ethnic Fractionalization, 1991` +
                    `Change in Ethnic Fractionalization, 1991 to 2013` +
                    `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                    `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +

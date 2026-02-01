@@ -1,4 +1,4 @@
-"municipality","community","total","muslims","serbs","croats","yugoslavs","others","muslims_percent","serbs_percent","croats_percent","yugoslavs_percent","others_percent","population_percent_of_municipality","fractionalization","polarization"
+"municipality","community","population","muslims","serbs","croats","yugoslavs","other","percent_muslims","percent_serbs","percent_croats","percent_yugoslavs","percent_other","population_percent_of_municipality","fractionalization","polarization"
 "Banja Luka","Ada",3758,517,2405,159,252,425,0.137573177221927,0.639968068121341,0.042309739222991,0.0670569451836083,0.113092070250133,0.0192036465466141,0.552437928410167,0.724119395278314
 "Banja Luka","Agino Selo",1106,2,1077,2,5,20,0.00180831826401447,0.97377938517179,0.00180831826401447,0.00452079566003617,0.0180831826401447,0.00565173844612963,0.0513997298967659,0.100846249710038
 "Banja Luka","Bistrica",1217,6,1186,1,18,6,0.00493015612161052,0.974527526705012,0.000821692686935086,0.0147904683648316,0.00493015612161052,0.00621895631911371,0.0500280536821218,0.0978235099771936

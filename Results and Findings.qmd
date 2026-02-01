@@ -1,66 +1,279 @@
 ---
-  title: "Results and Findings"
-  format: html
-  editor: visual
+  title: "Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia and Herzegovina’s 1997 Municipal Elections"
+  author: Tim Ballesteros
+  date: "30 January 2026"
+  format:
+    html:
+      favicon: favicon.png
+  editor: source
 ---
 
-```{r loading, echo = FALSE, warning=FALSE, message=FALSE}
+```{r}
+#| label: load-libraries
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
 
 library(modelsummary)
 library(cowplot)
 library(flextable)
 library(officer)
 library(magrittr)
+library(readxl)
+library(sf)
+library(ggplot2)
+library(ggbeeswarm)
+library(ggrepel)
+library(patchwork)
+library(plotly)
+library(here)
+library(jpeg)
+library(grid)
+library(stringr)
 library(dplyr)
+library(tidyverse)
+
+```
+
+```{r}
+#| label: load-data
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+### LOAD DATASETS ###
+
+# pre-war data
+prewar_data <- readxl::read_xlsx("Formatted Data/data_prewar.xlsx")
+
+# post-war data
+postwar_data <- readxl::read_xlsx("Formatted Data/data_postwar.xlsx")
+
+# post-war canton data
+postwar_data_canton <- readxl::read_xlsx("Formatted Data/data_postwar_canton.xlsx")
+
+# pre-war data assigned to post-war municipalities
+prewar_data_assigned_to_postwar <- readxl::read_xlsx(
+  "Formatted Data/data_prewar_assigned_postwar.xlsx"
+  )
+
+# load 04-GLMs.qmd
+# temp_script <- tempfile(fileext = ".R")
+# knitr::purl("Scripts/04-GLMs.qmd", output = temp_script, documentation = 0)
+# source(temp_script)
+# unlink(temp_script)
+
+
+### LOAD DATA SHAPEFILES ###
+
+# prewar data
+prewar_data_shapefile <- sf::read_sf("Shape Files/Formatted Shape Files/prewar_data.gpkg")
+
+# postwar municipality data
+postwar_data_shapefile <- sf::read_sf("Shape Files/Formatted Shape Files/postwar_data.gpkg")
+
+# postwar canton data
+postwar_canton_data_shapefile <- sf::read_sf("Shape Files/Formatted Shape Files/postwar_canton_data.gpkg")
+
+
+### LOAD SHAPFILES ###
+
+# Pre-War Municipalities Map Shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/Formatted Shape Files/bih_prewar_municipalities_shapefile_formatted.gpkg",
+  quiet = TRUE
+  )
+
+# Postwar Municipalities Map Shapefile
+postwar_municipalities_shapefile <- sf::read_sf(
+  "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+  quiet = TRUE
+)
+
+# IEBL Shapefile
+iebl_shapefile <- sf::read_sf(
+  "Shape Files/Formatted Shape Files/iebl_shapefile_formatted.gpkg",
+  quiet = TRUE
+  )
+
+
+### LOAD OTHER FILES ###
 
 # source GLM models
 source("~/R/bih_voting/11-GLM_1997_vote.R", echo = FALSE)
 
-# source population maps
-source("~/R/bih_voting/23-Mapping_population.R", echo = FALSE)
+# load minefield jpg image
+minefield_image <- jpeg::readJPEG("landmine locations 2004.jpg")
 
-# source death maps
-source("~/R/bih_voting/25-Mapping_death_data.R", echo = FALSE)
+# load cantonal landmine calculations
+bih_minefields_2004_perc_canton_area <- read.csv("Formatted Data/landmines_2004_canton.csv")
 
-# source population model relationship graph
-source("~/R/bih_voting/26-Population_relationship_graph.R", echo = FALSE)
+# Minefield 2004 Map Shapefile
+minefield_2004_shapefile <- sf::read_sf(
+  "Shape Files/bih_landmine_areas.gpkg",
+  quiet = TRUE
+)
 
-# source death data comparison graph
-source("~/R/bih_voting/27-Death_data_comparison.R", echo = FALSE)
 
-# source turnout rates graph
-source("~/R/bih_voting/29-Turnout_rates_graph.R", echo = FALSE)
+### load data
+# deaths by municipality data
+# death_data <- read.csv("Formatted Data/deaths_per_municipality_formatted.csv")
+# death_data_postwar_municipalities <- read.csv("Formatted Data/deaths_per_postwar_municipality_formatted.csv")
+
+# minefield data
+# landmines <- read.csv("Formatted Data/landmines_1997.csv")
+
+# load formatted shapefiles
+# source("01-Format_shapefiles.R")
+
+# # post-war canton shapefile
+# bih_postwar_canton_shapefile <- sf::read_sf(
+#   "Shape Files/geoBoundaries-BIH-ADM2-all/geoBoundaries-BIH-ADM2.shp",
+#   quiet = TRUE
+# )
+# 
+# # IEBF shapefile
+# iebf_shapefile <- sf::read_sf("Shape Files/internal_entity_division_shapefile.shp")
 
 ```
 
 ## Introduction
-Democratic elections in post-conflict settings are seen as pivotal in shifting away from partisan violence to non-violent competition of power through electoral politics. Parties that contest and succeed in elections, however, are frequently those organised through established communities; following a conflict, this means the combatant organisations will have a leg up in organisational capacity and recognition needed to succeed in elections.^[Lyons, 2004; Reilly, 2002.] Additionally, identities that were once fluid or not divisive frequently harden during and following a conflict.^[Hadzic, Carlson, and Tavits, 2017.] While the exact relationship between conflict and the solidifying of identities has yet to be determined, by the end of the conflict citizens are largely split along the divisions of the conflict.
 
-Taken together, political parties forming from – or indeed just the rebranding of – militant groups have an advantage over other groups in campaigning and communities will have polarized views of the identity-based political parties. Often this results in victories for ethnic politics following an election, particularly in countries with little prior experience with democracy.
+Democratic elections in post-conflict settings are seen as pivotal in shifting away from partisan violence to non-violent competition of power through electoral politics. Parties that contest and succeed in elections, however, are frequently those organised through established communities; following a conflict, this means the combatant organisations will have a leg up in organisational capacity and recognition needed to succeed in elections.[^1] Additionally, identities that were once fluid or not divisive frequently harden during and following a conflict.[^2] While the exact relationship between conflict and the solidifying of identities has yet to be determined, by the end of the conflict citizens are largely split along the divisions of the conflict.
 
-Ethnic parties – or parties with any identitarian focus – however, do not obtain all the votes. Nor do they receive equal support from all parts of society. Non-ethnic parties – parties campaigning along the traditional left-right divide or for specific issues – often see support from particular groups in society or within a confined geographic region, while support from the population at large is essentially absent.
+[^1]: Lyons, 2004; Reilly, 2002.
 
-To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality^[*Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
+[^2]: Hadzic, Carlson, and Tavits, 2017.
+
+Taken together, political parties forming from --- or indeed just the rebranding of --- militant groups have an advantage over other groups in campaigning and communities will have polarized views of the identity-based political parties. Often this results in victories for ethnic politics following an election, particularly in countries with little prior experience with democracy.
+
+Ethnic parties -- or parties with any identitarian focus --- however, do not obtain all the votes. Nor do they receive equal support from all parts of society. Non-ethnic parties --- parties campaigning along the traditional left-right divide or for specific issues --- often see support from particular groups in society or within a confined geographic region, while support from the population at large is essentially absent.
+
+To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality[^3] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
+
+[^3]: *Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.
+
+## Literature Review
+
+Academic literature widely uses the concept of ethnic parties - and sectarian parties more generally - but generally omit concretely defining the term.[^4] Operationalizations of differing concepts of ethnic parties lead to vastly different measurements, with Chandra finding that, depending on the measurement, ethnic parties received between 2% and 39% of the vote in India's 1991 parliamentary election.[^5] Literature also generally operates on the assumption that all ethnic parties are generally the same; authors that do differentiate between different groups largely limit themselves to territoriality or different degrees of political demands.[^6] Another way to differentiate different kinds of ethnic parties is by focusing on how ethnic parties are structured and how they present themselves to the electorate, instead of distinguishing based on their platforms.[^7]
+
+[^4]: Chandra, 2011.
+
+[^5]: Chandra, 2011.
+
+[^6]: de Winter and Gomez-Reino, 2002; Gadjanova, 2015.
+
+[^7]: Ishiyama and Breuning, 2011.
+
+Despite a lack of universal classification as to what constitutes an "ethnic" party, or even if there is one composition of an "ethnic" party, much work has been done that has furthered the understanding of how these parties gain and maintain support in post-conflict settings.
+
+Peace agreements now commonly feature elections as a key pillar, though researchers do not agree upon their efficacy in maintaining peace. Conflicts that are fought along ethnic lines often feature minority ethnic groups demanding greater cultural autonomy; increased democratic representation would merely channel this to ethnic political representation.[^8] The pre-existing organizational capacity of ethnic-based political actors following a conflict gives them an advantage over often poorly mobilized civil society. These parties can thus easily "appeal to the very same insecurities that generated the original conflict" as "the easiest way to mobilize voter support".[^9] According to Lyons, this results in the "\[e\]lectoral ratification of the militarized institutions of the civil war," by definition non-inclusive parties.[^10] With the war's actors being the best organized and their platforms the easiest to mobilize around, the effects of conflict only further entrench any pre-war ethnic voting patterns. Hadzic, Carlson and Tavits found that wartime exposure to violence solidifies ethnic identity, engenders distrust towards non-co-ethnics, and causes greater intra-ethnic trust.[^11]
+
+[^8]: Wagner and Dreff, 2014.
+
+[^9]: Reilly, 2002: 133.
+
+[^10]: Lyons 2004: 36
+
+[^11]: Hadzic, Carlson and Tavits, 2017.
+
+Not all post-conflict countries see support for ethnic parties. Batty found that ethnically divided Liberia and Sierra Leone both saw cross-segmental support in the first elections after their respective wars, while Pickering accredits the success of non-nationalist parties in North Macedonia following their conflict to the parties' stronger record in governing.[^12] Murtagh found that which electoral system was used to be critical, with consociationalism providing the potential to constrain ethnic-based parties after a conflict.[^13]
+
+[^12]: Batty, 2015; Pickering, 2009.
+
+[^13]: Murtagh, 2015.
+
+Ethnic-based political parties are marked by incentives for further extremism and chauvinism in order for the party to be deemed "more" ethnic than rival parties representing the same group.[^14] This leads to a process of outbidding, where parties attempt to take progressively more radical positions in order to gain the support of those belonging to their ethnic community.[^15] Political elites will generate this outbidding as they compete for the votes by sacrificing moderation.[^16]
+
+[^14]: Stroschein, 2011.
+
+[^15]: Rabushka and Shepsle, 1972; Zuber, 2011.
+
+[^16]: Horowitz, 1985.
+
+Competition between parties representing the same ethnicity does not necessarily have to be marked by outbidding. Stroschein found that outbidding was not the primary source of division between ethnic Hungarian parties in Romania, but rather that they were divided based on their view of whether to influence policies at the national or at the local level.[^17] Zuber found that ethnic Hungarian and Bosniak parties in Serbia enacted strategies other than outbidding when competing with rival ethnic-based parties.[^18]
+
+[^17]: Stroschein, 2011.
+
+[^18]: Zuber, 2011.
+
+Often, there is an uneven spread of votes for ethnic and non-ethnic parties across a country. Pugh and Cobble found that municipalities in Bosnia and Herzegovina with higher population densities and more ethnic diversity voted more frequently for non-nationalist parties.[^19] Stroschein identified that the calculations of voting for ethnic parties are different for those in ethnic enclaves and those living outside those enclaves; the study found those in enclaves more receptive to voting for the more extreme Hungarian party in Romania than those outside Hungarian enclaves.[^20] Fractionalization and polarization metrics have been used to quantify ethnic diversity when looking at the impact of this heterogeneity in voting patterns.[^21]
+
+[^19]: Pugh and Cobble, 2001.
+
+[^20]: Stroschein, 2011.
+
+[^21]: Pugh and Cobble, 2001.
 
 ## Election Background
-Voter registration, specifically ensuring a lack of fraud in voters registering for a specific municipality, was a major challenge for what ended up being two elections in the aftermath of the Bosnian War: the general elections and the municipal elections. The general elections included votes for the ethnically-balanced tripartite presidency, in which one Bosniak, on Croat, and one Serb was elected to the Presidency; the House of Representatives, national legislature; and entity- and canton-level offices. The Dayton Agreement mandated this to occur within six months of the signing of the agreement (taken as 14 December 1995, the ceremonial signing date), or within nine months at the latest upon the Organization for Security and Co-operation in Europe's (OSCE) recommendation.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date (“Election Day”) six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." https://www.ohr.int/dayton-peace-agreement/annex-3/] Municipal elections were local elections covering municipal-level offices; the Dayton Agreement only stated these elections were to be held "as soon as possible".
 
-The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities. As such, the Dayton Agreement stipulated multiple places for individuals to register: (1) where the individual had lived in 1991; (2) where the individual now resided; or (3) where they intended to live in the future.^[Commission on Security and Cooperation in Europe, 1997.]
+### The Dayton Agreement
 
-Initially, the Provisional Election Commission attempted to have themselves and the government update voter rolls. This lead to efforts by multiple government actors - mainly but not exclusively relating to registering Serb voters^[Bureau of Democracy, Human Rights, and Labor, 1998.] - to influence voter registry and municipality of registration to manipulate local elections and cement the demographic changes realized by the war. Brčko, the district not within either Republika Srpska or the Federation, was particularly impacted.
+The Dayton Agreement[^22] featured guarantees for elections across Bosnia at national, entity, canton, and municipal levels very quickly after the end of the Bosnian War. The Dayton Agreement set national, entity, and cantonal office elections to be held six months after the signing of the agreement,[^23] extendable by the Organization for Security and Co-operation in Europe's (OSCE) to "no later than nine months" if they determine delays necessary.[^24] International and domestic stakeholders had less urgency for municipal-level elections.
 
-Due to the fraud in voter enrollment, the OSCE postponed the municipal elections - that is, the races where accurate registration to a specific municipality had the most impact - in August 1996 to November the same year. The timeframe-mandated general elections occurred as scheduled on 14 September 1996, the last day within the nine-month window. These national-, entity-, and canton-level elections were less impacted by fraudulent municipal registration, as the precise municipality of registration did not impact what elections the voters participated in.
+[^22]: Formally the General Framework Agreement for Peace in Bosnia and Herzegovina.
 
-Fraud in voter rolls was noted as a significant problem in the general elections. The International Crisis Group (ICG) reported that, based on preliminary results, voter turnout in the 1996 general election was over 100%.^[International Crisis Group, 1996.] This claim has been disputed when extrapolating demographic trends,^[Malcolm, 1997.] though the lack of demographic information about the post-war Bosnian population limits any concrete claims on number of eligible citizens. Another significant problem was relating to freedom of movement, which the Dayton Agreement stated was an essential condition of elections. Individuals faced threats, were subjected to violence, detained, and murdered when attempting to cross the IEBL to participate in the election. Official UNHCR buses transporting voters across the lines were stoned and faced harassment and detention.^[International Crisis Group, 1996.]
+[^23]: The signing of the Dayton Agreement and its immediate entry into force is taken as 14 December 1994, the date of the formal signing in Paris, France. Parties to the conflict initially signed the agreement on 21 November 1995 at the Wright-Patterson Air Force Base outside Dayton, Ohio.
 
-Due to the problems experienced leading up to the general elections, the OSCE modified the requirements for internally displaced persons (IDPs) and refugees. IDPs attempting to register in the municipality to which they were displaced now had to have resided there since before August 1996 and be able to provide documentary proof. IDPs and refugees attempting to register in a municipality other than the one they resided prior to the war were now required to demonstrate with clear and convincing documentation that they had a pre-existing, legitimate, and non-transitory relationship with that municipality based on ownership of a property or business, an offer of employment, or an invitation by a blood relative who had lived in that municipality before the conflict began.^[Commission on Security and Cooperation in Europe, 1997.] Diverting from both the European-wide and Bosnian norms, the Provisional Election Commission required individuals  to actively register to vote for the municipal elections; previously voter registration was automatic in Bosnia and Herzegovina.^[Commission on Security and Cooperation in Europe, 1997.] To account for these changes, the OSCE delayed municipal elections from November 1996 to April 1997, then a third time to 13-14 September 1997.^[Commission on Security and Cooperation in Europe, 1997.]
+[^24]: General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date ("Election Day") six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." https://www.ohr.int/dayton-peace-agreement/annex-3/
 
-These new restrictions, in addition to more assertive monitoring, did reduce fraud. In the general election, 160,000 Bosnians in Yugoslavia registered to vote in a municipality other than the one in which they lived in 1991. Leading up to the municipal elections, only several thousand refugees across all countries attempted to do so; only 145 were able to do so.^[Commission on Security and Cooperation in Europe, 1997.] The OSCE also scrutinized and prevented several cases of attempted fraud. In Bosniak-dominated Žepče, the *Hrvatska demokratska zajednica* (HDZ; Croatian Democratic Union, the main Croat nationalist party) attempted to bring in voters from surrounding areas to register with false documentation. The OSCE removed approximately 2,800 voters from the registration list and they began a new, three-day registration period. The OSCE also rejected over 3,000 voter registration forms in Brčko over suspicion of fraud.^[Commission on Security and Cooperation in Europe, 1997.]
+The Dayton Agreement additionally set out initial voter eligibility rules, emphasizing the right of refugees to participate in the elections.[^25] The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities;[^26] the estimated population of Bosnia and Herzegovina in 1996 was 16.7% lower than the pre-war population count, a decrease of 732,033 people.[^27] These statistics emphasized the importance to establish fair and just protocols for these individuals to vote. For the 1996 elections, individuals had multiple options for in which municipality to register: (1) as a general rule, where the individual had lived at the time of the 1991 census, regardless of their current residence; (2) where the individual now resided; or (3) where they intended to live in the future.
 
-Table X shows OSCE's data on where individuals registered to vote based on where they were located, by entity.^[Organization for Security and Co-operation in Europe, 1997.]
+[^25]: General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article IV. "Voters. Any citizen of Bosnia and Herzegovina aged 18 or older whose name appears on the 1991 census for Bosnia and Herzegovina shall be eligible, in accordance with electoral rules and regulations, to vote. A citizen who no longer lives in the municipality in which he or she resided in 1991 shall, as a general rule, be expected to vote, in person or by absentee ballot, in that municipality, provided that the person is determined to have been registered in that municipality as confirmed by the local election commission and the Provisional Election Commission. Such a citizen may, however, apply to the Commission to cast his or her ballot elsewhere. The exercise of a refugee's right to vote shall be interpreted as confirmation of his or her intention to return to Bosnia and Herzegovina. By Election Day, the return of refugees should already be underway, thus allowing many to participate in person in elections in Bosnia and Herzegovina. The Commission may provide in the electoral rules and regulations for citizens not listed in the 1991 census to vote." https://www.ohr.int/dayton-peace-agreement/annex-3/
 
-**TABLE X.** Voter Registration in the 1997 Election, by Entity and Absentee Status
-```{r voter_registration_table, echo=FALSE, warning=FALSE, fig.align = 'center'}
+[^26]: Commission on Security and Cooperation in Europe, 1997.
+
+[^27]: Gekic, Bidzan-Gekic, Miric, and Remenyi, 2020.
+
+### Implementing Dayton: The 1996 General Elections
+
+Michel Foucault stated "politics is war by other means."[^28] The war's belligerents may have laid down their arms - or at least transitioned away from armed conflict - but they were still seeking to achieve the same goals as they had been over the previous four years. With the rules of the elections laid out in the Dayton Agreement, the Provisional Election Commission, and the OSCE, belligerents in the war transitioned to politics to cement their victories gained during the war. And these groups would take any advantage they could to win.
+
+[^28]: Foucault, 2003.
+
+Another challenge was the flexibility in voter's municipality of registration. In attempting to accommodate to the many IDPs and refugees, the Dayton Agreement and official bodies involved in overseeing the elections allowed for actors to commit fraud that was, within select municipalities, widespread. Groups within Bosnia and Herzegovina - particularly but by no means exclusively Serbs in Republika Srpska and Brčko district[^29] - took advantage of displaced persons being able to choose what municipality to register in with very little requirements; at this point, there were no requirements for a connection to the municipality people intended to relocate to, meaning displaced persons could essentially chose freely where to register.
+
+[^29]: Bureau of Democracy, Human Rights, and Labor, 1998.
+
+Initially, the Provisional Election Commission attempted to have themselves and the government update voter rolls. This allowed multiple government actors to influence voter registration, specifically allowing them to have people who are more likely to vote in their favor to be registered to the municipality of the government's choice. This was, in effect, a plan to cement demographic changes caused by the war by allowing politicians from "their" community to get elected and discourage those from "other" communities who were displaced to return. Brčko, the district not within either Republika Srpska or the Federation, was particularly impacted.[^30]
+
+[^30]: Bureau of Democracy, Human Rights, and Labor, 1998.
+
+Due to the fraud in voter enrollment, the OSCE postponed the municipal elections - that is, the races where accurate registration to a specific municipality had the most impact - in August 1996 to November the same year. The timeframe-mandated general elections occurred as scheduled on 14 September 1996, the last day within the nine-month window. These national-, entity-, and canton-level elections were less impacted by fraudulent municipal registration, as the precise municipality of registration did not as greatly impact what elections the voters participated in.
+
+Fraud in voter rolls was noted as a significant problem in the general elections. The International Crisis Group (ICG) reported that, based on preliminary results, voter turnout in the 1996 general election was over 100%.[^31] This claim has been disputed when extrapolating demographic trends,[^32] though the lack of demographic information about the post-war Bosnian population limits any concrete claims on number of eligible citizens. Another significant problem was relating to freedom of movement, which the Dayton Agreement stated was an essential condition of elections. Individuals faced threats, were subjected to violence, detained, and murdered when attempting to cross the IEBL to participate in the election. Official UNHCR buses transporting voters across the lines were stoned and faced harassment and detention.[^33]
+
+[^31]: International Crisis Group, 1996.
+
+[^32]: Malcolm, 1997.
+
+[^33]: International Crisis Group, 1996.
+
+Due to the problems experienced leading up to the general elections, the OSCE modified the requirements for internally displaced persons (IDPs) and refugees. IDPs attempting to register in the municipality to which they were displaced now had to have resided there since before August 1996 and be able to provide documentary proof. IDPs and refugees attempting to register in a municipality other than the one they resided prior to the war were now required to demonstrate with clear and convincing documentation that they had a pre-existing, legitimate, and non-transitory relationship with that municipality based on ownership of a property or business, an offer of employment, or an invitation by a blood relative who had lived in that municipality before the conflict began.[^34] Diverting from both the European-wide and Bosnian norms, the Provisional Election Commission required individuals to actively register to vote for the municipal elections; previously voter registration was automatic in Bosnia and Herzegovina.[^35] To account for these changes, the OSCE delayed municipal elections from November 1996 to April 1997, then a third time to 13-14 September 1997.[^36]
+
+[^34]: Commission on Security and Cooperation in Europe, 1997.
+
+[^35]: Commission on Security and Cooperation in Europe, 1997.
+
+[^36]: Commission on Security and Cooperation in Europe, 1997.
+
+These new restrictions, in addition to more assertive monitoring, did reduce fraud. In the general election, 160,000 Bosnians in Yugoslavia registered to vote in a municipality other than the one in which they lived in 1991. Leading up to the municipal elections, only several thousand refugees across all countries attempted to do so; only 145 were able to do so.[^37] The OSCE also scrutinized and prevented several cases of attempted fraud. In Bosniak-dominated Žepče, the *Hrvatska demokratska zajednica* (HDZ; Croatian Democratic Union, the main Croat nationalist party) attempted to bring in voters from surrounding areas to register with false documentation. The OSCE removed approximately 2,800 voters from the registration list and they began a new, three-day registration period. The OSCE also rejected over 3,000 voter registration forms in Brčko over suspicion of fraud.[^38]
+
+[^37]: Commission on Security and Cooperation in Europe, 1997.
+
+[^38]: Commission on Security and Cooperation in Europe, 1997.
+
+Table 1 shows OSCE's data on where individuals registered to vote based on where they were located, by entity.[^39]
+
+[^39]: Organization for Security and Co-operation in Europe, 1997.
+
+**TABLE 1.** Voter Registration in the 1997 Election, by Entity and Absentee Status
+
+```{r}
+#| label: voter-registration-table
+#| echo: FALSE
+#| warning: FALSE
+#| fig-align: 'center'
 
 border_style <- officer::fp_border(color = "gray50", style = "solid", width = 0.5)
 
@@ -93,28 +306,106 @@ registration_table <- tibble::tibble(
 registration_table
 
 ```
-[*Notes: Percents might not add up to 100 due to rounding. All percentages displayed are out of the row-wise total. Municipalities depicted are post-war municipalities. Source: OSCE, 1997*]{style="font-size: 0.75em;"}
 
-Individuals registering for their 1991 municipality of residence while still living within that municipality was far more frequent in the Federation than in Republika Srpska.^[Organization for Security and Co-operation in Europe, 1997.] Republika Srpska saw larger proportions of voters register absentee both within-country and out-of-country, as well as in their 1997 municipality of residence. Overall, nearly a quarter of voters registered as absentee voters.
+[*Notes: Percents might not add up to 100 due to rounding. All percentages displayed are out of the row-wise total. Municipalities depicted are post-war municipalities. Source: Organization for Security and Co-operation in Europe, 1997.*]{style="font-size: 0.75em;"}
 
-While the delay of municipal elections to occurring just short of two years since the signing of the Dayton Agreement did provide opportunities for the OSCE to take measures on voter registration fraud, freedom of movement remained restricted; this denial of a civil right had significant implications for elections at local levels.^[Commission on Security and Cooperation in Europe, 1997.] Violence against displaced persons attempting to return remained, including cases where local law enforcement participated.^[Bureau of Democracy, Human Rights, and Labor, 1998.]
+Individuals registering for their 1991 municipality of residence while still living within that municipality was far more frequent in the Federation than in Republika Srpska.[^40] Republika Srpska saw larger proportions of voters register absentee both within-country and out-of-country, as well as in their 1997 municipality of residence. Overall, nearly a quarter of voters registered as absentee voters.
+
+[^40]: Organization for Security and Co-operation in Europe, 1997.
+
+While the delay of municipal elections to occurring just short of two years since the signing of the Dayton Agreement did provide opportunities for the OSCE to take measures on voter registration fraud, freedom of movement remained restricted; this denial of a civil right had significant implications for elections at local levels.[^41] Violence against displaced persons attempting to return remained, including cases where local law enforcement participated.[^42]
+
+[^41]: Commission on Security and Cooperation in Europe, 1997.
+
+[^42]: Bureau of Democracy, Human Rights, and Labor, 1998.
 
 ## Methodology and Research Questions
-To address what factors impact a municipality's proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.^[Centralna izborna komisija Bosne i Hercegovine, 2012.]
 
-I classify political parties as "nationalist" and "non-nationalist", as well as "other" and "independent", based on research by Pugh and Cobble on Bosnian municipal elections.^[Pugh and Cobble, 2001.] Parties appealing to a particular ethnic group and promoting that group’s rights to the exclusion of the rights of others were coded as nationalist. Modifications were made such that parties appealing to an ethnic base to promote ethnic rights in a pluralistic society were coded as non-nationalist parties. This is particularly important in several municipalities in Canton 10, where parties such as Zavičaj and Za Drvar appealed to displaced Serbs and promoted their rights but did not campaign for the discrimination against non-Serbs.^[Wilkinson, 1998.] As such, “nationalist parties” refers to those that promote a sole identity group to the exclusion of the rights of others. “Non-nationalist parties,” on the other hand, refers to a wider range of parties, ranging from those that promote specific interests, those that campaign on the left-right political and those that campaign to specific national communities within the context of a pluralist country. Only parties that saw at least a modest amount of support were coded, leaving independents and small parties uncoded.
+To address what factors impact a municipality's proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.[^43]
 
-The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic cohorts were heavily concentrated around boarders with Croatia and Serbia prior to the war; spillover from the war in Croatia began in areas neighboring Croatia; and Serb irregular forces as well as Yugoslav troops and supplies entered through rump Yugoslavia.^[Bennett, 2016.]. The war was additionally an attempt by Croatian and Yugoslav governments to annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the “mother” country, and thus will be less inclined to vote for non-nationalist parties.
+[^43]: Centralna izborna komisija Bosne i Hercegovine, 2012.
 
-$H_{1a}$: Municipalities more proximate to the Croatian or Yugoslav^[Yugoslavia here refers to the post-breakaway rump state, consisting of modern-day Serbia, Montenegro, and Kosovo. What is now known as North Macedonia additionally broke away in 1992, though it was only recognized in 1993.] borders will see decreased shares of votes for non-nationalist parties.
+I classify political parties as "nationalist" and "non-nationalist", as well as "other" and "independent", based on research by Pugh and Cobble on Bosnian municipal elections.[^44] Parties appealing to a particular ethnic group and promoting that group's rights to the exclusion of the rights of others were coded as nationalist. Modifications were made such that parties appealing to an ethnic base to promote ethnic rights in a pluralistic society were coded as non-nationalist parties. This is particularly important in several municipalities in Canton 10, where parties such as Zavičaj and Za Drvar appealed to displaced Serbs and promoted their rights but did not campaign for the discrimination against non-Serbs.[^45] As such, "nationalist parties" refers to those that promote a sole identity group to the exclusion of the rights of others. "Non-nationalist parties," on the other hand, refers to a wider range of parties, ranging from those that promote specific interests, those that campaign on the left-right political and those that campaign to specific national communities within the context of a pluralist country. Only parties that saw at least a modest amount of support were coded, leaving independents and small parties uncoded.
 
-The division of Bosnia and Herzegovina into two entities by the Inter-Entity Boundary Line (IEBL) in the Dayton Agreement is also predicted to be related to voting patterns. The IEBL roughly follows the final military fronts and as such can be viewed as a proxy for the front line. Similarly, proximity to the IEBL results in proximity to the entity successor of the opposing military force, which implies potential uncertainty for their safety were the Dayton Agreement to fail. As such, proximity to the IEBL is hypothesized to decrease non-nationalist vote shares.
+[^44]: Pugh and Cobble, 2001.
 
-$H_{1b}$: Municipalities more proximate to the IEBL will see decreased shares of votes for non-nationalist parties.
+[^45]: Wilkinson, 1998.
 
-Distances are calculated from the closest point in the municipality to the second geographic feature, such as the IEBL. A binary dummy variable is used to indicate whether a municipality was formed from the division of a pre-war municipality by the IEBL.
+### Exposure to Violence
 
-The literature places a heavy focus on the ethnic composition of voting districts in explaining support for ethnic parties. The exact relationship is not clear, but homogeneous areas are perceived as to not feel threatened by other ethnic groups taking power and as such are potentially less inclined to support diversionary politics. In the case of post-war elections, and especially in the case of Bosnia and Herzegovina, this theory weighs too heavily on the localized governance aspect. Another perspective is that areas with greater heterogeneity will be less inclined to support zero-sum politics as they live in closer proximity to the “others” they would be in essence voting against. As such, it is hypothesized that more heterogeneous areas will see less nationalistic votes.
+Intensity of conflict is hypothesized to result an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits's[^46] work on conflict cementing ethnic identities. Those that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
+
+[^46]: Hadzic, Carlson and Tavits, 2017.
+
+To measure this localized intensity of conflict, two measures are used: deaths by municipality and suspected minefield coverage by municipality.
+
+$H_{1a}$: Municipalities that saw a greater portion of deaths relative to population during the war will see lower portions of votes go to non-nationalist parties.
+
+$H_{1b}$: Municipalities that saw a greater portion of the municipality's land area covered in possible minefields during the war will see lower portions of votes go to non-nationalist parties.
+
+Data on deaths per population for each municipality is included as a proxy for the degree of violence in each locale. The data is from Costalli and Moro[^47], who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo. The results are validated using data from the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.[^48] See Appendix A for a comparison of the distribution of fatalities across municipalities and the impact on select models using UCDP data.
+
+[^47]: Costalli and Moro, 2012.
+
+[^48]: Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.
+
+Minefield data comes from the Bosnia and Herzegovina Mine Action Center containing data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents.[^49] The data represents the situation as of November 2004, so cleared and lifted areas are assumed to have not been assessed and cleared at the ending of the war. This data was converted to georeferenced vector data. See Figure X for the source map and the extracted approximate mine locations.
+
+[^49]: Bosnia and Herzegovina Mine Action Center, 2004.
+
+**FIGURE X.** Approximate Minefield Location Source Image and Extracted Shapefile
+
+```{r}
+#| label: mine-maps
+#| echo: FALSE
+#| fig.width: 10
+#| fig.height: 5
+#| out.width: "100%"
+
+# convert minefield image
+# minefield_grob <- grid::rasterGrob(minefield_image, interpolate = TRUE)
+
+# create plots
+p1 <- ggplot2::ggplot() + 
+  ggplot2::annotation_raster(minefield_image, -Inf, Inf, -Inf, Inf) +
+  ggplot2::theme_void() +
+  ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0, "pt")) +
+  ggplot2::coord_fixed(expand = FALSE)
+  
+  # p1 <- patchwork::wrap_elements(minefield_grob)
+
+p2 <- ggplot() +
+  # Bottom layer (Base map)
+  geom_sf(data = postwar_municipalities_shapefile, fill = "gray80", color = "white") + 
+  # Top layer (Overlay with transparency)
+  geom_sf(data = minefield_2004_shapefile, fill = "blue", alpha = 0.5, color = "black") + 
+  theme_minimal()
+
+# p2 <- ggplot2::ggplot(minefield_2004_shapefile) +
+#   ggplot2::geom_sf(fill = "black", color = "black", size = 0.2) +
+#   ggplot2::theme_minimal() +
+#   ggplot2::theme(
+#     legend.position = "none",
+#     axis.ticks = element_blank()
+#   ) +
+#   ggplot2::coord_sf(expand = FALSE)
+
+# combine
+p1 + p2
+
+```
+
+[*Notes: Original Approximate Minefield Location Source Image (left) and the extracted approximate minefield location shapefile (right). The shapefile includes approximate cleared, mined, and lifted areas and approximate locations of mine incidents. Source: Bosnia and Herzegovina Mine Action Center, 2004; author calculations.*]{style="font-size: 0.75em;"}
+
+This vectorized data is then split into pre-war municipalities and the percentage of each municipality covered with approximate minefield locations is calculated.
+
+To validate this data, cantonal estimates from the United Nations Mine Action Centre are compared to the above approximate landmine coverage estimates. The United Nations Mine Action Centre released estimates for minefield area coverage across the Federation's 10 cantons and Republika Srpska in 1997.[^50] See Appendix B for the full comparison.
+
+[^50]: International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.
+
+### Ethnic Fractionalization
+
+The literature places a heavy focus on the ethnic composition of voting districts in explaining support for ethnic parties. The exact relationship is not clear, but homogeneous areas are perceived as to not feel threatened by other ethnic groups taking power and as such are potentially less inclined to support diversionary politics. In the case of post-war elections, and especially in the case of Bosnia and Herzegovina, this theory weighs too heavily on the localized governance aspect. Another perspective is that areas with greater heterogeneity will be less inclined to support zero-sum politics as they live in closer proximity to the "others" they would be in essence voting against. As such, it is hypothesized that more heterogeneous areas will see less nationalistic votes.
 
 $H_{2a}$: Municipalities that were more ethnically heterogeneous prior to the war will see increased shares of votes for non-nationalist parties.
 
@@ -122,7 +413,11 @@ The war drastically changed the ethnic composition of many municipalities, which
 
 $H_{2b}$: Municipalities that were more ethnically heterogeneous after the war will see increased shares of votes for non-nationalist parties.
 
-To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization measurement is taken from Alesina et al.^[Alesina et al., 2003.] and Fearon^[Fearon, 2003.], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country’s fractionalization as
+To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization measurement is taken from Alesina et al.[^51] and Fearon[^52], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country's fractionalization as
+
+[^51]: Alesina et al., 2003.
+
+[^52]: Fearon, 2003.
 
 $Fractionalization = 1-\sum_{i=1}^{N} {p_{i}^{2}}$
 
@@ -130,29 +425,60 @@ where $p$ is the percentage of the population of the $i^{th}$ ethnic group in th
 
 Measurements for ethnic fractionalization are included based on the 1991 and 2013 census results. The former measures the pre-war ethnic composition of municipalities, while the latter assumes that the relative distributions of ethnic groups within municipalities from the immediate post-war perior remain roughly consistent over the next two decades until the 2013 census, with most of the movement of the population occurring during the war.
 
-Percentages of each constituent peoples – Bosniaks, Croats and Serbs – as well as Yugoslavs and Others are included to determine if any of these five ethnic groups or categories has a particular impact on voting behavior. Data comes from the 1991 census and thus reflects the pre-war distribution of the population rather than the population during the vote. While this similarly has issues with mass population displacement, it allows for analysis on pre-war population demographics that were largely the location of voting in 1997.
+Percentages of each constituent peoples -- Bosniaks, Croats and Serbs -- as well as Yugoslavs and Others are included to determine if any of these five ethnic groups or categories has a particular impact on voting behavior. Data comes from the 1991 census and thus reflects the pre-war distribution of the population rather than the population during the vote. While this similarly has issues with mass population displacement, it allows for analysis on pre-war population demographics that were largely the location of voting in 1997.
+
+#### Ethnic population + % change in ethnic population
+
+#### Absolute change in proportion of ethnic populations
+
+### Voting Location and Turnout
+
+Little research has been done on displaced persons' voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic[^53]. Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,[^54] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
+
+[^53]: Stefanovic, and Loizides, 2015.
+
+[^54]: Zic, 2017.
+
+$H_{3a}$: Municipalities that saw a larger proportion of absentee voting will see a larger proportion of votes for nationalist parties.
+
+<!-- Add turnout -->
+
+### Distances
+
+The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic cohorts were heavily concentrated around boarders with Croatia and Serbia prior to the war; spillover from the war in Croatia began in areas neighboring Croatia; and Serb irregular forces as well as Yugoslav troops and supplies entered through rump Yugoslavia.[^55] The war was additionally an attempt by Croatian and Yugoslav governments to annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the "mother" country, and thus will be less inclined to vote for non-nationalist parties.
+
+[^55]: Bennett, 2016.
+
+$H_{4a}$: Municipalities more proximate to the Croatian or Yugoslav[^56] borders will see decreased shares of votes for non-nationalist parties.
+
+[^56]: Yugoslavia here refers to the post-breakaway rump state, consisting of modern-day Serbia, Montenegro, and Kosovo. What is now known as North Macedonia additionally broke away in 1992, though it was only recognized in 1993.
+
+The division of Bosnia and Herzegovina into two entities by the Inter-Entity Boundary Line (IEBL) in the Dayton Agreement is also predicted to be related to voting patterns. The IEBL roughly follows the final military fronts and as such can be viewed as a proxy for the front line. Similarly, proximity to the IEBL results in proximity to the entity successor of the opposing military force, which implies potential uncertainty for their safety were the Dayton Agreement to fail. As such, proximity to the IEBL is hypothesized to decrease non-nationalist vote shares.
+
+$H_{4b}$: Municipalities more proximate to the IEBL will see decreased shares of votes for non-nationalist parties.
+
+Distances are calculated from the closest point in the municipality to the second geographic feature, such as the IEBL. A binary dummy variable is used to indicate whether a municipality was formed from the division of a pre-war municipality by the IEBL.
+
+### Population and Population Density
 
 Similar to the reasoning behind the hypothesis of more diverse populations seeing higher proportions of votes go to non-nationalist parties, the urbanity of a municipality is predicted to be positively related to the portion of votes going to non-nationalist parties.
 
-$H_{3}$: More urban municipalities will vote in a larger proportion for non-nationalist parties.
+$H_{5a}$: More urban municipalities will vote in a larger proportion for non-nationalist parties.
 
-Population from the 1991 census is used for each municipality; while the war did see large amounts of displacement, populations still had belief in the implementation of the right to return promises stated in the Dayton Agreement, many individuals voted absentee in their pre-war municipality and the population sizes relative to each other are unlikely to have drastically changed. A binary variable is also included to indicate whether the municipality is one of the 10 pre-war municipalities comprising the city of Sarajevo.
+Population from the 1991 census is used for each municipality; while the war did see large amounts of displacement, populations still had belief in the implementation of the right to return promises stated in the Dayton Agreement, many individuals voted absentee in their pre-war municipality and the population sizes relative to each other are unlikely to have drastically changed.
 
-Intensity of conflict is hypothesized to result an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits’s^[Hadzic, Carlson and Tavits 2017] work on conflict cementing ethnic identities. Those that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
+Population density
 
-$H_{4a}$: Municipalities that saw greater violence during the war will see lower portions of votes go to non-nationalist parties.
+### Control Variables
 
-Data on deaths per population for each municipality is included as a proxy for the degree of violence in each locale. The data is from Costalli and Moro^[Costalli and Moro, 2012.], who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo. A second source of deaths comes from Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.^[Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.]
-
-Little research has been done on displaced persons’ voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic^[Stefanovic, and Loizides, 2015.]. Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,^[Zic, 2017.] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
-
-$H_{4b}$: Municipalities that saw a larger proportion of absentee voting will see a larger proportion of votes for nationalist parties.
+FBiH municipality, Sarajevo municipality, % each ethnicity
 
 ## Overall Findings
 
 Models A1, A2, and A3 (see Table 1) assess vote proportions for non-nationalist parties across all municipalities in Bosnia and Herzegovina in the 1997 municipal elections.
 
 ```{r}
+#| label: results-a
 #| echo: false
 #| results: asis
 
@@ -167,6 +493,7 @@ cat('</details>')
 Models A1-RS, A2-RS, and A3-RS (see Table 2) assess vote proportions for non-nationalist parties across municipalities in Republika Srpska, including Brčko district, in the 1997 municipal elections.
 
 ```{r}
+#| label: results-a-rs
 #| echo: false
 #| results: asis
 
@@ -181,6 +508,7 @@ cat('</details>')
 Models A1-FBiH, A2-FBiH, and A3-FBiH (see Table 3) assess vote proportions for non-nationalist parties across municipalities in the Federation of Bosnia and Herzegovina, including Brčko district, in the 1997 municipal elections.
 
 ```{r}
+#| label: results-a-fbih
 #| echo: false
 #| results: asis
 
@@ -195,6 +523,7 @@ cat('</details>')
 Models B1, B2, and B3 (see Table 4) assess vote proportions for nationalist parties across all municipalities in Bosnia and Herzegovina in the 1997 municipal elections.
 
 ```{r}
+#| label: results-b
 #| echo: false
 #| results: asis
 
@@ -209,6 +538,7 @@ cat('</details>')
 Models B1-RS, B2-RS, and B3-RS (see Table 5) assess vote proportions for non-nationalist parties across municipalities in Republika Srpska, including Brčko district, in the 1997 municipal elections.
 
 ```{r}
+#| label: results-b-rs
 #| echo: false
 #| results: asis
 
@@ -223,6 +553,7 @@ cat('</details>')
 Models B1-FBiH, B2-FBiH, and B3-FBiH (see Table 6) assess vote proportions for non-nationalist parties across municipalities in the Federation of Bosnia and Herzegovina, including Brčko district, in the 1997 municipal elections.
 
 ```{r}
+#| label: results-b-fbih
 #| echo: false
 #| results: asis
 
@@ -235,72 +566,241 @@ cat('</details>')
 ```
 
 ### Deaths per Population
-The Bosnian War was deadly, particularly on civilians. While the exact degree of severity remains unknown, estimates for the number of total fatalities from the Bosnian War are approximately 100,000 deaths, approximately 2.3% of the pre-war population. Some estimates give vastly different results, though these were typically produced within the first decade following the war; death estimates have ranged from 25,000 to 329,000.^[Nilsen, 2004.] This speaks nothing for the number of injured, the countless families forced to flee their homes, those who lost loved ones in the violence, and the immense cultural heritage targeted and sometimes erased.
+
+The Bosnian War was deadly, particularly on civilians. While the exact degree of severity remains unknown, estimates for the number of total fatalities from the Bosnian War are approximately 100,000 deaths, approximately 2.3% of the pre-war population. Some estimates give vastly different results, though these were typically produced within the first decade following the war; death estimates have ranged from 25,000 to 329,000.[^57] This speaks nothing for the number of injured, the countless families forced to flee their homes, those who lost loved ones in the violence, and the immense cultural heritage targeted and sometimes erased.
+
+[^57]: Nilsen, 2004.
 
 Fatalities remain one of the most accessible metrics of violence resulting from conflict. While it in and of itself may represent a small portion of people who suffered due to conflict, deaths remain a good proxy for overall violence within the war. Casualties, particularly among combatants, likely correlate strongly with locations of fatalities. Fatalities also likely depict areas of increased fighting, which would relate to forced civilian displacement.
 
-As previously stated, an estimated 100,000 people died in the Bosnian War. These estimates do vary: The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.^[Ball, Tabeau, & Verwimp, 2007.] This figure was increased to 101,040 in the final 2012 release of the report.^[Sito-Sucic & Robinson, 2012.] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.^[Zwierzchowski & Tabeau, 2010.] Applying the 1991 Bosnian Census data to Costalli and Moro's pre-war municipality proportion of population deaths, their dataset contains an estimated 95,088 deaths, all attributed to specific pre-war municipalities. The UCDP's Georeferenced Event Dataset Global, version 25.1, which features geo-referenced incident-level data with fatality estimates, contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate).
+As stated above, an estimated 100,000 people died in the Bosnian War. These estimates do vary: The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.[^58] This figure was increased to 101,040 in the final 2012 release of the report.[^59] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.[^60] Applying the 1991 Bosnian Census data to Costalli and Moro's pre-war municipality proportion of population deaths, their dataset contains an estimated 95,088 deaths, all attributed to specific pre-war municipalities. The UCDP's Georeferenced Event Dataset Global, version 25.1, which features geo-referenced incident-level data with fatality estimates, contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate).
 
-Though the overall estimated number of deaths differ significantly, the impact on the model would only be impacted by differing distributions of deaths by municipality. Assessing proportions of total deaths by municipality in Costalli and Moro's dataset and the UCDP GED dataset's best estimate, 21 pre-war municipalities have differences in the proportion of total deaths between the two sources of 1 percentage point or more. Srebrenica far and away saw the biggest difference: Costalli and Moro attributed 8.1% of deaths to Srebrenica, while UCDP attributed 24.2% (21.8% to 26.1% using low and high estimates), or a percentage difference of 16 percentage points. Brčko, Sarajevo Novo Sarajevo, Bihać, and Goražde also saw differences greater than 2 percentage points. Figure X shows municipalities who saw greater than 1 percentage point difference in their proportion of fatalities between the two datasets, with bands for UCDP's low and high estimates shown in gray.
+[^58]: Ball, Tabeau, & Verwimp, 2007.
 
-**FIGURE X.** Proportion of Total Deaths in Costalli and Moro and UCDP, by Select Municipality
-```{r death_comparison, echo=FALSE, warning=FALSE, fig.align = 'center'}
+[^59]: Sito-Sucic & Robinson, 2012.
 
-#death_perc_of_total_plot
-plotly
-
-```
-[*Notes: Municipalities displayed are pre-war municipalities. Error bars for UCDP estimates depict calculations based on the low and high death estimates; the best death estimate proportion does not necessarily fall between proportions calculated using the low and high death estimates. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
-
-Map X shows differences in the percent of deaths between the two data sources for all municipalities.
-
-**FIGURE X.** Comparison of Proportion of Total Deaths by Costalli and Moro vs. UCDP, by Municipality
-```{r death_comparison_map, echo=FALSE, warning=FALSE, fig.align = 'center'}
-
-death_perc_comparison_map_plotly
-
-```
-[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Positive values indicate Costalli and Moro has a higher proportion of overall deaths for that municipality, while negative values indicate UCDP does. Values closer to white indicate the two data sources attribute similar proportions of overall deaths to the municipality; it does not indicate the same number of deaths. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+[^60]: Zwierzchowski & Tabeau, 2010.
 
 The five pre-war municipalities that saw the most absolute number of deaths were Srebrenica (7,711 deaths), Prijedor (5,201), Zvornik (4,127), Bratunac (3,604), and Sarajevo Novi Grad (3,151), which combined account for an estimated 25% of all deaths in the war. Based on pre-war populations, the pre-war municipalities that saw the highest proporitons of death relative to population were Srebrenica (21.0% of the municipality's pre-war population), Bratunac (10.7%), Rogatica (9.2%), Vlasenica (8.6%), and Višegrad (8.3%). These counts are based on the location of death, not where the individuals lived. As such, places like Srebrenica that saw large numbers of individuals who lived in other municipalities die did not necessarily see the highest proportion of their pre-war population die, but rather saw the highest proportion of people die in the municipality relative to their pre-war population. Map X shows pre-war municipalities by the absolute number of deaths (left) and the number of deaths relative to the pre-war population (right), with the five municipalities with the highest values highlighted.
 
 **MAP X.** Deaths and Deaths per 100,000 Pre-War Population, by municipality
-```{r death_maps, echo=FALSE, warning=FALSE, fig.align = 'center'}
 
+```{r}
+#| label: death-maps
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+### FORMAT DATA ###
+
+# format c&m death data with geographic data
+deaths_prewar_municipality <- prewar_data_shapefile %>%
+  sf::st_make_valid() %>%
+  dplyr::select(Municipality, `Deaths per Population`, `Number of Deaths`) %>%
+  dplyr::mutate(
+    `Deaths per 100,000` = `Deaths per Population` * 100000,
+    `Deaths per 100,000, logged` = dplyr::case_when(
+      `Deaths per 100,000` == 0 ~ 0,
+      `Deaths per 100,000` > 0 ~ log(`Deaths per 100,000`),
+      `Deaths per 100,000` < 0 ~ log(`Deaths per 100,000`) + 1
+    ))
+
+
+### CREATE ABSOLUTE MAP ###
+
+deaths_prewar_municipalities_top5_abs <- deaths_prewar_municipality %>%
+  dplyr::slice_max(`Number of Deaths`, n = 5) %>%
+  dplyr::pull(Municipality)
+
+deaths_prewar_municipalities_top5_abs_shapefile <- deaths_prewar_municipality %>%
+  dplyr::filter(Municipality %in% deaths_prewar_municipalities_top5_abs) %>%
+  dplyr::mutate(label = paste0(Municipality,": ",round(`Number of Deaths`)," deaths"))
+
+# legend breaks
+original_breaks <- c(250, 1500, 7500) 
+
+logged_break_positions <- case_when(
+  original_breaks > 0 ~ log(original_breaks),
+  original_breaks == 0 ~ 0,
+  .default = NA
+)
+
+final_labels <- scales::label_number(big.mark = ",")(original_breaks[original_breaks >= 0])
+
+deaths_absolute_prewar_municipalities_map <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = deaths_prewar_municipality,
+    ggplot2::aes(fill = `Deaths per 100,000, logged`)
+  ) +
+  ggplot2::scale_fill_gradient(
+    name = "Deaths",
+    breaks = logged_break_positions,
+    labels = final_labels,
+    low = "white",
+    high = "darkred",
+    na.value = "grey70"
+  ) +
+  # ggplot2::geom_sf(data = iebf_shapefile, color = "black", size = 0.5) +
+  ggplot2::geom_sf(
+    data = deaths_prewar_municipalities_top5_abs_shapefile,
+    color = "black",
+    fill = NA,
+    size = 0.75
+    ) +
+  ggrepel::geom_label_repel(
+    data = deaths_prewar_municipalities_top5_abs_shapefile,
+    ggplot2::aes(label = Municipality, geometry = geom),
+    stat = "sf_coordinates",
+    min.segment.length = 0,
+    label.size = 0.25,
+    fill = "white",
+    colour = "black",
+    force = 2,
+    nudge_x = 0.5,
+    seed = 74
+  ) +
+  ggplot2::theme_void() +
+  ggplot2::theme(legend.position="bottom")
+
+# deaths_absolute_prewar_municipalities_map
+
+
+### CREATE PER CAPITA MAP ###
+
+deaths_prewar_municipalities_top5_pc <- deaths_prewar_municipality %>%
+  dplyr::slice_max(`Deaths per 100,000`, n = 5) %>%
+  dplyr::pull(Municipality)
+
+deaths_prewar_municipalities_top5_pc_shapefile <- deaths_prewar_municipality %>%
+  dplyr::filter(Municipality %in% deaths_prewar_municipalities_top5_pc) %>%
+  dplyr::mutate(label = paste0(Municipality,": ",round(`Number of Deaths`)," deaths"))
+
+# legend breaks
+original_breaks <- c(150, 1500, 15000) 
+
+logged_break_positions <- case_when(
+  original_breaks > 0 ~ log(original_breaks),
+  original_breaks == 0 ~ 0,
+  .default = NA
+  )
+
+final_labels <- scales::label_number(big.mark = ",")(original_breaks[original_breaks >= 0])
+
+deaths_per_capita_prewar_municipalities_map <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = deaths_prewar_municipality,
+    ggplot2::aes(
+      fill = `Deaths per 100,000, logged`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Deaths per 100,000 residents: ", round(`Deaths per 100,000`, 1))
+      )
+  ) +
+  ggplot2::scale_fill_gradient(
+    name = "Deaths per\n100,000",
+    breaks = logged_break_positions,
+    labels = final_labels,
+    low = "white",
+    high = "darkred",
+    na.value = "grey70"
+    ) +
+  # ggplot2::geom_sf(data = iebf_shapefile, color = "black", size = 0.5) +
+  ggplot2::geom_sf(
+    data = deaths_prewar_municipalities_top5_pc_shapefile,
+    color = "black",
+    fill = NA,
+    size = 0.75
+    ) +
+  ggrepel::geom_label_repel(
+    data = deaths_prewar_municipalities_top5_pc_shapefile,
+    ggplot2::aes(label = Municipality, geometry = geom),
+    stat = "sf_coordinates",
+    min.segment.length = 0,
+    label.size = 0.25,
+    fill = "white",
+    colour = "black",
+    force = 2,
+    nudge_x = 0.5,
+    seed = 74
+  ) +
+  ggplot2::theme_void() +
+  ggplot2::theme(legend.position = "bottom")
+
+# deaths_per_capita_prewar_municipalities_map
+
+# combine plots for dispaly
 cowplot::plot_grid(deaths_absolute_prewar_municipalities_map,
                    deaths_per_capita_prewar_municipalities_map,
                    ncol = 2)
 
 ```
+
 [*Notes: Municipalities shown are pre-war municipalities. The municipalites with the top five highest death counts (left) and deaths per 100,000 (right) are labeled and outlined in black. Source: Costalli & Moro 2012; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
-Multiple models found a correlation between wartime deaths per pre-war municipal population and the proportion of nationalist and non-nationalist votes cast in 1997. Models A2 and A2-FBiH found higher proportions of deaths relative to pre-war population to correlate to lower proportions of non-nationalist votes cast in the municipality. Models B2 and B2-FBiH found complementary results, with higher proportions of deaths correlating to a higher proportion of votes being cast for nationalist political parties. 
-Overall, higher rates of fatalities lead to more nationalist voting patterns. These findings, however, were not found in Republika Srpska.
+Multiple models found a correlation between wartime deaths per pre-war municipal population and the proportion of nationalist and non-nationalist votes cast in 1997. Models A2 and A2-FBiH found higher proportions of deaths relative to pre-war population to correlate to lower proportions of non-nationalist votes cast in the municipality. Models B2 and B2-FBiH found complementary results, with higher proportions of deaths correlating to a higher proportion of votes being cast for nationalist political parties. Overall, higher rates of fatalities lead to more nationalist voting patterns. These findings, however, were not found in Republika Srpska.
 
 ### Minefield Prevelance
-The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a specific canton or Republika Srpska. Map X shows the estimated minefield density (estimated number of minefields per square kilometer) per canton, Brčko district, and Republika Srpska.
-
-**MAP X.** Estimated Minefield Density, by Canton
-```{r minefield_maps, echo=FALSE, warning=FALSE, fig.align = 'center'}
-
-minefield_density_canton_map
-
-```
-[*Notes: Cantons and Brčko district shown; Republika Srpska estimates only available at an entity level. Source: ICRC 1998; Bolton 2003; United Nations 1997.*]{style="font-size: 0.75em;"}
 
 Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
 
-Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, and B3 all found higher densities correlated to lower proportions of votes for nationalist parties; Model B1-FBiH found the reverse relationship, with higher minefield densities correlated to the municipality receiving a higher share of votes for nationalist parties.
+Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, B3, B1-FBiH, and B3-FBiH all found higher densities correlated to lower proportions of votes for nationalist parties.
+
+```{r}
+#| label: minefield-map
+#| echo: FALSE
+#| include: FALSE
+
+### FORMAT DATA ###
+
+landmines_postwar_canton <- postwar_canton_data_shapefile %>%
+  dplyr::select(Canton, Entity, `Minefields per Sq. km, Canton`) %>%
+  # collapse Republika Srpska (excluding Brčko District), as estimates were for the entire entity
+  dplyr::mutate(Canton = dplyr::case_when(
+    Entity == "Republika Srpska" ~ "Republika Srpska",
+    .default = Canton
+  )) %>%
+  dplyr::group_by(Canton) %>%
+  dplyr::summarise(
+    `Minefields per Sq. km, Canton` = min(`Minefields per Sq. km, Canton`, na.rm = TRUE),
+    geom = sf::st_union(geom)
+  )
+
+### CREATE MINEFIELDS MAP ###
+
+minefield_density_canton_map <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = landmines_postwar_canton,
+    ggplot2::aes(
+      fill = `Minefields per Sq. km, Canton`,
+      text = paste0(
+        "Canton: ", Canton, "\n", 
+        "Percent Yugoslavs: ", round(`Minefields per Sq. km, Canton`, 2)
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "darkred", na.value = "grey50") +
+  ggplot2::labs(fill = "Estimated\nMinefields\nper sq. km") +
+  ggplot2::theme_void()
+
+# minefield_density_canton_map <- plotly::ggplotly(
+#   minefield_density_canton_map,
+#   tooltip = c("text")
+# )
+# 
+# minefield_density_canton_map
+
+```
 
 ### Ethnic Fractionalization
+
 Pre-war ethnic fractionalization, as an operationalization of ethnic diversity, was found to correlate to post-war voting patterns.
 
-Models A1, A2, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores — a more heterogeneous society — were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses — the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment — to be statistically significant; model A3 found an increase in ethnic fractionalization correlated to higher proportions of votes for non-nationalist political parties.
+Models A1, A2, A3, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores --- a more heterogeneous society --- were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses --- the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment --- to be statistically significant; model A3 found an increase in ethnic fractionalization --- the municipality became more diverse --- correlated to higher proportions of votes for non-nationalist political parties.
 
 Overall, more diverse pre-war municipalities saw higher rates of voting for nationalist political parties, even when controlling for levels of violence in the communities. This appears to be true primarily for Federation municipalities. While the evidence is limited, it appears municipalities who gained diversity - or at least loss diversity relatively less than other municipalities - following the war were less inclined to vote for nationalist parties. Only 13 of the 130 municipalities who participated in the 1997 elections saw increased ethnic diversity from 1997 to 2013.
 
 ### Votes Cast Outside of Municipality
-In the end, just over one-fifth of all votes cast came from absentee voters. This means absentee voters voted at lower rates than those who were living within the muncipality they registered. Berkovići, Petrovo, and Donji Žabar — all in Republika Srpska — saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality. 
+
+Just over one-fifth of all votes cast came from absentee voters. This means absentee voters voted at lower rates than those who were living within the muncipality they registered. Berkovići, Petrovo, and Donji Žabar --- all in Republika Srpska --- saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality.
 
 The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1-FBiH and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
 
@@ -309,45 +809,111 @@ The proportion of total votes cast outside the municipality was found to correla
 turnout intro
 
 **FIGURE X.** Turnout Rates in Republika Srpska and the Federation, by municipality
-```{r turnout_rate_graph, echo=FALSE, warning=FALSE, fig.align = 'center'}
+
+```{r}
+#| label: turnout-rate-graph
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+turnout <- postwar_data %>%
+  dplyr::mutate(
+    Entity = stringr::str_squish(Entity),
+    `Turnout Rate, 1997` = `Total Votes Cast, 1997` / `Population, 1991 Redistributed`,
+    Entity = ifelse(Entity == "Federacija Bosna i Hercegovina", "Federation", Entity)
+    ) %>%
+  dplyr::select(Municipality, Entity, `Turnout Rate, 1997`) %>%
+  dplyr::filter(!is.na(`Turnout Rate, 1997`))
+
+# pull Brčko value
+turnout_brcko <- turnout[["Turnout Rate, 1997"]][turnout$Municipality == "Brčko"]
+
+# append Brčko as both RS and FBiH
+turnout <- turnout %>%
+  rbind(tibble(
+    Municipality = c("Brčko", "Brčko"),
+    Entity = c("Republika Srpska", "Federation"),
+    `Turnout Rate, 1997` = c(turnout_brcko, turnout_brcko)
+  )) %>%
+  # drop Brčko as an Entity
+  dplyr::filter(Entity != "Brčko")
+
+turnout_graph <- ggplot2::ggplot(
+  turnout,
+  ggplot2::aes(
+    x = `Turnout Rate, 1997`,
+    y = Entity,
+    fill = `Turnout Rate, 1997`,
+    text = paste0(
+      "Municipality: ", Municipality, "\n", 
+      "Turnout Rate: ", round(100 * `Turnout Rate, 1997`, 1), "%"
+    ))
+  ) +
+  ggbeeswarm::geom_beeswarm(
+    shape = 21,
+    color = "black",
+    size = 3,
+    cex = 3
+    ) +
+  ggplot2::scale_fill_gradient(
+    low = "gray90",
+    high = "black",
+    name = "Turnout Rate",
+    labels = scales::label_percent()
+    ) +
+  ggplot2::scale_y_discrete(expand = expansion(mult = 0.5)) +
+  ggplot2::scale_x_continuous(
+    labels = scales::percent,
+    limits = c(0, 1)) +
+  ggplot2::labs(
+    x = "Turnout Rate",
+    y = NULL
+  ) +
+  ggplot2::theme_minimal()
+
+turnout_graph <- plotly::ggplotly(
+  turnout_graph,
+  tooltip = c("text")
+)
 
 turnout_graph
 
 ```
+
 [*Notes: Municipalities depicted are post-war municipalities. Brčko district is included in both Republika Srpska and the Federation. Turnout rates are calculated based on pre-war population counts and include all persons, including those not eligible to vote, such as minors. Source: Bosnia's Central Election Commission, 2012.*]{style="font-size: 0.75em;"}
 
-A municipality's turnout rate — based on the number of votes registered to vote in the municipality — was found to correlate to nationalist voting patterns. Models A3, A1-RS, A2-RS, and A3-RS all found higher turnout to be correlated with a lower proportion of votes going to non-nationalist parties. Model A1-FBiH found the opposite: higher turnout resulted in proportionally more votes going towards non-nationalist parties. Models B3, B1-RS, B2-RS, and B3-RS found higher turnout correlated to higher proportions of votes going to nationalist candidates.
-
-While it initially seems there might be some contradictory results among the models, it appears that the relationship between turnout rates and nationalist voting patterns may be distinct and opposite between municipalities in the Federation and in Republika Srpska. All Republika Srpska models found turnout rates to be statistically significant, while the relationship appears to be weaker in the Federation as only one model found turnout rates to be statistically significant.
+A municipality's turnout rate --- based on the number of votes registered to vote in the municipality --- was found to correlate to nationalist voting patterns. Model A2 found a higher turnout rate correlated with a lower proportion of votes being cast for non-nationalist parties. Models B1, B2, and B3 found higher turnout rates correlated with higher proportions of votes for nationalist political parties.
 
 ### Ethnic Group Prevalence
-```{r ethinc_group_proportions, echo=FALSE}
+
+```{r}
+#| label: ethnic-group-proportions
+#| echo: FALSE
 
 ## BOSNIAKS
-num_muslim <- sum(census_data_1991$muslim)
-perc_muslim <- round(100 * sum(census_data_1991$muslim) / sum(census_data_1991$total), 0)
+num_muslim <- sum(prewar_data[["Muslim Population, 1991"]], na.rm = TRUE)
+perc_muslim <- round(100 * num_muslim / sum(prewar_data[["Population, 1991"]], na.rm = TRUE), 0)
 
 ## CROAT
-num_croat <- sum(census_data_1991$croat)
-perc_croat <- round(100 * sum(census_data_1991$croat) / sum(census_data_1991$total), 0)
+num_croat <- sum(prewar_data[["Croat Population, 1991"]], na.rm = TRUE)
+perc_croat <- round(100 * num_croat / sum(prewar_data[["Population, 1991"]], na.rm = TRUE), 0)
 
 ## SERB
-num_serb <- sum(census_data_1991$serb)
-perc_serb <- round(100 * sum(census_data_1991$serb) / sum(census_data_1991$total), 0)
+num_serb <- sum(prewar_data[["Serb Population, 1991"]], na.rm = TRUE)
+perc_serb <- round(100 * num_serb / sum(prewar_data[["Population, 1991"]], na.rm = TRUE), 0)
 
 ## YUGOSLAVS
-num_yugoslav <- sum(census_data_1991$yugoslavs)
-perc_yugoslav <- round(100 * sum(census_data_1991$yugoslavs) / sum(census_data_1991$total), 2)
+num_yugoslav <- sum(prewar_data[["Yugoslav Population, 1991"]], na.rm = TRUE)
+perc_yugoslav <- round(100 * num_yugoslav / sum(prewar_data[["Population, 1991"]], na.rm = TRUE), 0)
 
-yug_pop_cor <- round(cor(df$`Yugoslav Population Percentage, 1991`, df$`Population, 1991`), 4)
-yug_pop_log_cor <- round(cor(df$`Yugoslav Population Percentage, 1991`, df$`Population, 1991 Logged`), 4)
+yug_pop_cor <- round(cor(df[["Yugoslav Population Percentage, 1991"]], df[["Population, 1991"]]), 4)
+yug_pop_log_cor <- round(cor(df[["Yugoslav Population Percentage, 1991"]], df[["Population, 1991 Logged"]]), 4)
 
 ## OTHER
-num_other <- sum(census_data_1991$other)
-perc_other <- round(100 * sum(census_data_1991$other) / sum(census_data_1991$total), 2)
+num_other <- sum(prewar_data[["Other Population, 1991"]], na.rm = TRUE)
+perc_other <- round(100 * num_other / sum(prewar_data[["Population, 1991"]], na.rm = TRUE), 0)
 
 ```
-
 
 Bosnia and Herzegovina consists of three main ethnoreligious groups: Bosniaks (also referred to as Muslims), Croats, and Serbs. Pre-war, a pan-Yugoslav identity was also present. Groups outside these were and continue to be classified as an "Other" ethnicity, particularly in political contexts where there are restrictions based on ethnicity for some post-war roles, such as the tripartite presidency. Pre-war, `r perc_muslim`% of the population identified as Muslim, `r perc_croat`% as Croat, and `r perc_serb`% as Serb, with the rest identifying as Yugoslav or another ethnicity.
 
@@ -359,8 +925,32 @@ No model found either the proportion of Muslims in the pre-war municipality or t
 
 **MAP X.** Percent Identifying as Muslim in 1991, by municipality
 
-```{r muslim_map, echo=FALSE, fig.align = 'center'}
+```{r}
+#| label: muslim-map
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
 
+prewar_muslims <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = prewar_data_shapefile,
+    ggplot2::aes(
+      fill = `Muslim Population Percentage, 1991`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Percent Muslims: ", round(`Muslim Population Percentage, 1991`, 0), "%"
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "#008000", na.value = "grey50") +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.5) +
+  ggplot2::labs(fill = "Percent Muslims,\n1991") +
+  ggplot2::theme_void()
+
+# prewar_muslims <- plotly::ggplotly(
+#   prewar_muslims,
+#   tooltip = c("text")
+#   )
+# 
 prewar_muslims
 
 ```
@@ -371,13 +961,37 @@ prewar_muslims
 
 A substantial majority of the pre-war Croats living in territory that ended within the Federation.
 
-Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger voteshares for nationalist parties. Several populations in the region of highest Croat concentration — along the border with Croatia's Dalmatian Coast — saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
+Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger voteshares for nationalist parties. Several populations in the region of highest Croat concentration --- along the border with Croatia's Dalmatian Coast --- saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
 
 None of the models found the change in proportion of Croats between 1991 and 2013 to be correlated with 1997 voting patterns.
 
 **MAP X.** Percent Identifying as Croat in 1991, by municipality
 
-```{r croat_map, echo=FALSE, fig.align = 'center'}
+```{r}
+#| label: croat-map
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+prewar_croats <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = prewar_data_shapefile,
+    ggplot2::aes(
+      fill = `Croat Population Percentage, 1991`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Percent Serbs: ", round(`Croat Population Percentage, 1991`, 0), "%"
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "#ff0000", na.value = "grey50") +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.5) +
+  ggplot2::labs(fill = "Percent Croats,\n1991") +
+  ggplot2::theme_void()
+
+# prewar_croats <- plotly::ggplotly(
+#   prewar_croats,
+#   tooltip = c("text")
+#   )
 
 prewar_croats
 
@@ -391,7 +1005,31 @@ Unlike the proportion of Croats, a higher pre-war proportion of Serbs in a munic
 
 **MAP X.** Percent Identifying as Serb in 1991, by municipality
 
-```{r serb_map, echo=FALSE, fig.align = 'center'}
+```{r}
+#| label: serb-map
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+prewar_serbs <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = prewar_data_shapefile,
+    ggplot2::aes(
+      fill = `Serb Population Percentage, 1991`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Percent Serbs: ", round(`Serb Population Percentage, 1991`, 0), "%"
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "#0047ab", na.value = "grey50") +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.5) +
+  ggplot2::labs(fill = "Percent Serbs,\n1991") +
+  ggplot2::theme_void()
+
+# prewar_serbs <- plotly::ggplotly(
+#   prewar_serbs,
+#   tooltip = c("text")
+#   )
 
 prewar_serbs
 
@@ -400,13 +1038,38 @@ prewar_serbs
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
 #### Yugoslavs
+
 People identifying as a pan-ethnic Yugoslav identity was limited even several generations after the formation of Yugoslavia, with only 8 pre-war municipalities having at least 10% of the population identifying as Yugoslav on the 1991 census (see Map X): Banja Luka, Bosanski Brod, Mostar, Sarajevo (Centar, Novo Sarajevo, Novi Grad), Tuzla, Zenica. Notably, these also correspond with some of the largest, most urbane communities in the country. Tuzla saw the largest proportion identify as Yugoslav, at just 16.7% of the population; Tuzla municipality had the 4th highest population in 1991. In total, `r num_yugoslav` people identified as Yugoslav, or `r perc_yugoslav`% of the population.
 
 **MAP X.** Percent Identifying as Yugoslav in 1991, by municipality
 
-```{r yugoslav_map, echo=FALSE, fig.align = 'center'}
+```{r}
+#| label: yugoslav-map
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
 
-prewar_yugoslav
+prewar_yugoslavs <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = prewar_data_shapefile,
+    ggplot2::aes(
+      fill = `Yugoslav Population Percentage, 1991`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Percent Yugoslavs: ", round(`Yugoslav Population Percentage, 1991`, 0), "%"
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "#800080", na.value = "grey50") +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.5) +
+  ggplot2::labs(fill = "Percent Yugoslavs,\n1991") +
+  ggplot2::theme_void()
+
+# prewar_yugoslavs <- plotly::ggplotly(
+#   prewar_yugoslavs,
+#   tooltip = c("text")
+#   )
+
+prewar_yugoslavs
 
 ```
 
@@ -424,7 +1087,30 @@ The catch-all "other" ethnic group option comprised any individual not part of t
 
 **MAP X.** Percent Identifying as Other ethnic groups in 1991, by municipality
 
-```{r other_map, echo=FALSE, fig.align = 'center'}
+```{r}
+#| label: other-ethnicity-map
+#| echo: FALSE
+#| fig.align: 'center'
+
+prewar_other <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = prewar_data_shapefile,
+    ggplot2::aes(
+      fill = `Other Population Percentage, 1991`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Percent Other Ethnicities: ", round(`Other Population Percentage, 1991`, 0), "%"
+      ))
+  ) +
+  ggplot2::scale_fill_gradient(low = "white", high = "yellow", na.value = "grey50") +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.5) +
+  ggplot2::labs(fill = "Percent Other\nEthnicities, 1991") +
+  ggplot2::theme_void()
+
+# prewar_other <- plotly::ggplotly(
+#   prewar_other,
+#   tooltip = c("text")
+#   )
 
 prewar_other
 
@@ -435,87 +1121,559 @@ prewar_other
 No model found either the proportion of Other ethnic groups in the pre-war municipality to be correlated to the proportion of votes cast in the 1997 municipal election.
 
 ### Distance to Croatia and Yugoslavia
+
 None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
 
-Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Model A1 found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B1-RS, and B2-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
+Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A3, A1-RS, A2-RS, and A3-RS found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B3, B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
 
 It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
 
 ### Sarajevo Municipalities
-Fifteen post-war municipalities were classified as part of Greater Sarajevo:  Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
 
-None of the models found Sarajevo municipalities to have statistically significant differences from non-Sarajevo municipalities.
+Fifteen post-war municipalities were classified as part of Greater Sarajevo: Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
+
+Model A3 found municipalities comprising metropolitan Sarajevo to be less likely to have voted for non-nationalist candidates. Models B3, B1-RS, B2-RS, and B3-RS found Sarajevo municipalities to correspond to higher proportions of votes being cast for nationalist candidates.
 
 ### Population
+
 Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
 
-Several models found the size of the pre-war population to be correlated with 1997 voting patterns. Model A3 found a larger pre-war population correlated with a higher share of non-nationalist votes, while model B3 found larger populations connected to less votes being cast for nationalist parties.
-
-Change in population between the 1991 and 2013 census was also found to correlate to voting patterns. Model A2 found higher increases in population to correlate to a lower proportion of votes to be cast to non-nationalist parties, while model B2 found higher decreases in population to relate to higher rates of voting for nationalist parties.
-
-<!-- Model A2 found this trend across all municipalities. Models A1 and A2-FBiH found the same trend, though only at the α = 0.1 confidence level. Figure X shows the modeled relationship between pre-war municipal population and predicted proportion of non-nationalist votes. -->
-
-<!-- **FIGURE X.** Modeled relationship of Pre-War Population on Proportion of Non-Nationationalist Votes -->
-
-<!-- ```{r pop_relationship_graph, echo=FALSE, warning=FALSE, fig.align = 'center'} -->
-
-<!-- cowplot::plot_grid(pop_relationship_graph_nonnationalist, -->
-<!--                    pop_relationship_graph_nationalist, -->
-<!--                    ncol = 2) -->
-
-<!-- ``` -->
-
-<!-- [*Notes: Models A2 and B2 found pre-war population, logged scale, to be statistically significant, while Model A1 only found it significant at the α = 0.1 confidence level. Source: Author calculations; Bosnia Central Election Commission, 1991.*]{style="font-size: 0.75em;"} -->
+None of the models found pre-war population or the change in population between 1991 and 2013 to be statistically significant.
 
 ### Municiplality Area
 
+Post-war municipal areas were found to correlate with voting patterns. Models A1, A2, A1-FBiH, and A3-FBiH found voters in larger municipalities were more likely to vote proportionally more for non-nationalist voting parties. Models B1, B2, B1-FBiH, and B3-FBiH found larger municipalities saw lower proportions of nationalist voting shares.
+
+## Conclusion
+
+...
+
+Multiple factors were found to have strong connections with voting intentionality in only Republika Srpska or the Federation. Voters faced different incentives in how to vote within these two entities, and certain factors appear to have only been significant influences within one entity or the other. Influencing factors therefore cannot solely be assessed at the country-wide level; local levels must be assessed in addition, particularly when the levels correspond to military frontiers and sides of the war.
 
 ## Works Cited
 
 Alesina, A. et al., (2003). Fractionalization. Journal of Economic Growth. 8(2), 155-194.
 
-Ball, P., Tabeau, E. and P. Verwimp, (2007). The Bosnian Book of Dead: Assessment of the Database (Full Report). Households in Conflict Network. https://hrdag.org/wp-content/uploads/2013/02/rdn5.pdf. [Accessed 2 November 2025]
+Ball, P., Tabeau, E. and P. Verwimp, (2007). The Bosnian Book of Dead: Assessment of the Database (Full Report). Households in Conflict Network. <https://hrdag.org/wp-content/uploads/2013/02/rdn5.pdf>. \[Accessed 2 November 2025\]
 
-Bennett, C., (2016). *Bosnia’s Paralysed Peace*. Oxford, UK: Oxford University Press.
+Batty, F., (2015). For Ethnic Group or Country? Evaluating Post-conflict Elections in Africa. Civil Wars. 17(3), 379-407.
 
-Bureau of Democracy, Human Rights, and Labor, (1998). Bosnia and Herzegovina Country Report on Human Rights Practices for 1997. [online] U.S. Department of State. Available at: https://1997-2001.state.gov/global/human_rights/1997_hrp_report/bosniahe.html. [Accessed 11 Nov. 2025].
+Bennett, C., (2016). *Bosnia's Paralysed Peace*. Oxford, UK: Oxford University Press.
 
-Centralna izborna komisija Bosne i Hercegovine, (2012). 1997 Municipal Election Final Results [online]. Centralna izborna komisija Bosne i Hercegovine. [Accessed 13 February 2020].
+Bosnia and Herzegovina Mine Action Center, (2004). Bosnia and Herzegovina Mine Situation as at Nov 2004. Bosnia and Herzegovina Mine Action Center. <https://www.bhmac.org>.
 
-Commission on Security and Cooperation in Europe, (1997). The 1997 Municipal Elections in Bosnia-Herzegovina. [online] Washington, DC: Commission on Security and Cooperation in Europe. https://www.govinfo.gov/content/pkg/GOVPUB-Y4_SE2-PURL-LPS767/pdf/GOVPUB-Y4_SE2-PURL-LPS767.pdf. [Accessed 11 Nov. 2025].
+Bureau of Democracy, Human Rights, and Labor, (1998). Bosnia and Herzegovina Country Report on Human Rights Practices for 1997. \[online\] U.S. Department of State. Available at: <https://1997-2001.state.gov/global/human_rights/1997_hrp_report/bosniahe.html>. \[Accessed 11 Nov. 2025\].
+
+Centralna izborna komisija Bosne i Hercegovine, (2012). 1997 Municipal Election Final Results \[online\]. Centralna izborna komisija Bosne i Hercegovine. \[Accessed 13 February 2020\].
+
+Chandra, K., (2011). What is an ethnic party? Party Politics. 17(2), 151-169.
+
+Commission on Security and Cooperation in Europe, (1997). The 1997 Municipal Elections in Bosnia-Herzegovina. \[online\] Washington, DC: Commission on Security and Cooperation in Europe. <https://www.govinfo.gov/content/pkg/GOVPUB-Y4_SE2-PURL-LPS767/pdf/GOVPUB-Y4_SE2-PURL-LPS767.pdf>. \[Accessed 11 Nov. 2025\].
 
 Costalli, S. and F. Moro, (2012). Ethnicity and strategy in the Bosnian civil war: Explanations for the severity of violence in Bosnian municipalities. Journal of Peace Research. 49(6), 801-815.
 
-Davies, S., Pettersson, T., Sollenberg, M., and M. Öberg, (2025). Organized violence 1989–2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4).
+Davies, S., Pettersson, T., Sollenberg, M., and M. Öberg, (2025). Organized violence 1989--2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4).
+
+De Winter, L. and M. Gomez-Reino, (2002). European Integration and Ethnoregionalist Parties. Party Politics. 8(4), 483-503.
 
 Fearon, J., (2003). Ethnic and Cultural Diversity by Country. Journal of Economic Growth. 8(2), 195-222.
 
-General Framework Agreement for Peace in Bosnia and Herzegovina, (1995). https://www.ohr.int/dayton-peace-agreement/.
+Foucault, M. (2003). Society Must Be Defended: Lectures at the Collège de France, 1975--1976. Translated by D. Macey. New York: Picador.
+
+Gadjanova, E., (2015). Measuring parties' ethnic appeals in democracies. Party Politics. 21(2), 309-327.
+
+General Framework Agreement for Peace in Bosnia and Herzegovina, (1995). <https://www.ohr.int/dayton-peace-agreement/>.
+
+Gekic, H., Bidzan-Gekic, A., Miric, R., and P. Remenyi, (2020). Hidden geographies of population implosion in Bosnia and Herzegovina. European Journal of Geography, 11(2), 47-64.
 
 Hadzic, D., Carlson, D. and M. Tavits, (2017). How Exposure to Violence Affects Ethnic Voting. British Journal of Political Science. 50, 345-362.
 
-International Crisis Group, (1996). Elections in Bosnia & Herzegovina. [online] International Crisis Group. Available at: https://www.crisisgroup.org/sites/default/files/elections-in-bosnia-herzegovina.pdf. [Accessed 11 Nov. 2025].
+Horowitz, D., (1985). Ethnic Groups in Conflict. Berkeley, US: University of California Press.
+
+International Crisis Group, (1996). Elections in Bosnia & Herzegovina. \[online\] International Crisis Group. Available at: <https://www.crisisgroup.org/sites/default/files/elections-in-bosnia-herzegovina.pdf>. \[Accessed 11 Nov. 2025\].
+
+International Committee of the Red Cross, (1998). The Silent Menace: Landmines in Bosnia and Herzegovina. \[online\] International Committee of the Red Cross. Available at: <https://www.icrc.org/sites/default/files/external/doc/en/assets/files/other/silent-menace-bosnia-herzegovina-57jp32-010298.pdf> \[Accessed 25 Jan. 2026\]
+
+Ishiyama, J. and M. Breuning, (2011). What's in a name? Ethnic party identity and democratic development in post-communist politics. Party Politics. 17(2), 223-241.
 
 Lyons, T., (2004). Post-conflict elections and the process of demilitarizing politics: the role of electoral administration. Democratization. 11(3), 36-62.
 
-Malcolm, N., (1997). Observations on the Bosnian Elections. Bosnia Report, [online] The Bosnian Institute. No. 17. Available at: https://web.archive.org/web/20170606080706/http://www.bosnia.org.uk/bosrep/report_format.cfm?articleid=1873&reportid=116. [Accessed 11 Nov. 2025].
+Malcolm, N., (1997). Observations on the Bosnian Elections. Bosnia Report, \[online\] The Bosnian Institute. No. 17. Available at: <https://web.archive.org/web/20170606080706/http://www.bosnia.org.uk/bosrep/report_format.cfm?articleid=1873&reportid=116>. \[Accessed 11 Nov. 2025\].
 
-Nilsen, K.A., (2004). “102.000 drept i Bosnia” [102,000 killed in Bosnia]. NRK. https://www.nrk.no/urix/102.000-drept-i-bosnia-1.585120. [Accessed 2 November 2025]
+Murtagh, C., (2015). Reaching Across: Institutional Barriers to Cross-Ethnic Parties in Post-Conflict Societies and the Case of Northern Ireland. Nations and Nationalism. 21(3), 544-565.
 
-Organization for Security and Co-operation in Europe (OSCE), Office for Democratic Institutions and Human Rights (ODIHR), (1997). “Bosnia and Herzegovina, Municipal Elections, 13-14 September 1997”. https://www.osce.org/files/f/documents/3/a/14025.pdf
+Pickering, P., (2009). Explaining Support for Non-Nationalist Parties in Post-Conflict Societies in the Balkans. Europe-Asia Studies. 61(4), 565-591.
+
+Nilsen, K.A., (2004). "102.000 drept i Bosnia" \[102,000 killed in Bosnia\]. NRK. <https://www.nrk.no/urix/102.000-drept-i-bosnia-1.585120>. \[Accessed 2 November 2025\]
+
+Organization for Security and Co-operation in Europe (OSCE), Office for Democratic Institutions and Human Rights (ODIHR), (1997). "Bosnia and Herzegovina, Municipal Elections, 13-14 September 1997". <https://www.osce.org/files/f/documents/3/a/14025.pdf>.
 
 Pugh, M. and M. Cobble, (2001). Non-Nationalist Voting in Bosnian Municipal Elections: Implications for Democracy and Peacebuilding. Journal of Peace Research. 38(1), 27-47.
 
+Rabushka, A. and K. Shepsle, (1972). Politics in Plural Societies: A Theory of Democratic Instability. Columbus, US: Charles E. Merrill Publishing.
+
 Reilly, B., (2002). Elections in Post-Conflict Scenarios: Constraints and Dangers. International Peacekeeping. 9(2), 118-139.
 
-Sito-Sucic, D. and M. Robinson, (2012). “After years of toil, book names Bosnian war dead”. Reuters. https://www.reuters.com/article/us-bosnia-dead-idUSBRE91E0J220130215/. [Accessed 2 November 2025]
+Sito-Sucic, D. and M. Robinson, (2012). "After years of toil, book names Bosnian war dead". Reuters. <https://www.reuters.com/article/us-bosnia-dead-idUSBRE91E0J220130215/>. \[Accessed 2 November 2025\]
 
 Stefanovic, D. and N. Loizides, (2015). The role of remote voting in encouraging return. Forced Migration Review. 50, 39-41.
 
+Stroschein, S., (2011). Demography in ethnic party fragmentation: Hungarian local voting in Romania. Party Politics. 17(2), 189-204.
+
 Sundberg, R. and E. Melander, (2013) Introducing the UCDP Georeferenced Event Dataset. Journal of Peace Research 50(4).
 
-Wilkinson, T., (1998). Symbol of Hope in a Land of Hate [online]. Los Angeles Times. [Accessed 16 April 2020].
+Wagner, W. and S. Dreef, (2014). Ethnic Composition and Electoral System Design: Demographic Context Conditions for Post-conflict Elections. Ethnopolitics. 13(3), 288-307.
+
+Wilkinson, T., (1998). Symbol of Hope in a Land of Hate \[online\]. Los Angeles Times. \[Accessed 16 April 2020\].
 
 Zic, B., (2017). The Political Impact of Displacement: Wartime IDPs, Religiosity, and Post-War Politics in Bosnia. Politics and Religion. 10(4), 862-886.
 
-Zwierzchowski, J. and E. Tabeau, (2010). The 1992-95 War in Bosnia and Herzegovina: Census-Based Multiple System Estimation of Casualties’ Undercount. Conference Paper for the International Research Workshop on ‘The Global Costs of Conflict’. https://www.icty.org/x/file/About/OTP/War_Demographics/en/bih_casualty_undercount_conf_paper_100201.pdf
+Zuber, C., (2011). Beyond outbidding? Ethnic party strategies in Serbia. Party Politics. 19(5), 758-777.
+
+Zwierzchowski, J. and E. Tabeau, (2010). The 1992-95 War in Bosnia and Herzegovina: Census-Based Multiple System Estimation of Casualties' Undercount. Conference Paper for the International Research Workshop on 'The Global Costs of Conflict'. <https://www.icty.org/x/file/About/OTP/War_Demographics/en/bih_casualty_undercount_conf_paper_100201.pdf>.
+
+## Appendix A: Verification and Comparison of Deaths by Municipality
+
+This study uses two data sources for municipal-level fatalities during the Bosnian War: Costalli and Moro and the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1[^61] Due to the nature of measuring deceased following a war, particularly geolocating the deaths to specific municipalities, differences are expected between the datasets. However, large levels of discepencies in a select few municipalities may lead to a different result when using either dataset in the models. This section assesses the degree of discrepencies in overall and municipal-level data and presents the results of select models using UCDP data instead of Costalli and Moro data.
+
+[^61]: Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.
+
+Applying the 1991 Bosnian Census data to Costalli and Moro's proportions of population deaths, the dataset contains an estimated 95,088 deaths. Regarding overall deaths recorded in each dataset, UCDP's GED dataset contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate). This means UCDP's dataset features only two-thirds (66.8%) the number of deaths as Costalli and Moro's and the 1991 Bosnian Ceensus's data.
+
+It appears likely that UCDP's dataset is undercounting deaths, as the estimated Costalli and Moro total aligns closely with other estimates, including the Bosnian Book of the Dead's 101,040 deaths[^62] and the International Criminal Tribunal for the former Yugoslavia's estimated 104,732 fatalities, with a minimum estimate of 89,186 deaths.[^63]
+
+[^62]: Sito-Sucic & Robinson, 2012.
+
+[^63]: Zwierzchowski & Tabeau, 2010.
+
+Though the two datasets differ in the overall estimated number of deaths, the models will only be impacted by differing distributions of deaths across municipalities. Assessing proportions of total deaths by municipality in Costalli and Moro's dataset and the UCDP GED dataset's best estimate, 21 pre-war municipalities have differences in the proportion of total deaths between the two sources of 1 percentage point or more. Figure X displays the estimated proportion of overall deaths in each of these select municipalities from both data sources, with bands for UCDP's low and high estimates shown in gray.
+
+**FIGURE X.** Proportion of Total Deaths in Costalli and Moro and UCDP, by Select Municipality
+
+```{r}
+#| label: death-comparison-plot
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+# set color scheme
+cm_color <- "#603055"
+ucdp_color <- "#990000"
+
+death_comparison_df <- prewar_data %>%
+  # calculate deaths per 100,000 population for c&m estimates
+  dplyr::mutate(
+    `Deaths per 100,000, C&M` = `Deaths per Population` * `Population, 1991`
+  ) %>%
+  dplyr::select(
+    Municipality,
+    # C&M data
+    `Deaths per 100,000, C&M`,
+    `Number of Deaths, C&M` = `Number of Deaths`,
+    # UCDP data
+    `Count of Events`,
+    `Number of Deaths, UCDP, best estimate` = `Number of Deaths, best estimate`,
+    `Number of Deaths, UCDP, high estimate` = `Number of Deaths, high estimate`,
+    `Number of Deaths, UCDP, low estimate` = `Number of Deaths, low estimate`,
+    `Deaths per 100,000, UCDP`,
+    `Deaths per 100,000, UCDP, high` = `Deaths per 100,000, high, UCDP`,
+    `Deaths per 100,000, UCDP, low` = `Deaths per 100,000, low, UCDP`
+    ) %>%
+  # drop unassigned deaths from UCDP dataset
+  dplyr::filter(!is.na(Municipality)) %>%
+  dplyr::mutate(
+    deaths_count_estimate_diff = `Number of Deaths, C&M` - `Number of Deaths, UCDP, best estimate`,
+    deaths_count_estimate_diff_direction = ifelse(deaths_count_estimate_diff >= 0, "lower", "higher"),
+    deaths_count_cm_log = ifelse(`Number of Deaths, C&M` > 0, log(`Number of Deaths, C&M`), 0),
+    deaths_count_best_ucdp_log = ifelse(`Number of Deaths, UCDP, best estimate` > 0, log(`Number of Deaths, UCDP, best estimate`), 0),
+    deaths_count_low_ucdp_log = ifelse(`Number of Deaths, UCDP, low estimate` > 0, log(`Number of Deaths, UCDP, low estimate`), 0),
+    deaths_count_high_ucdp_log = ifelse(`Number of Deaths, UCDP, high estimate` > 0, log(`Number of Deaths, UCDP, high estimate`), 0),
+    perc_of_deaths_cm = `Number of Deaths, C&M` / sum(`Number of Deaths, C&M`),
+    perc_of_deaths_best_ucdp = `Number of Deaths, UCDP, best estimate` / sum(`Number of Deaths, UCDP, best estimate`),
+    perc_of_deaths_low_ucdp = `Number of Deaths, UCDP, low estimate` / sum(`Number of Deaths, UCDP, low estimate`),
+    perc_of_deaths_high_ucdp = `Number of Deaths, UCDP, high estimate` / sum(`Number of Deaths, UCDP, high estimate`),
+    diff_in_perc = perc_of_deaths_cm - perc_of_deaths_best_ucdp
+    ) %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    ucdp_perc_lower = min(perc_of_deaths_low_ucdp, perc_of_deaths_high_ucdp),
+    ucdp_perc_upper = max(perc_of_deaths_low_ucdp, perc_of_deaths_high_ucdp)
+    ) %>%
+  dplyr::arrange(`Number of Deaths, C&M`) %>%
+  dplyr::mutate(
+    # row_order = nrow(death_comparison_df) - row_number() + 1,
+    Municipality = factor(Municipality, levels = Municipality)
+    )
+
+### format and merge data
+
+# plot absolute deaths
+death_counts_comparison_plot <- ggplot2::ggplot(data = death_comparison_df) +
+  ggplot2::geom_segment(
+    ggplot2::aes(x = deaths_count_cm_log, xend = deaths_count_best_ucdp_log,
+                 y = Municipality, yend = Municipality,
+                 color = deaths_count_estimate_diff_direction
+    )) +
+  theme_minimal() +
+  ggplot2::scale_color_manual(values = c("C&M" = cm_color, "UCDP" = ucdp_color, "lower" = "darkgreen", "higher" = "darkred")) +
+  
+  ggplot2::geom_point(
+    ggplot2::aes(x = deaths_count_cm_log, y = Municipality, size = `Deaths per 100,000, C&M`, color = "C&M")
+    ) +
+  ggplot2::geom_point(
+    ggplot2::aes(x = deaths_count_best_ucdp_log, y = Municipality, size = `Deaths per 100,000, UCDP`, color = "UCDP")
+    )
+
+# death_counts_comparison_plot
+
+
+
+# plot diff in percent of total deaths
+death_perc_comparison_df <- death_comparison_df %>%
+  dplyr::filter(abs(diff_in_perc) > 0.01) %>%
+  dplyr::rename(
+    `Percent of Deaths, C&M` = perc_of_deaths_cm,
+    `Percent of Deaths, UCDP` = perc_of_deaths_best_ucdp
+  )
+
+death_perc_of_total_plot <- ggplot2::ggplot(data = death_perc_comparison_df) +
+  
+  # ucdp low and high range
+  ggplot2::geom_errorbarh(
+    ggplot2::aes(xmin = ucdp_perc_lower, xmax = ucdp_perc_upper, y = Municipality), 
+                 width = 0.4, 
+                 color = "black",
+                 alpha = 0.6
+    ) +
+  
+  # dumbells
+  ggplot2::geom_segment(
+    ggplot2::aes(x = `Percent of Deaths, C&M`, xend = `Percent of Deaths, UCDP`,
+                 y = Municipality, yend = Municipality,
+    )) +
+  
+  ggplot2::scale_color_manual(
+    name = "Data Source",
+    values = c("Costalli & Moro est." = cm_color, "UCDP est." = ucdp_color)
+    ) +
+  
+  ggplot2::scale_size_continuous(name = "Deaths per\nPre-War Population") +
+  
+  ggplot2::guides(
+    color = guide_legend(order = 1),
+    size = guide_legend(order = 2)
+  ) +
+
+  # C&M data points
+  ggplot2::geom_point(
+    ggplot2::aes(x = `Percent of Deaths, C&M`, y = Municipality, size = `Deaths per 100,000, C&M`, color = "Costalli & Moro est.")
+  ) +
+  
+  # UCDP data points
+  ggplot2::geom_point(
+    ggplot2::aes(x = `Percent of Deaths, UCDP`, y = Municipality, size = `Deaths per 100,000, UCDP`, color = "UCDP est.")
+  ) +
+  
+  ggplot2::labs(x = "Estimated Percentage of Deaths", y = "Municipality") +
+  # ggplot2::theme(
+  #   legend.position = "bottom",
+  #   legend.box = "horizontal"
+  #   ) + 
+  # ggplot2::theme_minimal() +
+  ggplot2::scale_x_continuous(labels = scales::percent)
+
+# death_perc_of_total_plot
+
+plotly <- plotly::ggplotly(
+  death_perc_of_total_plot,
+  tooltip = c("Municipality", "Percent of Deaths, C&M", "Percent of Deaths, UCDP",
+              "Deaths per 100,000, C&M", "Deaths per 100,000, UCDP")
+  )
+
+plotly
+
+```
+
+[*Notes: Municipalities displayed are pre-war municipalities. Error bars for UCDP estimates depict calculations based on the low and high death estimates; the best death estimate proportion does not necessarily fall between proportions calculated using the low and high death estimates. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+Srebrenica far and away saw the biggest difference: Costalli and Moro attributed 8.1% of deaths to Srebrenica, while UCDP attributed 24.2% (21.8% to 26.1% using low and high estimates), or a percentage difference of 16 percentage points. The data sources do report substantial differences in the estimated number of deaths as well: UCDP's data places the best estimate of deaths in Srebrenica at 15,317 people (15,278 low, 15,503 high), while Costalli and Moro and the 1991 Bosnian Census place the estimate at 7,711 people. In addition to Srebrenica, the municipalities of Brčko, Sarajevo Novo Sarajevo, Bihać, and Goražde also saw differences greater than 2 percentage points.
+
+Figure X shows differences in the percent of deaths between the two data sources for all municipalities.
+
+**FIGURE X.** Comparison of Proportion of Total Deaths by Costalli and Moro vs. UCDP, by Municipality
+
+```{r}
+#| label: death-comparison-map
+#| echo: FALSE
+#| warning: FALSE
+#| fig.align: 'center'
+
+death_perc_comparison_df <- prewar_data_shapefile %>%
+  # calculate deaths per 100,000 population for c&m estimates
+  dplyr::mutate(
+    `Deaths per 100,000, C&M` = `Deaths per Population` * `Population, 1991`
+  ) %>%
+  dplyr::select(
+    Municipality,
+    # C&M data
+    `Deaths per 100,000, C&M`,
+    `Number of Deaths, C&M` = `Number of Deaths`,
+    # UCDP data
+    `Number of Deaths, UCDP, best estimate` = `Number of Deaths, best estimate`,
+    `Deaths per 100,000, UCDP`
+    ) %>%
+  # drop unassigned deaths from UCDP dataset
+  dplyr::filter(!is.na(Municipality)) %>%
+  dplyr::mutate(
+    `Percent of Deaths, C&M` = `Number of Deaths, C&M` / sum(`Number of Deaths, C&M`),
+    `Percent of Deaths, UCDP` = `Number of Deaths, UCDP, best estimate` / sum(`Number of Deaths, UCDP, best estimate`),
+    `Difference in Percent\nof Total Deaths` = `Percent of Deaths, C&M` - `Percent of Deaths, UCDP`
+    )
+
+death_perc_comparison_map <- ggplot2::ggplot() +
+  ggplot2::geom_sf(
+    data = death_perc_comparison_df,
+    ggplot2::aes(
+      fill = `Difference in Percent\nof Total Deaths`,
+      text = paste0(
+        "Municipality: ", Municipality, "\n", 
+        "Difference in Percent of Total Deaths: ", round(`Difference in Percent\nof Total Deaths`, 1), "%"
+        )
+      )
+    ) +
+  ggplot2::scale_fill_gradient2(
+    low = cm_color,
+    mid = "white",
+    high = ucdp_color,
+    na.value = "grey70"
+  ) +
+  ggplot2::geom_sf(data = iebl_shapefile, color = "black", size = 0.4) +
+  ggplot2::theme_void()
+
+# death_perc_comparison_map
+
+death_perc_comparison_map_plotly <- plotly::ggplotly(
+  death_perc_comparison_map,
+  tooltip = c("text")
+)
+
+death_perc_comparison_map_plotly
+
+
+
+
+### v2
+# death_perc_comparison_df2 <- death_comparison_df %>%
+#   dplyr::filter(abs(diff_in_perc) > 0.01) %>%
+#   dplyr::select(
+#     Municipality, `Percent of Deaths, C&M` = perc_of_deaths_cm,
+#     `Percent of Deaths, UCDP` = perc_of_deaths_best_ucdp,
+#     `Deaths per 100,000, C&M`, `Deaths per 100,000, UCDP`, `Deaths per 100,000, UCDP, low`,
+#     `Deaths per 100,000, UCDP, high`
+#     ) %>%
+#   tidyr::pivot_longer(2:7, names_to = "Data Source", values_to = "Percent of Deaths") %>%
+#   dplyr::mutate(
+#     `Deaths per 100,000` = dplyr::case_when(
+#       `Data Source` == "Percent of Deaths, C&M" ~ `Deaths per 100,000, C&M`,
+#       `Data Source` == "Percent of Deaths, UCDP" ~ `Deaths per 100,000, UCDP`,
+#       .default = NA
+#     ),
+#     `Percent of Deaths` = as.numeric(`Percent of Deaths`),
+#     `Deaths per 100,000` = as.numeric(`Deaths per 100,000`)
+#   ) %>%
+#   dplyr::select(
+#     Municipality, `Data Source`, `Percent of Deaths`, `Deaths per 100,000`,
+#     `Deaths per 100,000, UCDP low`, `Deaths per 100,000, UCDP high`
+#     )
+
+```
+
+[*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Positive values indicate Costalli and Moro has a higher proportion of overall deaths for that municipality, while negative values indicate UCDP does. Values closer to white indicate the two data sources attribute similar proportions of overall deaths to the municipality; it does not indicate the same number of deaths. Source: Costalli & Moro 2012; UCDP, 2025; Bosnia Census 1991.*]{style="font-size: 0.75em;"}
+
+## Appendix B: Verification and Comparison of Estimated Minefield Coverage by Municipality
+
+The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a specific canton or Republika Srpska.[^64] Map X shows the estimated minefield density (estimated number of minefields per square kilometer) per canton, Brčko district, and Republika Srpska.
+
+[^64]: International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.
+
+**TABLE X.** Title
+
+```{r}
+#| label: minefield-table
+#| echo: FALSE
+
+col1 <- c(
+  "Federation","Bosnian Podrinje", "Canton 10", "Central Bosnia", "Herzegovina-Neretva", "Posavina",
+  "Sarajevo", "Tuzla", "Una-Sana", "West Herzegovina", "Zenica-Doboj", "Subtotal",
+  "Republika Srpska / Brčko", "Banja Luka", "Bijeljina", "Brčko", "Doboj", "Foča",
+  "Istočno Sarajevo", "Trebinje", "Vlasenica", "Subtotal", "Location Undetermined", "Total"
+)
+
+# col2 - area
+canton_area <- postwar_municipalities_shapefile %>%
+  dplyr::mutate(
+    canton = stringr::str_squish(canton),
+    entity = stringr::str_squish(entity),
+    area = units::set_units(sf::st_area(geometry), "km^2")
+    ) %>%
+  as.data.frame() %>%
+  dplyr::group_by(canton) %>%
+  dplyr::summarize(
+    area = sum(area, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup()
+
+canton_area <- tibble::add_row(
+    canton_area,
+    canton = "Total",
+    area = sum(canton_area$area)
+  )
+
+# pull entity subtotals
+federation_area <- canton_area %>%
+  dplyr::filter(
+    canton %in% c("Bosnian Podrinje", "Canton 10", "Central Bosnia", "Herzegovina-Neretva",
+                  "Posavina", "Sarajevo", "Tuzla", "Una-Sana", "West Herzegovina", "Zenica-Doboj")
+    ) %>%
+  dplyr::pull(area) %>%
+  sum()
+
+rs_brcko_area <- canton_area %>%
+  dplyr::filter(
+    canton %in% c("Banja Luka", "Bijeljina", "Brčko", "Doboj", "Foča", "Istočno Sarajevo",
+                  "Trebinje", "Vlasenica")
+    ) %>%
+  dplyr::pull(area) %>%
+  sum()
+
+# column 3 - prewar population
+col3 <- c(NA, 37573, 118257, 336200, 268928, 58423, 510694, 597765, 358688, 88992, 476101,
+          2851621, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1525412, NA, 4377033)
+
+# column 4 - postwar population
+col4 <- c(NA, 39240, 78750, 252617, 176203, 38666, 348039, 615673, 222634, 91942, 429898,
+          2293662, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1453852, NA, 3747514)
+
+# column 7 - minefield count
+col7 <- c(NA, 246, 0, 1879, 1091, 388, 1430, 3141, 1417, 751, 2329, 12672, NA, NA, NA, NA, NA, NA,
+          NA, NA, NA, 4757, 425, 17854)
+
+# header rows
+header1 <- c("Entity/Canton", "Area", "Population", "NA", "Wartime Population Change", "NA",
+             "Minefields", "NA", "NA", "UNMAC Minefield Estimate", NA)
+header2 <- c("NA", "in km^2", "Pre-War", "Post-War", "Count", "Percent", "Count", "Per 1,000",
+             "Per Area", "Area", "% Area")
+
+minefield_table <- data.frame(
+  canton = col1,
+  prewar_pop = col3,
+  postwar_pop = col4,
+  minefield_count = col7
+) %>%
+  dplyr::full_join(canton_area, by = "canton") %>%
+  dplyr::full_join(bih_minefields_2004_perc_canton_area, by = "canton") %>%
+  dplyr::mutate(
+    # add in entity area subtotals
+    area = dplyr::case_when(
+      dplyr::row_number() == which(canton == "Subtotal")[1] ~ federation_area,
+      dplyr::row_number() == which(canton == "Subtotal")[2]  ~ rs_brcko_area,
+      .default = area
+    ),
+    pop_change_count = postwar_pop - prewar_pop,
+    pop_change_perc = (postwar_pop - prewar_pop) / prewar_pop,
+    minefields_per_area = dplyr::case_when(
+      !is.na(minefield_count) ~ minefield_count / area,
+      is.na(minefield_count) ~ NA,
+      .default = NA
+    ),
+    minefields_per_capita = 1000 * minefield_count / postwar_pop
+  ) %>%
+  dplyr::select(canton, area, prewar_pop, postwar_pop, pop_change_count, pop_change_perc,
+                minefield_count, minefields_per_capita, minefields_per_area, minefield_area,
+                minefield_perc) %>%
+  
+  # apply pretty number formatting
+  dplyr::mutate(
+    area = dplyr::case_when(
+      is.na(area) ~ NA,
+      .default = formatC(area, digits = 2, format = "f")
+    ),
+    pop_change_perc = dplyr::case_when(
+      pop_change_perc > 0 ~ paste0("+", formatC(100 * pop_change_perc, digits = 2, format = "f"), "%"),
+      is.na(pop_change_perc) ~ NA,
+      .default = paste0(formatC(100 * pop_change_perc, digits = 2, format = "f"), "%")
+    ),
+    minefields_per_capita = dplyr::case_when(
+      is.na(minefields_per_capita) ~ NA,
+      .default = formatC(minefields_per_capita, digits = 2, format = "f")
+    ),
+    minefields_per_area = dplyr::case_when(
+      is.na(area) ~ NA,
+      .default = formatC(minefields_per_area, digits = 2, format = "f")
+    ),
+    minefield_area = dplyr::case_when(
+      is.na(area) ~ NA,
+      .default = formatC(minefield_area, digits = 2, format = "f")
+    ),
+    minefield_perc = dplyr::case_when(
+      is.na(area) ~ NA,
+      .default = formatC(100 * minefield_perc, digits = 2, format = "f")
+    )
+  ) %>%
+  
+  # convert to flextable
+  flextable::flextable() %>%
+  
+  flextable::set_table_properties(width = 1, layout = "fixed") %>%
+  flextable::autofit() %>%
+  
+  # remove default header row
+  flextable::delete_part(part = "header") %>%
+  
+  # add headers
+  flextable::add_header_row(values = header2) %>%
+  flextable::add_header_row(values = header1) %>%
+  
+  # format header
+  flextable::align(align = "center", part = "header") %>%
+  flextable::bold(bold = TRUE, part = "header") %>%
+  flextable::fontsize(i = 2, size = 8, part = "header") %>%
+  flextable::valign(valign = "top", part = "header") %>%
+
+  # merge header cells
+  flextable::merge_at(i = 1:2, j = 1, part = "header") %>%
+  flextable::merge_at(i = 1, j = 3:4, part = "header") %>%
+  flextable::merge_at(i = 1, j = 5:6, part = "header") %>%
+  flextable::merge_at(i = 1, j = 7:9, part = "header") %>%
+  flextable::merge_at(i = 1, j = 10:11, part = "header") %>%
+  
+  # merge body cells
+  flextable::merge_at(i = 1, part = "body") %>%
+  flextable::merge_at(i = 13, part = "body") %>%
+  
+  # format body cells
+  flextable::bold(i = c(1, 13), bold = TRUE) %>%
+  flextable::fontsize(size = 10, part = "body") %>%
+  flextable::align(j = 2:11, align = "center", part = "body") %>%
+  
+  # format borders
+  flextable::border_remove() %>% 
+  flextable::border_inner_h(border = border_style, part = "all") %>%
+  flextable::border_inner_v(border = border_style, part = "all") %>%
+  flextable::border_outer(border = border_style, part = "all")
+
+minefield_table
+
+```
+
+[*Notes: Cantons and entities shown are post-war cantons and municipalities. Data sources use alternative names for cantons: Gorazde (Bosnian Podrinje), Neretva (Herzegovina-Neretva), Tuzla-Podrinje (Tuzla), Western Bosnia (Canton 10), and Western Herzegovina (West Herzegovina). All sources fold Brčko metrics into the Republika Srpska entity metrics. Pre-war populations comes from the 1991 Bosnian Census and post-war populations from the UNHCR's 1997 estimates. Source: ICRC, 1998; OHR, 1998; UNMAC 2004; author calculations.*]{style="font-size: 0.75em;"}
+
+<!-- **MAP X.** Estimated Minefield Density, by Canton -->
+
+<!-- ```{r minefield_maps, echo=FALSE, warning=FALSE, fig.align = 'center'} -->
+
+<!-- minefield_density_canton_map -->
+
+<!-- ``` -->
+
+<!-- [*Notes: Cantons and Brčko district shown; Republika Srpska estimates only available at an entity level. Source: ICRC 1998; Bolton 2003; United Nations 1997.*]{style="font-size: 0.75em;"} -->

@@ -41,6 +41,8 @@
     "Distance to Another Country, Post-War": 18.9792,
     "Distance to IEBL, Post-War": 1.988,
     "Minefield Density": 0.1892,
+    "Minefield Area": 45.8065,
+    "Minefield Percentage of Municipalty": 0.0378,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -440,6 +442,8 @@
     "Distance to Another Country, Post-War": 42.044,
     "Distance to IEBL, Post-War": 12.2622,
     "Minefield Density": 1.2414,
+    "Minefield Area": 26.7673,
+    "Minefield Percentage of Municipalty": 0.1423,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -636,6 +640,8 @@
     "Distance to Another Country, Post-War": 9.5504,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 67.4704,
+    "Minefield Percentage of Municipalty": 0.2231,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -854,6 +860,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 11.5755,
     "Minefield Density": 0.3381,
+    "Minefield Area": 212.6691,
+    "Minefield Percentage of Municipalty": 0.2193,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -1297,6 +1305,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 12.9395,
+    "Minefield Percentage of Municipalty": 0.0172,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -1584,6 +1594,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 13.4418,
     "Minefield Density": 0.1892,
+    "Minefield Area": 0,
+    "Minefield Percentage of Municipalty": 0,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -1849,6 +1861,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.3381,
+    "Minefield Area": 149.1866,
+    "Minefield Percentage of Municipalty": 0.2602,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -2129,6 +2143,8 @@
     "Distance to Another Country, Post-War": 2.2763,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.3381,
+    "Minefield Area": 7.4479,
+    "Minefield Percentage of Municipalty": 0.0099,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -2343,6 +2359,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 12.167,
     "Minefield Density": 0.153,
+    "Minefield Area": 57.3423,
+    "Minefield Percentage of Municipalty": 0.0731,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -2637,6 +2655,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 22.6397,
     "Minefield Density": 0.1892,
+    "Minefield Area": 33.8651,
+    "Minefield Percentage of Municipalty": 0.1097,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -2908,6 +2928,8 @@
     "Distance to Another Country, Post-War": 67.1779,
     "Distance to IEBL, Post-War": 12.1046,
     "Minefield Density": 0.6968,
+    "Minefield Area": 16.4864,
+    "Minefield Percentage of Municipalty": 0.2077,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -3041,6 +3063,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 76.3915,
+    "Minefield Percentage of Municipalty": 0.3198,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -3222,6 +3246,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6902,
+    "Minefield Area": 129.5249,
+    "Minefield Percentage of Municipalty": 0.2667,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 1,
     "geometry": {
@@ -3447,6 +3473,8 @@
     "Distance to Another Country, Post-War": 43.7037,
     "Distance to IEBL, Post-War": 7.7303,
     "Minefield Density": 0.5786,
+    "Minefield Area": 70.7917,
+    "Minefield Percentage of Municipalty": 0.1862,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -3646,6 +3674,8 @@
     "Distance to Another Country, Post-War": 73.7688,
     "Distance to IEBL, Post-War": 27.2844,
     "Minefield Density": 0.5786,
+    "Minefield Area": 60.9854,
+    "Minefield Percentage of Municipalty": 0.3971,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -3841,6 +3871,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 6.8998,
     "Minefield Density": 0.3381,
+    "Minefield Area": 24.5298,
+    "Minefield Percentage of Municipalty": 0.1884,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -4005,6 +4037,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 9.6628,
     "Minefield Density": 0.3381,
+    "Minefield Area": 20.6072,
+    "Minefield Percentage of Municipalty": 0.0572,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -4232,6 +4266,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 8.2038,
     "Minefield Density": 0.1892,
+    "Minefield Area": 51.9279,
+    "Minefield Percentage of Municipalty": 0.1004,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -4504,6 +4540,8 @@
     "Distance to Another Country, Post-War": 11.3523,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 127.1446,
+    "Minefield Percentage of Municipalty": 0.1817,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -4842,6 +4880,8 @@
     "Distance to Another Country, Post-War": 35.8495,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 8.2951,
+    "Minefield Percentage of Municipalty": 0.2575,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -4936,6 +4976,8 @@
     "Distance to Another Country, Post-War": 41.9069,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 3.5962,
+    "Minefield Percentage of Municipalty": 0.3192,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -5021,6 +5063,8 @@
     "Distance to Another Country, Post-War": 73.1655,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5786,
+    "Minefield Area": 8.3484,
+    "Minefield Percentage of Municipalty": 0.1187,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -5146,6 +5190,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1765,
+    "Minefield Area": 19.652,
+    "Minefield Percentage of Municipalty": 0.3572,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -5247,6 +5293,8 @@
     "Distance to Another Country, Post-War": 46.5447,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5786,
+    "Minefield Area": 106.705,
+    "Minefield Percentage of Municipalty": 0.3199,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -5428,6 +5476,8 @@
     "Distance to Another Country, Post-War": 0.134,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 11.0355,
+    "Minefield Percentage of Municipalty": 0.2917,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -5522,6 +5572,8 @@
     "Distance to Another Country, Post-War": 7.7209,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.153,
+    "Minefield Area": 48.6361,
+    "Minefield Percentage of Municipalty": 0.0917,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -5715,6 +5767,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 23.6584,
     "Minefield Density": 0.1892,
+    "Minefield Area": 18.7424,
+    "Minefield Percentage of Municipalty": 0.0364,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -5977,6 +6031,8 @@
     "Distance to Another Country, Post-War": 61.7904,
     "Distance to IEBL, Post-War": 28.0526,
     "Minefield Density": 0.5786,
+    "Minefield Area": 28.356,
+    "Minefield Percentage of Municipalty": 0.0911,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -6208,6 +6264,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 53.8247,
+    "Minefield Percentage of Municipalty": 0.0471,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -6477,6 +6535,8 @@
     "Distance to Another Country, Post-War": 7.5889,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5424,
+    "Minefield Area": 37.1867,
+    "Minefield Percentage of Municipalty": 0.2326,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -6626,6 +6686,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 17.2892,
     "Minefield Density": 0.1892,
+    "Minefield Area": 16.5033,
+    "Minefield Percentage of Municipalty": 0.0226,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -6855,6 +6917,8 @@
     "Distance to Another Country, Post-War": 12.3159,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.153,
+    "Minefield Area": 120.2611,
+    "Minefield Percentage of Municipalty": 0.1128,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -7104,6 +7168,8 @@
     "Distance to Another Country, Post-War": 7.2639,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5424,
+    "Minefield Area": 39.0218,
+    "Minefield Percentage of Municipalty": 0.1863,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -7260,6 +7326,8 @@
     "Distance to Another Country, Post-War": 44.2164,
     "Distance to IEBL, Post-War": 21.832,
     "Minefield Density": 0.5786,
+    "Minefield Area": 88.0706,
+    "Minefield Percentage of Municipalty": 0.2182,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -7469,6 +7537,8 @@
     "Distance to Another Country, Post-War": 15.3264,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 56.2254,
+    "Minefield Percentage of Municipalty": 0.2998,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -7660,6 +7730,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 27.7487,
     "Minefield Density": 0.1892,
+    "Minefield Area": 47.4294,
+    "Minefield Percentage of Municipalty": 0.063,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -7987,6 +8059,8 @@
     "Distance to Another Country, Post-War": 29.2348,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 42.204,
+    "Minefield Percentage of Municipalty": 0.2073,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -8187,6 +8261,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 34.6351,
     "Minefield Density": 0,
+    "Minefield Area": 0,
+    "Minefield Percentage of Municipalty": 0,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -8371,6 +8447,8 @@
     "Distance to Another Country, Post-War": 58.6087,
     "Distance to IEBL, Post-War": 5.7658,
     "Minefield Density": 1.1712,
+    "Minefield Area": 33.3809,
+    "Minefield Percentage of Municipalty": 0.1247,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -8567,6 +8645,8 @@
     "Distance to Another Country, Post-War": 6.8056,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 21.8871,
+    "Minefield Percentage of Municipalty": 0.0626,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -8799,6 +8879,8 @@
     "Distance to Another Country, Post-War": 50.2808,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 48.8853,
+    "Minefield Percentage of Municipalty": 0.3325,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -8988,6 +9070,8 @@
     "Distance to Another Country, Post-War": 49.9002,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 75.4184,
+    "Minefield Percentage of Municipalty": 0.2564,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -9232,6 +9316,8 @@
     "Distance to Another Country, Post-War": 50.1423,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 19.2336,
+    "Minefield Percentage of Municipalty": 0.5698,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -9332,6 +9418,8 @@
     "Distance to Another Country, Post-War": 26.9085,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 2.7007,
+    "Minefield Percentage of Municipalty": 0.029,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -9450,6 +9538,8 @@
     "Distance to Another Country, Post-War": 38.8968,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 1.6564,
+    "Minefield Percentage of Municipalty": 0.023,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -9574,6 +9664,8 @@
     "Distance to Another Country, Post-War": 47.6132,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 15.7569,
+    "Minefield Percentage of Municipalty": 0.1987,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -9700,6 +9792,8 @@
     "Distance to Another Country, Post-War": 45.3744,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 4.0658,
+    "Minefield Percentage of Municipalty": 0.1008,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -9794,6 +9888,8 @@
     "Distance to Another Country, Post-War": 25.8257,
     "Distance to IEBL, Post-War": 13.7949,
     "Minefield Density": 0.2623,
+    "Minefield Area": 26.6372,
+    "Minefield Percentage of Municipalty": 0.0866,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -9985,6 +10081,8 @@
     "Distance to Another Country, Post-War": 58.1668,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5786,
+    "Minefield Area": 68.3515,
+    "Minefield Percentage of Municipalty": 0.2162,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -10164,6 +10262,8 @@
     "Distance to Another Country, Post-War": 58.6786,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 4.7703,
+    "Minefield Percentage of Municipalty": 0.0613,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -10307,6 +10407,8 @@
     "Distance to Another Country, Post-War": 66.1593,
     "Distance to IEBL, Post-War": 22.0797,
     "Minefield Density": 0.6968,
+    "Minefield Area": 7.9814,
+    "Minefield Percentage of Municipalty": 0.0209,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -10530,6 +10632,8 @@
     "Distance to Another Country, Post-War": 12.301,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 56.1942,
+    "Minefield Percentage of Municipalty": 0.2976,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -10720,6 +10824,8 @@
     "Distance to Another Country, Post-War": 13.6124,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 72.6098,
+    "Minefield Percentage of Municipalty": 0.109,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -10967,6 +11073,8 @@
     "Distance to Another Country, Post-War": 71.0375,
     "Distance to IEBL, Post-War": 13.8429,
     "Minefield Density": 0.5786,
+    "Minefield Area": 54.4311,
+    "Minefield Percentage of Municipalty": 0.3407,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -11180,6 +11288,8 @@
     "Distance to Another Country, Post-War": 21.9638,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 50.6719,
+    "Minefield Percentage of Municipalty": 0.1654,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -11390,6 +11500,8 @@
     "Distance to Another Country, Post-War": 34.4919,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.3381,
+    "Minefield Area": 18.3813,
+    "Minefield Percentage of Municipalty": 0.0549,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -11568,6 +11680,8 @@
     "Distance to Another Country, Post-War": 37.9686,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.2623,
+    "Minefield Area": 112.1063,
+    "Minefield Percentage of Municipalty": 0.0994,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -11905,6 +12019,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 22.8061,
     "Minefield Density": 0.1892,
+    "Minefield Area": 7.4165,
+    "Minefield Percentage of Municipalty": 0.0798,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -12036,6 +12152,8 @@
     "Distance to Another Country, Post-War": 47.95,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 76.1059,
+    "Minefield Percentage of Municipalty": 0.1368,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -12312,6 +12430,8 @@
     "Distance to Another Country, Post-War": 61.6671,
     "Distance to IEBL, Post-War": 19.1141,
     "Minefield Density": 0.5786,
+    "Minefield Area": 35.0318,
+    "Minefield Percentage of Municipalty": 0.2387,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -12479,6 +12599,8 @@
     "Distance to Another Country, Post-War": 3.9779,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 26.3368,
+    "Minefield Percentage of Municipalty": 0.2556,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -12628,6 +12750,8 @@
     "Distance to Another Country, Post-War": 22.129,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.153,
+    "Minefield Area": 163.1379,
+    "Minefield Percentage of Municipalty": 0.2856,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -12848,6 +12972,8 @@
     "Distance to Another Country, Post-War": 36.1724,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 3.3452,
+    "Minefield Percentage of Municipalty": 0.0587,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -12953,6 +13079,8 @@
     "Distance to Another Country, Post-War": 14.3745,
     "Distance to IEBL, Post-War": 34.2651,
     "Minefield Density": 0.1892,
+    "Minefield Area": 0.0039,
+    "Minefield Percentage of Municipalty": 0,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -13182,6 +13310,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 19.1574,
     "Minefield Density": 0.153,
+    "Minefield Area": 72.1575,
+    "Minefield Percentage of Municipalty": 0.0748,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -13444,6 +13574,8 @@
     "Distance to Another Country, Post-War": 9.3674,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 23.874,
+    "Minefield Percentage of Municipalty": 0.0726,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -13640,6 +13772,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 19.2704,
     "Minefield Density": 0,
+    "Minefield Area": 0,
+    "Minefield Percentage of Municipalty": 0,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -13814,6 +13948,8 @@
     "Distance to Another Country, Post-War": 9.7632,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 71.1219,
+    "Minefield Percentage of Municipalty": 0.2349,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -13981,6 +14117,8 @@
     "Distance to Another Country, Post-War": 36.3588,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 90.4424,
+    "Minefield Percentage of Municipalty": 0.2632,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -14170,6 +14308,8 @@
     "Distance to Another Country, Post-War": 50.8229,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 117.6162,
+    "Minefield Percentage of Municipalty": 0.3879,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -14377,6 +14517,8 @@
     "Distance to Another Country, Post-War": 4.5933,
     "Distance to IEBL, Post-War": 15.6809,
     "Minefield Density": 0.1892,
+    "Minefield Area": 16.7143,
+    "Minefield Percentage of Municipalty": 0.0661,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -14600,6 +14742,8 @@
     "Distance to Another Country, Post-War": 8.4578,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 51.0022,
+    "Minefield Percentage of Municipalty": 0.1289,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -14810,6 +14954,8 @@
     "Distance to Another Country, Post-War": 14.2691,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.2623,
+    "Minefield Area": 233.5205,
+    "Minefield Percentage of Municipalty": 0.22,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -15108,6 +15254,8 @@
     "Distance to Another Country, Post-War": 35.7343,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 98.3639,
+    "Minefield Percentage of Municipalty": 0.1498,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -15435,6 +15583,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.2623,
+    "Minefield Area": 4.014,
+    "Minefield Percentage of Municipalty": 0.0189,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -15603,6 +15753,8 @@
     "Distance to Another Country, Post-War": 14.6907,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 7.5507,
+    "Minefield Percentage of Municipalty": 0.0078,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -15911,6 +16063,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 24.821,
+    "Minefield Percentage of Municipalty": 0.0523,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -16166,6 +16320,8 @@
     "Distance to Another Country, Post-War": 63.1584,
     "Distance to IEBL, Post-War": 16.6611,
     "Minefield Density": 0.5786,
+    "Minefield Area": 31.0245,
+    "Minefield Percentage of Municipalty": 0.1269,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -16382,6 +16538,8 @@
     "Distance to Another Country, Post-War": 0.6775,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 48.7883,
+    "Minefield Percentage of Municipalty": 0.2997,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -16555,6 +16713,8 @@
     "Distance to Another Country, Post-War": 55.0796,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 9.1364,
+    "Minefield Percentage of Municipalty": 0.9357,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -16632,6 +16792,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1765,
+    "Minefield Area": 18.8616,
+    "Minefield Percentage of Municipalty": 0.12,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -16770,6 +16932,8 @@
     "Distance to Another Country, Post-War": 29.1641,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 75.6017,
+    "Minefield Percentage of Municipalty": 0.1906,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -17047,6 +17211,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1765,
+    "Minefield Area": 62.1622,
+    "Minefield Percentage of Municipalty": 0.5285,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -17176,6 +17342,8 @@
     "Distance to Another Country, Post-War": 5.5934,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 16.0811,
+    "Minefield Percentage of Municipalty": 0.1873,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -17314,6 +17482,8 @@
     "Distance to Another Country, Post-War": 14.0019,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 43.2122,
+    "Minefield Percentage of Municipalty": 0.1828,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -17582,6 +17752,8 @@
     "Distance to Another Country, Post-War": 23.7236,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 47.2351,
+    "Minefield Percentage of Municipalty": 0.0929,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -17765,6 +17937,8 @@
     "Distance to Another Country, Post-War": 17.4916,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5424,
+    "Minefield Area": 23.1695,
+    "Minefield Percentage of Municipalty": 0.2751,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -17889,6 +18063,8 @@
     "Distance to Another Country, Post-War": 8.4171,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 42.0202,
+    "Minefield Percentage of Municipalty": 0.3562,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -18016,6 +18192,8 @@
     "Distance to Another Country, Post-War": 22.56,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 3.2235,
+    "Minefield Percentage of Municipalty": 0.0197,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -18135,6 +18313,8 @@
     "Distance to Another Country, Post-War": 42.6265,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 62.749,
+    "Minefield Percentage of Municipalty": 0.256,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -18294,6 +18474,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 33.5758,
     "Minefield Density": 0,
+    "Minefield Area": 4.9603,
+    "Minefield Percentage of Municipalty": 0.011,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -18569,6 +18751,8 @@
     "Distance to Another Country, Post-War": 12.0481,
     "Distance to IEBL, Post-War": 2.6432,
     "Minefield Density": 0.1892,
+    "Minefield Area": 11.4668,
+    "Minefield Percentage of Municipalty": 0.0142,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -18889,6 +19073,8 @@
     "Distance to Another Country, Post-War": 4.4652,
     "Distance to IEBL, Post-War": 14.5377,
     "Minefield Density": 0.1892,
+    "Minefield Area": 4.5111,
+    "Minefield Percentage of Municipalty": 0.0071,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -19193,6 +19379,8 @@
     "Distance to Another Country, Post-War": 26.2515,
     "Distance to IEBL, Post-War": 26.3454,
     "Minefield Density": 0.2623,
+    "Minefield Area": 45.3295,
+    "Minefield Percentage of Municipalty": 0.0959,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -19411,6 +19599,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.2623,
+    "Minefield Area": 87.0751,
+    "Minefield Percentage of Municipalty": 0.2714,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -19607,6 +19797,8 @@
     "Distance to Another Country, Post-War": 34.8574,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 39.5804,
+    "Minefield Percentage of Municipalty": 0.0722,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -19866,6 +20058,8 @@
     "Distance to Another Country, Post-War": 3.9818,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 56.3003,
+    "Minefield Percentage of Municipalty": 0.0892,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -20167,6 +20361,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 9.9482,
     "Minefield Density": 0.1892,
+    "Minefield Area": 10.2011,
+    "Minefield Percentage of Municipalty": 0.0297,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -20398,6 +20594,8 @@
     "Distance to Another Country, Post-War": 17.721,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.3381,
+    "Minefield Area": 136.1781,
+    "Minefield Percentage of Municipalty": 0.1902,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -20609,6 +20807,8 @@
     "Distance to Another Country, Post-War": 7.193,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 32.6441,
+    "Minefield Percentage of Municipalty": 0.3645,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -20750,6 +20950,8 @@
     "Distance to Another Country, Post-War": 53.945,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 13.6962,
+    "Minefield Percentage of Municipalty": 0.4314,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -20865,6 +21067,8 @@
     "Distance to Another Country, Post-War": 56.6307,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 23.3832,
+    "Minefield Percentage of Municipalty": 0.5742,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -20982,6 +21186,8 @@
     "Distance to Another Country, Post-War": 51.9289,
     "Distance to IEBL, Post-War": 0.4943,
     "Minefield Density": 1.1712,
+    "Minefield Area": 14.2403,
+    "Minefield Percentage of Municipalty": 0.3463,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -21098,6 +21304,8 @@
     "Distance to Another Country, Post-War": 54.1882,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 53.3433,
+    "Minefield Percentage of Municipalty": 0.1608,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -21339,6 +21547,8 @@
     "Distance to Another Country, Post-War": 16.5489,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 9.7539,
+    "Minefield Percentage of Municipalty": 0.0136,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -21631,6 +21841,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 30.5044,
     "Minefield Density": 0.1892,
+    "Minefield Area": 28.4216,
+    "Minefield Percentage of Municipalty": 0.0603,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -21895,6 +22107,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 27.7686,
     "Minefield Density": 0.1892,
+    "Minefield Area": 49.712,
+    "Minefield Percentage of Municipalty": 0.0963,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -22159,6 +22373,8 @@
     "Distance to Another Country, Post-War": 22.5573,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 10.3708,
+    "Minefield Percentage of Municipalty": 0.0409,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -22350,6 +22566,8 @@
     "Distance to Another Country, Post-War": 5.1026,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.2623,
+    "Minefield Area": 35.8485,
+    "Minefield Percentage of Municipalty": 0.1596,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -22515,6 +22733,8 @@
     "Distance to Another Country, Post-War": 8.9278,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 12.3447,
+    "Minefield Percentage of Municipalty": 0.3843,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -22602,6 +22822,8 @@
     "Distance to Another Country, Post-War": 35.1448,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 95.206,
+    "Minefield Percentage of Municipalty": 0.1132,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -22870,6 +23092,8 @@
     "Distance to Another Country, Post-War": 41.6115,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 24.2324,
+    "Minefield Percentage of Municipalty": 0.188,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -23023,6 +23247,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 19.2944,
     "Minefield Density": 0.153,
+    "Minefield Area": 41.1598,
+    "Minefield Percentage of Municipalty": 0.0416,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -23292,6 +23518,8 @@
     "Distance to Another Country, Post-War": 69.2219,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.5786,
+    "Minefield Area": 188.6588,
+    "Minefield Percentage of Municipalty": 0.3296,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -23565,6 +23793,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 81.6778,
+    "Minefield Percentage of Municipalty": 0.0939,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -23831,6 +24061,8 @@
     "Distance to Another Country, Post-War": 29.0077,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.1712,
+    "Minefield Area": 63.6836,
+    "Minefield Percentage of Municipalty": 0.1993,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -24037,6 +24269,8 @@
     "Distance to Another Country, Post-War": 36.1038,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 47.8964,
+    "Minefield Percentage of Municipalty": 0.4047,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -24195,6 +24429,8 @@
     "Distance to Another Country, Post-War": 20.9888,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 40.7631,
+    "Minefield Percentage of Municipalty": 0.1425,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -24398,6 +24634,8 @@
     "Distance to Another Country, Post-War": 7.027,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 21.594,
+    "Minefield Percentage of Municipalty": 0.1223,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -24561,6 +24799,8 @@
     "Distance to Another Country, Post-War": 38.5421,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 10.8738,
+    "Minefield Percentage of Municipalty": 0.1757,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -24663,6 +24903,8 @@
     "Distance to Another Country, Post-War": 51.2588,
     "Distance to IEBL, Post-War": 10.7294,
     "Minefield Density": 0.6968,
+    "Minefield Area": 32.5772,
+    "Minefield Percentage of Municipalty": 0.0864,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -24921,6 +25163,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 12.4273,
     "Minefield Density": 0.3381,
+    "Minefield Area": 108.2097,
+    "Minefield Percentage of Municipalty": 0.3033,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -25160,6 +25404,8 @@
     "Distance to Another Country, Post-War": 69.2356,
     "Distance to IEBL, Post-War": 12.4457,
     "Minefield Density": 0.6968,
+    "Minefield Area": 76.1867,
+    "Minefield Percentage of Municipalty": 0.316,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -25371,6 +25617,8 @@
     "Distance to Another Country, Post-War": 71.9422,
     "Distance to IEBL, Post-War": 19.3912,
     "Minefield Density": 0.5786,
+    "Minefield Area": 76.1975,
+    "Minefield Percentage of Municipalty": 0.49,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -25527,6 +25775,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 13.0138,
     "Minefield Density": 0.1892,
+    "Minefield Area": 10.758,
+    "Minefield Percentage of Municipalty": 0.023,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -25747,6 +25997,8 @@
     "Distance to Another Country, Post-War": 8.4109,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 13.3681,
+    "Minefield Percentage of Municipalty": 0.0595,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -25931,6 +26183,8 @@
     "Distance to Another Country, Post-War": 57.9517,
     "Distance to IEBL, Post-War": 2.9506,
     "Minefield Density": 1.1712,
+    "Minefield Area": 26.2324,
+    "Minefield Percentage of Municipalty": 0.3787,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -26071,6 +26325,8 @@
     "Distance to Another Country, Post-War": 5.9452,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 5.0523,
+    "Minefield Percentage of Municipalty": 0.0806,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -26196,6 +26452,8 @@
     "Distance to Another Country, Post-War": 49.2834,
     "Distance to IEBL, Post-War": 7.3192,
     "Minefield Density": 0.6968,
+    "Minefield Area": 107.9732,
+    "Minefield Percentage of Municipalty": 0.1811,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -26468,6 +26726,8 @@
     "Distance to Another Country, Post-War": 68.2984,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 48.7383,
+    "Minefield Percentage of Municipalty": 0.0855,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -26719,6 +26979,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 80.7504,
+    "Minefield Percentage of Municipalty": 0.1965,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -27003,6 +27265,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 3.7375,
     "Minefield Density": 0.1892,
+    "Minefield Area": 46.8731,
+    "Minefield Percentage of Municipalty": 0.163,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -27200,6 +27464,8 @@
     "Distance to Another Country, Post-War": 0,
     "Distance to IEBL, Post-War": 2.1969,
     "Minefield Density": 0.2623,
+    "Minefield Area": 17.1304,
+    "Minefield Percentage of Municipalty": 0.0689,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -27402,6 +27668,8 @@
     "Distance to Another Country, Post-War": 32.9102,
     "Distance to IEBL, Post-War": 20.8903,
     "Minefield Density": 0.1892,
+    "Minefield Area": 0.4162,
+    "Minefield Percentage of Municipalty": 0.0011,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -27634,6 +27902,8 @@
     "Distance to Another Country, Post-War": 13.3782,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 1.2414,
+    "Minefield Area": 28.2824,
+    "Minefield Percentage of Municipalty": 0.2155,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -27781,6 +28051,8 @@
     "Distance to Another Country, Post-War": 6.831,
     "Distance to IEBL, Post-War": 7.998,
     "Minefield Density": 0.2623,
+    "Minefield Area": 2.0409,
+    "Minefield Percentage of Municipalty": 0.0111,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -27944,6 +28216,8 @@
     "Distance to Another Country, Post-War": 0.5253,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 39.3861,
+    "Minefield Percentage of Municipalty": 0.2156,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -28105,6 +28379,8 @@
     "Distance to Another Country, Post-War": 8.4192,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 34.2239,
+    "Minefield Percentage of Municipalty": 0.1388,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -28284,6 +28560,8 @@
     "Distance to Another Country, Post-War": 36.1104,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.1892,
+    "Minefield Area": 42.7296,
+    "Minefield Percentage of Municipalty": 0.0798,
     "Republika Srpska Municipality": 1,
     "Federation Municipality": 0,
     "geometry": {
@@ -28501,6 +28779,8 @@
     "Distance to Another Country, Post-War": 8.6444,
     "Distance to IEBL, Post-War": 18.1118,
     "Minefield Density": 0,
+    "Minefield Area": 1.5033,
+    "Minefield Percentage of Municipalty": 0.0037,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -28725,6 +29005,8 @@
     "Distance to Another Country, Post-War": 65.9471,
     "Distance to IEBL, Post-War": 0,
     "Minefield Density": 0.6968,
+    "Minefield Area": 50.4608,
+    "Minefield Percentage of Municipalty": 0.2601,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {
@@ -28882,6 +29164,8 @@
     "Distance to Another Country, Post-War": 21.8034,
     "Distance to IEBL, Post-War": 0.7592,
     "Minefield Density": 1.2414,
+    "Minefield Area": 21.9773,
+    "Minefield Percentage of Municipalty": 0.0766,
     "Republika Srpska Municipality": 0,
     "Federation Municipality": 1,
     "geometry": {

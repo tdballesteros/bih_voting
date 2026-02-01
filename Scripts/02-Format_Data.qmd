@@ -1,0 +1,1196 @@
+---
+title: "02-Format_Data"
+format: html
+---
+
+This file formats all raw data used in this project in combination with the formatted municipality, canton, entity, and IEBL shapefiles formatted in 01-Format_Shapefiles.qmd. Data is exported as .csv files
+
+## Loading
+```{r}
+#| label: load-libraries
+#| echo: FALSE
+
+library(geodata)
+library(units)
+library(sf)
+library(mapview)
+library(readxl)
+library(units)
+library(tidyverse)
+
+```
+
+```{r}
+#| label: load-data
+#| echo: FALSE
+
+### CENSUS DATA ###
+
+# Census Data, 1991
+# Source: xxx
+bih_census_1991 <- readxl::read_xlsx("../Data/bih_census_1991.xlsx")
+
+# Census Data, 1991, by Community
+# Source: xxx
+bih_census_1991_community <- readxl::read_xlsx("../Data/Stanovništvo prema nacionalnom izjašnjavanju po mjesnim zajednicama 1991.xlsx")
+
+# Census Data, 1991, by Post-War Municipalities
+# Source: Avdić, Mirić, Gekić, and Gekić
+bih_census_1991_postwar_modified <- readxl::read_xlsx("../Data/Avdić, Mirić, Gekić, and Gekić data.xlsx", skip = 1)
+
+# Census Data, 2013
+# Source: xxx
+bih_census_2013 <- readxl::read_xlsx("../Data/bih_census_2013.xlsx")
+
+
+### SHAPE FILES ###
+
+# Pre-War Shapefile
+bih_prewar_municipalities_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_prewar_municipalities_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# Post-War Municipality Shapefile
+bih_postwar_municipalities_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_postwar_municipalities_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# Post-War Canton Shapefile
+bih_postwar_cantons_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/bih_postwar_cantons_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# Post-War Entity Shapefile
+bih_postwar_entities_shapefile <- sf::st_read(
+  "../Shape Files/Raw Shapefiles/geoBoundaries-BIH-ADM1-all/geoBoundaries-BIH-ADM1.shp",
+  quiet = TRUE
+  )
+
+# Post-War IEBL Shapefile
+bih_postwar_iebl_shapefile <- sf::read_sf(
+  "../Shape Files/Formatted Shape Files/iebl_shapefile_formatted.gpkg",
+  quiet = TRUE
+)
+
+# Country Outline Shapefile
+bih_outline_shapefile <- sf::st_read(
+  "../Shape Files/Raw Shapefiles/geoBoundaries-BIH-ADM0-all/geoBoundaries-BIH-ADM0.shp",
+  quiet = TRUE
+  )
+
+# Croatia, Serbia, Montenegro, and Kosovo County Outline Shapefiles
+hrv_shapefile <- geodata::gadm(country = "HRV", level = 0)
+srb_shapefile <- geodata::gadm(country = "SRB", level = 0)
+mne_shapefile <- geodata::gadm(country = "MNE", level = 0)
+xko_shapefile <- geodata::gadm(country = "XKO", level = 0)
+
+# Minefield 2004 Map Shapefile
+# Source: xxx
+minefield_2004_shapefile <- sf::read_sf(
+  "../Shape Files/bih_landmine_areas.gpkg",
+  quiet = TRUE
+)
+
+
+### ELECTION DATA ###
+
+# Municipal Vote Tally
+# Source: xxx
+municipal_election_tally <- readxl::read_xlsx("../Data/bih_municipal_votes_97_tally.xlsx")
+
+# Municipal Vote Seat Allocation
+# Source: xxx
+municipal_seat_allocation <- read.csv("../Data/bih_municipal_elections_97_seat_allocation.csv")
+
+# Nationalist Party Leanings
+# Source: xxx
+nationalist_party_leanings_1997 <- readxl::read_xlsx("../Data/bih_parties_1997_leanings.xlsx")
+ 
+# Voting Location
+# Source: xxx
+voting_location_1997 <- readxl::read_xlsx("../Data/bih_voting_location_1997.xlsx")
+
+
+### OTHER DATA ###
+# Death Data, by Post-War Municipalities
+# Source: Costalli and Moro, 2012
+death_data_cm_original <- readxl::read_xlsx("../Data/deaths_per_municipality.xlsx")
+
+# UCDP GED Event Dataset v25.1
+# Source: xxx
+gede <- readxl::read_xlsx("../Data/GEDEvent_v25_1.xlsx")
+
+# Post-War Municipalities Metadata
+postwar_metadata <- readxl::read_xlsx("../Data/bih_postwar_municipality_metadata.xlsx")
+
+# Municipality Reorganization Crosswalk
+municipality_reorg_crosswalk <- readxl::read_xlsx("../Data/bih_municipality_reorg_crosswalk.xlsx")
+
+# Minefield Prevalence by Canton
+# Source: xxx
+landmines <- readxl::read_xlsx("../Data/unmac_minefield_canton_data_1997.xlsx", skip = 1)
+
+```
+
+## Pre-War Data
+This section formats data that is from before the 1992-1995 war or is based upon the pre-war municipalities.
+
+### 1991 Census Data
+```{r}
+#| label: census-data-1991
+#| echo: FALSE
+
+# Note: The total row's Total value shows a population 1,402 individuals greater than the sum of the
+# individual ethnic groups. All municipality-level Total values match the sum of the breakdown
+# values.
+census_data_1991 <- bih_census_1991 %>%
+  # drop Bosnia-wide row
+  dplyr::filter(Municipality != "Total") %>%
+  # rename Muslims (Bosniaks) and Total variables
+  dplyr::rename(
+    muslims = `Muslims by nationality`,
+    population = Total) %>%
+  dplyr::rename_with(tolower) %>%
+  dplyr::mutate(
+    # calculate municipality-level percentages by ethnicity
+    dplyr::across(c(muslims, serbs, croats, yugoslavs, other), ~ .x / population,
+                  .names = "percent_{.col}"),
+    # calculate polarization and fractionalization metrics
+    fractionalization = 1 - rowSums(dplyr::across(dplyr::starts_with("percent_"))^2),
+    polarization = 1 - 4 * rowSums(dplyr::across(dplyr::starts_with("percent_"), ~ .x * (0.5 - .x)^2)),
+    percent_total_population = population / sum(population),
+    # rename pre-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Centar Sarajevo" ~ "Sarajevo Centar",
+      "Dubica" ~ "Bosanska Dubica",
+      "Gradiška" ~ "Bosanska Gradiška",
+      "Novi Grad" ~ "Bosanski Novi",
+      "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+      "Novo Sarajevo" ~ "Sarajevo Novo Sarajevo",
+      "Šamac" ~ "Bosanski Šamac",
+      "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Vogošća" ~ "Sarajevo Vogošća",
+      .default = municipality
+    )
+  ) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = census_data_1991,
+  file = "../Formatted Data/census_data_1991_formatted.csv",
+  row.names = FALSE
+  )
+
+```
+
+```{r}
+#| label: census-data-1991-postwar
+#| echo: FALSE
+
+# 1991 census data assigned to post-war municipalities
+
+census_data_1991_postwar <- bih_census_1991_postwar_modified %>%
+  # drop unneeded columns
+  dplyr::select(Municipality, `Population 1991`) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names
+    Municipality = dplyr::case_match(
+      Municipality,
+      "Domaljevac Šamac" ~ "Domaljevac-Šamac",
+      "Foča (FBiH)" ~ "Foča-Ustikolina",
+      "Trnovo (FBiH)" ~ "Trnovo-FBIH",
+      "Pale (FBiH)" ~ "Pale-Prača",
+      "Kupres (RS)" ~ "Kupres-RS",
+      .default = Municipality
+      )) %>%
+  # manually add Bužim, Kostajnica, and Milići
+  rbind(tibble::tibble(
+    Municipality = c("Bužim", "Kostajnica", "Milići"),
+    `Population 1991` = c(16940, 6231, 16038)
+  )) %>%
+  dplyr::left_join(municipality_reorg_crosswalk, by = dplyr::join_by("Municipality" == "Postwar Municipality")) %>%
+  dplyr::select(
+    postwar_municipality = Municipality, prewar_municipality = `Prewar Municipality`, pop_1991 = `Population 1991`, modified = Modified
+  )
+
+# create version to merge with pre-war census data
+census_data_1991_new_municipalities_to_merge <- bih_census_1991_postwar_modified %>%
+  dplyr::select(municipality = Municipality, population_to_subtract = `Population 1991`) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(population_to_subtract = sum(population_to_subtract)) %>%
+  dplyr::ungroup()
+
+# create version to append to pre-war census data
+census_data_1991_new_municipalities_to_append <- bih_census_1991_postwar_modified %>%
+  dplyr::select(municipality = Municipality, redist_population = `Population 1991`)
+
+census_data_1991_postwar <- census_data_1991 %>%
+  dplyr::select(municipality, population) %>%
+  dplyr::left_join(census_data_1991_new_municipalities_to_merge, by = "municipality") %>%
+  dplyr::mutate(
+    population_to_subtract = ifelse(is.na(population_to_subtract), 0, population_to_subtract),
+    population = population - population_to_subtract
+    ) %>%
+  dplyr::select(municipality, redist_population = population) %>%
+  rbind(census_data_1991_new_municipalities_to_append) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Bosanska Dubica" ~ "Dubica",
+      "Bosanska Gradiška" ~ "Gradiška",
+      "Bosanski Brod" ~ "Brod",
+      "Bosanski Novi" ~ "Novi Grad",
+      "Bosanski Šamac" ~ "Šamac",
+      "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      "Kupres" ~ "Kupres-FBIH",
+      "Prozor" ~ "Prozor-Rama",
+      "Sarajevo Novo Sarajevo" ~ "Novo Sarajevo",
+      "Sarajevo Vogošća" ~ "Vogošća",
+      "Trnovo" ~ "Trnovo-RS",
+      .default = municipality
+      ))
+
+# write formatted data
+write.csv(
+  x = census_data_1991_postwar,
+  file = "../Formatted Data/census_data_1991_postwar_municipalities.csv",
+  row.names = FALSE
+  )
+
+```
+
+```{r}
+#| label: census-data-1991-by-community
+#| echo: FALSE
+
+# 1991 census data by community (village/town/city)
+
+census_data_1991_community <- bih_census_1991_community %>%
+  dplyr::filter(
+    # drop opština and country total rows
+    `Mjesne Zajednice` != "TOTAL",
+    # drop country total percentages row
+    !is.na(`Mjesne Zajednice`)
+  ) %>%
+  # rename variables to English
+  dplyr::select(municipality = Opština, community = `Mjesne Zajednice`, population = Ukupno,
+                muslims = Muslimani, serbs = Srbi, croats = Hrvati, yugoslavs = Jugosloveni,
+                other = Ostali) %>%
+  dplyr::mutate(
+    # calculate municipality-level percentages by ethnicity
+    dplyr::across(c(muslims, serbs, croats, yugoslavs, other), ~ .x / population,
+                  .names = "percent_{.col}")
+  ) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::mutate(population_percent_of_municipality = population / sum(population)) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    # calculate polarization and fractionalization metrics
+    fractionalization = 1 - rowSums(dplyr::across(dplyr::starts_with("percent_"))^2),
+    polarization = 1 - 4 * rowSums(dplyr::across(dplyr::starts_with("percent_"), ~ .x * (0.5 - .x)^2))
+  ) %>%
+  dplyr::arrange(municipality, community)
+
+# write formatted data
+write.csv(
+  x = census_data_1991_community,
+  file = "../Formatted Data/census_data_1991_community_formatted.csv",
+  row.names = FALSE
+  )
+
+```
+
+### Death Data
+```{r}
+#| label: death-data-costalli-and-moro
+#| echo: FALSE
+
+death_data_cm <- death_data_cm_original %>%
+  # rename variables
+  dplyr::select(municipality = Municipality, fractionalization_cm = Fractionalization,
+                polarization_cm = Polarization, ethnic_dominance_cm = `Ethnic Dominance`,
+                deaths_per_population = `Deaths/Population`) %>%
+  dplyr::mutate(
+    # rename pre-war municipalities to standardize names
+    municipality = ifelse(municipality == "Sarajevo Novo Sar.",
+                          "Sarajevo Novo Sarajevo",
+                          municipality)
+    ) %>%
+  # merge in 1991 census data to calculate absolute death values
+  dplyr::full_join(census_data_1991, by = "municipality") %>%
+  # calculate approximate total death counts based on 1991 census population values
+  dplyr::mutate(deaths_count = population * deaths_per_population) %>%
+  # drop unneeded population variables
+  dplyr::select(municipality, deaths_per_population, deaths_count, fractionalization_cm,
+                polarization_cm, ethnic_dominance_cm) %>%
+  dplyr::arrange(municipality)
+
+# create additional rows for new post-war municipalities
+# death_data2 <- death_data_cm %>%
+#   dplyr::mutate(municipality = dplyr::case_match(
+#     municipality,
+#     "Bosanska Krupa" ~	"Bužim",
+#     "Sanski Most" ~	"Oštra Luka",
+#     "Ključ" ~	"Ribnik",
+#     "Bosanski Petrovac" ~	"Petrovac",
+#     "Drvar" ~	"Istočni Drvar",
+#     "Kupres" ~	"Kupres-RS",
+#     "Jajce" ~	"Jezero",
+#     "Kneževo" ~	"Dobretići",
+#     "Doboj" ~	"Doboj Jug",
+#     "Gračanica" ~	"Petrovo",
+#     "Gradačac" ~	"Pelagićevo",
+#     "Odžak" ~	"Vukosavlje",
+#     "Šamac" ~	"Domaljevac-Šamac",
+#     "Orašje" ~	"Donji Žabar",
+#     "Lopare" ~	"Čelić",
+#     "Ugljevik" ~	"Teočak",
+#     "Zvornik" ~	"Sapna",
+#     "Kalesija" ~	"Osmaci",
+#     "Trebinje" ~	"Ravno",
+#     "Stolac" ~	"Berkovići",
+#     "Mostar" ~	"Istočni Mostar",
+#     "Trnovo" ~	"Trnovo-RS",
+#     "Foča" ~	"Foča-Ustikolina",
+#     "Goražde" ~	"Novo Goražde",
+#     "Pale" ~	"Pale-Prača",
+#     "Ilidža" ~	"Istočna Ilidža",
+#     "Sarajevo Stari Grad" ~	"Istočno Stari Grad",
+#     "Sarajevo Novo Sarajevo" ~	"East New Sarajevo",
+#     "Bosanski Novi" ~	"Kostajnica",
+#     "Tešanj" ~	"Usora",
+#     "Vlasenica" ~	"Milići",
+#     .default = NA
+#   )) %>%
+#   dplyr::filter(!is.na(municipality))
+# 
+# death_data3 <- death_data_cm %>%
+#   dplyr::mutate(municipality = dplyr::case_match(
+#     municipality,
+#     "Bosanska Krupa" ~ "Krupa na Uni",
+#     "Doboj" ~ "Doboj Istok",
+#     .default = NA
+#   )) %>%
+#   dplyr::filter(!is.na(municipality))
+# 
+# death_data_postwar_municipalities <- death_data_cm %>%
+#   rbind(death_data2, death_data3)
+
+# write formatted data
+write.csv(
+  x = death_data_cm,
+  file = "../Formatted Data/deaths_per_municipality_formatted.csv",
+  row.names = FALSE
+  )
+# write.csv(
+#   x = death_data_postwar_municipalities,
+#   file = "../Formatted Data/deaths_per_postwar_municipality_formatted.csv",
+#   row.names = FALSE
+#   )
+
+```
+
+```{r}
+#| label: death-data-ucdp
+#| echo: FALSE
+
+# calculate total Bosnia and Herzegovina dataset
+gede_bih <- gede %>%
+  # restrict data to Bosnia and Herzegovina
+  dplyr::filter(
+    country == "Bosnia-Herzegovina"
+    ) %>%
+  # drop unneeded columns
+  dplyr::select(-c(active_year, code_status, number_of_sources, source_article, source_office,
+                   source_date, source_headline, source_original, adm_1, adm_2, geom_wkt,
+                   priogrid_gid, country, country_id, region, gwnoa, gwnob))
+
+# calculate dataset restricted to geocoded entries
+gede_bih_geocoded <- gede_bih %>%
+  dplyr::filter(
+    # filter out location precision of 6 (country-level))
+    where_prec %in% c(1, 2, 5)
+    ) %>%
+  # convert to an sf object
+  sf::st_as_sf(
+    coords = c("longitude", "latitude"),
+    crs = 4326,
+    remove = FALSE
+    ) %>%
+  # calculate the length of each event and add one so date range is inclusive of endpoints
+  dplyr::mutate(
+    event_length = difftime(date_end, date_start, units = "days") + 1
+    )
+
+# calculate death summary statistics
+# total deaths
+sum(gede_bih$best, na.rm = FALSE)
+
+# geocoded deaths
+sum(gede_bih_geocoded$best, na.rm = FALSE)
+
+# 99.5% of deaths (best estimate) are geocoded
+
+
+
+## prewar municipality mapping
+# confirm CRSs match
+sf::st_crs(gede_bih_geocoded)$proj4string
+sf::st_crs(bih_prewar_municipalities_shapefile)$proj4string
+# both WGS84
+
+# spatial join
+gede_municipality_prewar_assignment <- sf::st_join(
+  gede_bih_geocoded,
+  bih_prewar_municipalities_shapefile,
+  join = st_within,
+  left = TRUE
+)
+
+# collapse by municipality
+gede_municipality_prewar_counts <- gede_municipality_prewar_assignment %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(
+    count_of_events = n(),
+    best = sum(best, na.rm = TRUE),
+    high = sum(high, na.rm = TRUE),
+    low = sum(low, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(municipality) %>%
+  # add 1991 census data
+  dplyr::full_join(census_data_1991, by = "municipality") %>%
+  mutate(across(c(count_of_events, best, high, low), ~replace_na(.x, 0))) %>%
+  dplyr::mutate(
+    deaths_per_100000 = 100000 * best / population,
+    deaths_per_100000_high = 100000 * high / population,
+    deaths_per_100000_low = 100000 * low / population
+  ) %>%
+  as.data.frame() %>%
+  dplyr::select(municipality, count_of_events, best, high, low, deaths_per_100000,
+                deaths_per_100000_high, deaths_per_100000_low)
+
+# write formatted data
+write.csv(
+  x = gede_municipality_prewar_counts,
+  file = "../Formatted Data/ucdp_deaths_prewar_municipality_formatted.csv",
+  row.names = FALSE
+  )
+
+
+
+## postwar municipality mapping
+bih_postwar_municipalities_shapefile <- bih_postwar_municipalities_shapefile %>%
+  sf::st_make_valid()
+
+# confirm CRSs match
+sf::st_crs(gede_bih_geocoded)$proj4string
+sf::st_crs(bih_postwar_municipalities_shapefile)$proj4string
+# both WGS84
+
+# spatial join
+gede_municipality_postwar_assignment <- sf::st_join(
+  gede_bih_geocoded,
+  bih_postwar_municipalities_shapefile,
+  join = st_within,
+  left = TRUE
+)
+
+# collapse by municipality
+gede_municipality_postwar_counts <- gede_municipality_postwar_assignment %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(
+    count_of_events = n(),
+    best = sum(best, na.rm = TRUE),
+    high = sum(high, na.rm = TRUE),
+    low = sum(low, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(municipality) %>%
+  as.data.frame() %>%
+  dplyr::select(-geometry)
+
+# write formatted data
+write.csv(
+  x = gede_municipality_postwar_counts,
+  file = "../Formatted Data/ucdp_deaths_postwar_municipality_formatted.csv",
+  row.names = FALSE
+  )
+
+```
+
+## Post-War Data
+This section formats data that is from after the 1992-1995 war or is based upon the post-war municipalities.
+
+### 2013 Census Data
+```{r}
+#| label: census-data-2013
+#| echo: FALSE
+
+census_data_2013 <- bih_census_2013 %>%
+  dplyr::rename_with(tolower) %>%
+  dplyr::mutate(
+    # calculate municipality-level percentages by ethnicity
+    population = bosniak + croat + serb + `not declared` + other + `no answer`,
+    # calculate municipality-level percentages by ethnicity
+    dplyr::across(c(bosniak, serb, croat, `not declared`, other, `no answer`), ~ .x / population,
+                  .names = "percent_{.col}"),
+    # calculate polarization and fractionalization metrics
+    fractionalization = 1 - rowSums(dplyr::across(dplyr::starts_with("percent_"))^2),
+    polarization = 1 - 4 * rowSums(dplyr::across(dplyr::starts_with("percent_"), ~ .x * (0.5 - .x)^2)),
+    percent_total_population = population / sum(population),
+    # rename post-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Centar Sarajevo" ~ "Sarajevo Centar",
+      "Doboj - Istok" ~ "Doboj Istok",
+      "Doboj - Jug" ~ "Doboj Jug",
+      "Foča-FBiH" ~ "Foča-Ustikolina",
+      "Foča-RS" ~ "Foča",
+      "Gornji Vakuf - Uskoplje" ~ "Gornji Vakuf-Uskoplje",
+      "Kneževo" ~ "Skender Vakuf",
+      "Kupres-FBiH" ~ "Kupres-FBIH",
+      "Kozarska Dubica" ~ "Dubica",
+      "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+      "Pale-FBiH" ~ "Pale-Prača",
+      "Pale-RS" ~ "Pale",
+      "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Trnovo-FBiH" ~ "Trnovo-FBIH",
+      # "Brod" ~ "Bosanski Brod",
+      # "Doboj - Istok" ~	"Doboj East",
+      # "Doboj - Jug" ~	"Doboj South",
+      # "Foča-FBiH" ~	"Foča-Ustikolina",
+      # "Foča-RS" ~	"Foča",
+      # "Gornji Vakuf - Uskoplje" ~	"Gornji Vakuf-Uskoplje",
+      # "Gradiška" ~ "Bosanska Gradiška",
+      # "Istočno Novo Sarajevo" ~	"East New Sarajevo",
+      # "Kneževo" ~	"Skender Vakuf / Kneževo",
+      # "Kostajnica" ~ "Bosanska Kostajnica",
+      # "Kozarska Dubica" ~	"Dubica",
+      # "Pale-FBiH" ~	"Pale-Prača",
+      # "Pale-RS" ~	"Pale",
+      .default = municipality
+    )) %>%
+  dplyr::rename(
+    not_declared = `not declared`,
+    no_answer = `no answer`,
+    percent_not_declared = `percent_not declared`,
+    percent_no_answer = `percent_no answer`
+  ) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = census_data_2013,
+  file = "../Formatted Data/census_data_2013_formatted.csv",
+  row.names = FALSE
+  )
+
+```
+
+### Election Data
+```{r}
+#| label: municipal-election-results-1997
+#| echo: FALSE
+
+election_tally <- municipal_election_tally %>%
+  # rename variables
+  dplyr::select(municipality_code = MunCode, municipality = Municipality, party = `Party/Coalition`,
+                vote_count = Votes, total_municipal_votes = TotMunVotes) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names, including renaming all Mostar districts
+    municipality = dplyr::case_match(
+      municipality,
+      "Bosanska Dubica / Kozarska Dubica" ~ "Dubica",
+      "Bosanska Gradiška / Gradiška" ~ "Gradiška",
+      "Bosanska Krupa / Krupa na Uni" ~ "Krupa na Uni",
+      "Bosanski Brod / Srpski Brod" ~ "Brod",
+      "Bosanski Novi / Novi Grad" ~ "Novi Grad",
+      "Bosanski Petrovac / Petrovac" ~ "Petrovac",
+      "Bosanski Šamac / Šamac" ~ "Šamac",
+      "Bosansko Grahovo / Grahovo" ~ "Bosansko Grahovo",
+      "Centar Sarajevo" ~ "Sarajevo Centar",
+      "Drvar / Srpski Drvar" ~ "Istočni Drvar",
+      "Foča / Srbinje" ~ "Foča",
+      "Goražde / Srpsko Goražde" ~ "Novo Goražde",
+      "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      "Gračanica / Petrovo" ~ "Petrovo",
+      "Gradačac / Pelagićevo" ~ "Pelagićevo",
+      "Ilidža / Srpska Ilidža" ~ "Istočna Ilidža",
+      "Jajce / Jezero" ~ "Jezero",
+      "Kalesija / Osmaci" ~ "Osmaci",
+      "Ključ / Ribnik" ~ "Ribnik",
+      "Kupres" ~ "Kupres-FBIH",
+      "Kupres / Srpski Kupres" ~ "Kupres-RS",
+      "Mostar / Srpski Mostar" ~ "Istočni Mostar",
+      "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+      "Novo Sarajevo / Srpsko Novo Sarajevo" ~ "Istočno Novo Sarajevo",
+      "Odžak / Vukosavlje" ~ "Vukosavlje",
+      "Orašje / Srpsko Orašje" ~ "Donji Žabar",
+      "Pale (RS)" ~ "Pale",
+      "Prozor / Prozor-Rama" ~ "Prozor-Rama",
+      "Sanski Most / Srpski Sanski Most" ~ "Oštra Luka",
+      "Skender Vakuf / Kneževo" ~ "Skender Vakuf",
+      "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Stari Grad Sarajevo / Srpski Stari Grad" ~ "Istočni Stari Grad",
+      "Stolac / Berkovići" ~ "Berkovići",
+      "Trnovo (FBIH)" ~ "Trnovo-FBIH",
+      "Trnovo (RS)" ~ "Trnovo-RS",
+      # "Stolac / Berkovići" ~ "Berkovići",
+      # "Bosansko Grahovo / Grahovo" ~ "Bosansko Grahovo",
+      # "Bosanski Brod / Srpski Brod" ~ "Bosanski Brod",
+      # "Orašje / Srpsko Orašje" ~ "Donji Žabar",
+      # "Foča / Srbinje" ~ "Foča",
+      # "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      # "Bosanska Gradiška / Gradiška" ~ "Bosanska Gradiška",
+      # "Ilidža / Srpska Ilidža" ~ "Istočna Ilidža",
+      # "Drvar / Srpski Drvar" ~ "Istočni Drvar",
+      # "Mostar / Srpski Mostar" ~ "Istočni Mostar",
+      # "Stari Grad Sarajevo / Srpski Stari Grad" ~ "Istočni Stari Grad",
+      # "Novo Sarajevo / Srpsko Novo Sarajevo" ~ "East New Sarajevo",
+      # "Jajce / Jezero" ~ "Jezero",
+      # "Bosanska Dubica / Kozarska Dubica" ~ "Dubica",
+      # "Bosanska Krupa / Krupa na Uni" ~ "Krupa na Uni",
+      # "Kupres" ~ "Kupres-FBIH",
+      # "Kupres / Srpski Kupres" ~ "Kupres-RS",
+      # "Bosanski Novi / Novi Grad" ~ "Novi Grad",
+      # "Goražde / Srpsko Goražde" ~ "Novo Goražde",
+      # "Kalesija / Osmaci" ~ "Osmaci",
+      # "Sanski Most / Srpski Sanski Most" ~ "Oštra Luka",
+      # "Pale (RS)" ~ "Pale",
+      # "Gradačac / Pelagićevo" ~ "Pelagićevo",
+      # "Bosanski Petrovac / Petrovac" ~ "Petrovac",
+      # "Gračanica / Petrovo" ~ "Petrovo",
+      # "Prozor / Prozor-Rama" ~ "Prozor-Rama",
+      # "Ključ / Ribnik" ~ "Ribnik",
+      # "Bosanski Šamac / Šamac" ~ "Šamac",
+      # "Trnovo (FBIH)" ~ "Trnovo-FBIH",
+      # "Trnovo (RS)" ~ "Trnovo-RS",
+      # "Odžak / Vukosavlje" ~ "Vukosavlje",
+      # collapse portions of Mostar (FBIH) municipality
+      "Mostar Jug" ~ "Mostar",
+      "Mostar Jugoistok" ~ "Mostar",
+      "Mostar Jugozapad" ~ "Mostar",
+      "Mostar Sjever" ~ "Mostar",
+      "Mostar Stari Grad" ~ "Mostar",
+      "Mostar Zapad" ~ "Mostar",
+      .default = municipality
+    )) %>%
+  # collapse results by municipality and party to summarize Mostar
+  dplyr::group_by(municipality, party) %>%
+  dplyr::summarise(
+    municipality_code = max(municipality_code),
+    vote_count = sum(vote_count),
+    total_municipal_votes = sum(total_municipal_votes)
+  ) %>%
+  dplyr::ungroup() %>%
+  # fix Mostar total municipal votes values
+  dplyr::group_by(municipality) %>%
+  dplyr::mutate(
+    total_municipal_votes = max(total_municipal_votes)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    # create new municipality code for merged Mostar municipalities
+    municipality_code = ifelse(municipality == "Mostar", "151", municipality_code),
+    # calculate percentage of vote each party received per municipality
+    percent_vote = vote_count / total_municipal_votes
+    ) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = election_tally,
+  file = "../Formatted Data/election_tally_1997_formatted.csv",
+  row.names = FALSE
+  )
+
+# post-war municipalities without data:
+## Doboj Istok, Doboj Jug, Dobretići, Domaljevac-Šamac, Foča-FBiH, Kostajnica, Milići, Pale-FBiH, Ravno, Sapna, Teočak, Usora
+
+```
+    
+```{r}
+#| label: municipal-election-seat-allocation-1997
+#| echo: FALSE
+
+seat_tally <- municipal_seat_allocation %>%
+  dplyr::rename(municipality = Municipality, canton = Canton, entity = Entity, voters = Voters,
+                `SRS*` = `SRS....`
+                ) %>%
+  dplyr::filter(!municipality %in% c("TOTAL", "")) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names
+    municipality = dplyr::case_match(
+      municipality,
+      "Banovici" ~ "Banovići",
+      "Bihac" ~ "Bihać",
+      "Bileca" ~ "Bileća",
+      "Bosanska Dubica" ~ "Dubica",
+      "Bosanska Gradiska" ~ "Gradiška",
+      "Bosanska Krupa RS" ~ "Krupa na Uni",
+      "Bosanski Brod" ~ "Brod",
+      "Bosanski Novi" ~ "Novi Grad",
+      "Bosanski Petrovac RS" ~ "Petrovac",
+      "Bosanski Samac" ~ "Šamac",
+      "Brcko" ~ "Brčko",
+      "Busovaca" ~ "Busovača",
+      "Buzim" ~ "Bužim",
+      "Cajnice" ~ "Čajniče",
+      "Caplijna" ~ "Čapljina",
+      "Celinac" ~ "Čelinac",
+      "Centar Sarajevo" ~ "Sarajevo Centar",
+      "Citluk" ~ "Čitluk",
+      "Drvar RS" ~ "Istočni Drvar",
+      "Foca" ~ "Foča",
+      "Glamoc" ~ "Glamoč",
+      "Gorazde" ~ "Goražde",
+      "Gorazde RS" ~ "Novo Goražde",
+      "Gornji Vakuf" ~ "Gornji Vakuf-Uskoplje",
+      "Gracanica" ~ "Gračanica",
+      "Gracanica RS" ~ "Petrovo",
+      "Gradacac" ~ "Gradačac",
+      "Gradacac RS" ~ "Pelagićevo",
+      "Hadzici" ~ "Hadžići",
+      "Ilidza" ~ "Ilidža",
+      "Ilidza RS" ~ "Istočna Ilidža",
+      "Ilijas" ~ "Ilijaš",
+      "Jajce RS" ~ "Jezero",
+      "Kalesija RS" ~ "Osmaci",
+      "Kljuc" ~ "Ključ",
+      "Kljuc RS" ~ "Ribnik",
+      "Kotor Varos" ~ "Kotor Varoš",
+      "Kresevo" ~ "Kreševo",
+      "Kupres" ~ "Kupres-FBIH",
+      "Kupres RS" ~ "Kupres-RS",
+      "Laktasi" ~ "Laktaši",
+      "Ljubuski" ~ "Ljubuški",
+      "Lopare" ~ "Čelić",
+      "Lopare RS" ~ "Lopare",
+      "Modrica" ~ "Modriča",
+      "Mostar RS" ~ "Istočni Mostar",
+      "Mrkonjic Grad" ~ "Mrkonjić Grad",
+      "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+      "Novo Sarajevo RS" ~ "Istočno Novo Sarajevo",
+      "Odzak" ~ "Odžak",
+      "Odzak RS" ~ "Vukosavlje",
+      "Orasje" ~ "Orašje",
+      "Orasje RS" ~ "Donji Žabar",
+      "Posusje" ~ "Posušje",
+      "Prozor" ~ "Prozor-Rama",
+      "Sanski Most RS" ~ "Oštra Luka",
+      "Sekovici" ~ "Šekovići",
+      "Sipovo" ~ "Šipovo",
+      "Siroki Brijeg" ~ "Široki Brijeg",
+      "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Stari Grad Sarajevo RS" ~ "Istočni Stari Grad",
+      "Stolac RS" ~ "Berkovići",
+      "Tesanj" ~ "Tešanj",
+      "Teslic" ~ "Teslić",
+      "Trnovo" ~ "Trnovo-FBIH",
+      "Trnovo RS" ~ "Trnovo-RS",
+      "Vares" ~ "Vareš",
+      "Velika Kladusa" ~ "Velika Kladuša",
+      "Visegrad" ~ "Višegrad",
+      "Vogosca" ~ "Vogošća",
+      "Zavidovici" ~ "Zavidovići",
+      "Zepce" ~ "Žepče",
+      "Zivinice" ~ "Živinice",
+      # "Pale" ~ "Pale-RS",
+      # "Skender Vakuf" ~ "Kneževo",
+      # "Stari Grad Sarajevo RS" ~ "Istočni Stari Grad",
+      # # collapse portions of Mostar (FBIH) municipality
+      # "Mostar Jug" ~ "Mostar",
+      # "Mostar Jugoistok" ~ "Mostar",
+      # "Mostar Jugozapad" ~ "Mostar",
+      # "Mostar Sjever" ~ "Mostar",
+      # "Mostar Stari Grad" ~ "Mostar",
+      # "Mostar Zapad" ~ "Mostar",
+      .default = municipality
+    )) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = seat_tally,
+  file = "../Formatted Data/seat_tally_1997_formatted.csv",
+  row.names = FALSE
+  )
+
+# post-war municipalities without data:
+## Doboj Istok, Doboj Jug, Dobretići, Domaljevac-Šamac, Foča-FBiH, Kostajnica, Milići, Pale-FBiH, Ravno, Sapna, Teočak, Usora
+
+```
+
+```{r}
+#| label: nationalist-votes-allocation-1997
+#| echo: FALSE
+
+nat_votes_1997 <- nationalist_party_leanings_1997 %>%
+  dplyr::rename_with(tolower) %>%
+  dplyr::full_join(election_tally, by = "party") %>%
+  dplyr::filter(
+    !is.na(municipality),
+    !municipality %in%
+      c("Lista na Nivou / Razini Grada Mostara za Gradsko Vijeće",
+        "Općina Mostar Jug za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Jugoistok za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Jugozapad za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Sjever za Gradsko Vijeće Grada Mostara",
+        "Općina Mostar Zapad za Gradsko Vijeće Grada Mostara")
+      ) %>%
+  # collapse by binary value
+  dplyr::group_by(municipality, binary) %>%
+  dplyr::summarise(
+    # vote_count = sum(vote_count, na.rm = TRUE),
+    # total_municipal_votes = max(total_municipal_votes, na.rm = TRUE),
+    percent_vote = sum(percent_vote, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = binary, values_from = percent_vote) %>%
+  replace(is.na(.), 0) %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = nat_votes_1997,
+  file = "../Formatted Data/nationalist_votes_1997.csv",
+  row.names = FALSE
+  )
+
+```
+
+```{r}
+#| label: voting-location-1997
+#| echo: FALSE
+
+voting_location <- voting_location_1997 %>%
+  dplyr::select(municipality = Municipality, votes_cast_in_district = NumInDist,
+                votes_cast_out_district = NumOutDist, total_votes_cast = TotalVotes) %>%
+  dplyr::mutate(
+    # rename post-war municipalities to standardize names, including renaming all Mostar districts
+    municipality = dplyr::case_match(
+      municipality,
+      "Bosanska Gradiška" ~ "Gradiška",
+      "Bosanski Brod" ~ "Brod",
+      "Centar Sarajevo" ~ "Sarajevo Centar",
+      "Doboj-Istok" ~ "Doboj Istok",
+      "Doboj-Jug" ~ "Doboj Jug",
+      "Foča-FBiH" ~ "Foča-Ustikolina",
+      "Istočna Mostar" ~ "Istočni Mostar",
+      "Kupres-FBiH" ~ "Kupres-FBIH",
+      "Novi Grad Sarajevo" ~ "Sarajevo Novi Grad",
+      "Pale-FBiH" ~ "Pale-Prača",
+      "Pale-RS" ~ "Pale",
+      "Skender Vakuf / Kneževo" ~ "Skender Vakuf",
+      "Stari Grad Sarajevo" ~ "Sarajevo Stari Grad",
+      "Trnovo-FBiH" ~ "Trnovo-FBIH",
+      # collapse portions of Mostar (FBIH) municipality
+      "Mostar Jug" ~ "Mostar",
+      "Mostar Jugoistok" ~ "Mostar",
+      "Mostar Jugozapad" ~ "Mostar",
+      "Mostar Sjever" ~ "Mostar",
+      "Mostar Stari Grad" ~ "Mostar",
+      "Mostar Zapad" ~ "Mostar",
+      .default = municipality
+    )
+  ) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(
+    votes_cast_in_district = sum(votes_cast_in_district, na.rm = TRUE),
+    votes_cast_out_district = sum(votes_cast_out_district, na.rm = TRUE),
+    total_votes_cast = sum(total_votes_cast, na.rm = TRUE),
+    perc_cast_in = votes_cast_in_district / total_votes_cast,
+    perc_cast_out = votes_cast_out_district / total_votes_cast,
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(municipality)
+
+# write formatted data
+write.csv(
+  x = voting_location,
+  file = "../Formatted Data/voting_location_1997.csv",
+  row.names = FALSE
+  )
+
+```
+
+## Distances from Neighboring Countries
+```{r}
+#| label: municipal-distances-from-neighbors
+#| echo: FALSE
+
+# create shapefile of united Serbia and Montenegro (rump Yugoslavia)
+yug_shapefile <- srb_shapefile %>%
+  rbind(mne_shapefile) %>%
+  rbind(xko_shapefile) %>%
+  sf::st_as_sf() %>%
+  sf::st_union() %>%
+  sf::st_as_sf()
+
+## pre-war data
+mun_distances_prewar <- bih_prewar_municipalities_shapefile %>%
+  dplyr::mutate(
+    # calculate distances from each municipality to HRV, SRB, MNE and rump YUG, as well as the
+    # inter-ethnic boundary line
+    dist_hrv = units::set_units(sf::st_distance(geom, sf::st_as_sf(hrv_shapefile))[,1], km),
+    dist_srb = units::set_units(sf::st_distance(geom, sf::st_as_sf(srb_shapefile))[,1], km),
+    dist_mne = units::set_units(sf::st_distance(geom, sf::st_as_sf(mne_shapefile))[,1], km),
+    dist_yug = units::set_units(sf::st_distance(geom, sf::st_as_sf(yug_shapefile))[,1], km),
+    dist_internal_border = units::set_units(sf::st_distance(geom, bih_postwar_iebl_shapefile)[,1], km)
+  ) %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(dist_other_country = min(dist_hrv, dist_yug)) %>%
+  as.data.frame() %>%
+  dplyr::select(municipality, dist_hrv, dist_srb, dist_mne, dist_yug, dist_other_country,
+                dist_internal_border)
+
+# write formatted data
+write.csv(
+  x = mun_distances_prewar,
+  file = "../Formatted Data/prewar_municipality_distances.csv",
+          row.names = FALSE)
+
+## post-war data
+mun_distances_postwar <- bih_postwar_municipalities_shapefile %>%
+  dplyr::mutate(
+    # calculate distances from each municipality to HRV, SRB, MNE and rump YUG, as well as the
+    # inter-ethnic boundary line
+    dist_hrv = units::set_units(sf::st_distance(geom, sf::st_as_sf(hrv_shapefile))[,1], km),
+    dist_srb = units::set_units(sf::st_distance(geom, sf::st_as_sf(srb_shapefile))[,1], km),
+    dist_mne = units::set_units(sf::st_distance(geom, sf::st_as_sf(mne_shapefile))[,1], km),
+    dist_yug = units::set_units(sf::st_distance(geom, sf::st_as_sf(yug_shapefile))[,1], km),
+    dist_internal_border = units::set_units(sf::st_distance(geom, bih_postwar_iebl_shapefile)[,1], km)
+  ) %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(dist_other_country = min(dist_hrv, dist_yug)) %>%
+  as.data.frame() %>%
+  dplyr::select(municipality, dist_hrv, dist_srb, dist_mne, dist_yug, dist_other_country,
+                dist_internal_border)
+
+# write formatted data
+write.csv(
+  x = mun_distances_postwar,
+  file = "../Formatted Data/postwar_municipality_distances.csv",
+  row.names = FALSE
+  )
+
+```
+
+# Mines and Minefields
+```{r}
+#| label: canton-minefields-1997
+#| echo: FALSE
+
+# Calculate estimates for minefield prevalence at the cantonal level in 1997.
+
+## Calculate Canton Areas
+## Calculate areas of the 10 cantons in the Federation, Brčko, and Republika Srpska.
+canton_area <- bih_postwar_cantons_shapefile %>%
+  # for cantons in Republika Srpska, collapse into "Republika Srpska"
+  dplyr::mutate(
+    canton = dplyr::case_when(
+      entity == "Republika Srpska" ~ "Republika Srpska",
+      .default = canton
+    )) %>%
+  dplyr::group_by(canton) %>%
+  dplyr::summarise(.groups = 'drop') %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    canton_area = units::set_units(sf::st_area(geom), km^2)
+  )
+
+## Format Minefield Cantonal Data
+landmines1 <- landmines %>%
+  dplyr::select(canton = `Federation:`, minefields = Minefields) %>%
+  replace(is.na(.), 0) %>%
+  dplyr::mutate(canton = ifelse(canton == "Republika Srpska:", "Republika Srpska", canton)) %>%
+  dplyr::filter(canton != "Total:") %>%
+  # remove extra whitespace on either end of any strings and replace internal whitespace with
+  # standard space character
+  dplyr::mutate(
+    canton = stringr::str_squish(canton)
+  ) %>%
+  dplyr::full_join(canton_area, by = "canton") %>%
+  dplyr::mutate(
+    minefields_per_sq_km = minefields / canton_area
+  )
+
+## Replace Republika Srpska estimates with estimates for individual cantons.
+
+# pull RS minefield density estimate
+rs_minefield_density_est <- landmines1$minefields_per_sq_km[landmines1$canton == "Republika Srpska"]
+
+landmines_rs_cantons <- data.frame(
+  canton = c("Banja Luka", "Bijeljina", "Doboj", "Foča", "Istočno Sarajevo",
+             "Trebinje", "Vlasenica"),
+  minefields_per_sq_km = rep(rs_minefield_density_est, 7)
+)
+
+# append data
+landmines1 <- landmines1 %>%
+  dplyr::select(canton, minefields_per_sq_km) %>%
+  dplyr::filter(!canton %in% c("Republika Srpska", "Brčko")) %>%
+  rbind(landmines_rs_cantons)
+
+# estimate Brčko
+# 59.6 sq. km in Brčko are suspected areas - 12.04% of territory.
+# 6.36% estimate in FBiH and 1.71% in Republika Srpska.
+
+# Bosnia-wide estimate of 3 million landmines; 152 mines per square mile.
+
+# Divide 3 million landmines from number of minefields in data to get estimate of mines per
+# minefield.
+total_minefields <- sum(landmines$Minefields, na.rm = TRUE)
+average_mines_per_minefield = 3000000 / total_minefields
+
+# estimated 152 mines per square mile
+# convert to sq km
+mines_per_sq_km_est <- 152 / 2.59
+
+# pull Brčko size in sq km
+brcko_area <- canton_area$canton_area[canton_area$canton == "Brčko"]
+
+brcko_mine_estimate <- mines_per_sq_km_est * brcko_area
+brcko_minefield_estimate <- brcko_mine_estimate / average_mines_per_minefield
+brcko_minefield_density_estimate <- units::set_units(as.numeric(brcko_minefield_estimate / brcko_area), 1/km^2)
+
+# add Brčko estimate
+landmines1 <- landmines1 %>%
+  rbind(data.frame(
+    canton = "Brčko",
+    minefields_per_sq_km = brcko_minefield_density_estimate
+  )) %>%
+  dplyr::arrange(canton)
+
+# write formatted data
+write.csv(
+  x = landmines1,
+  file = "../Formatted Data/landmines_1997.csv",
+  row.names = FALSE
+  )
+
+```
+
+```{r}
+#| label: municipal-minefield-coverage-2004
+#| echo: FALSE
+
+# Using a 2004 map showing approximate minefield areas, cleared minefield areas, post-war mine
+# explosions, and frontlines of the battlefield, use the active and cleared minefield areas and
+# post-war mine explosion location data to approximate minefield areas. Use this geocoded data
+# to approximate proportion of post-war municipal areas at risk for landmine infection.
+
+bih_postwar_municipalities_shapefile <- bih_postwar_municipalities_shapefile %>%
+  sf::st_make_valid()
+
+minefield_2004_shapefile <- minefield_2004_shapefile %>%
+  sf::st_make_valid()
+
+ggplot() +
+  # Bottom layer (Base map)
+  geom_sf(data = bih_postwar_municipalities_shapefile, fill = "gray80", color = "white") + 
+  # Top layer (Overlay with transparency)
+  geom_sf(data = minefield_2004_shapefile, fill = "blue", alpha = 0.5, color = "black") + 
+  theme_minimal()
+
+# confirm CRSs match
+sf::st_crs(minefield_2004_shapefile)$proj4string
+sf::st_crs(bih_postwar_municipalities_shapefile)$proj4string
+# both WGS84
+
+bih_minefields_2004 <- sf::st_intersection(
+  minefield_2004_shapefile,
+  bih_postwar_municipalities_shapefile
+  )
+
+# collapse by municipality
+bih_minefields_2004_perc_area <- bih_minefields_2004 %>%
+  sf::st_make_valid() %>%
+  dplyr::mutate(
+    # calculate updated geometry area
+    area = units::set_units(sf::st_area(geom), km^2)
+    ) %>%
+  dplyr::group_by(municipality) %>%
+  dplyr::summarise(
+    minefield_area = sum(area, na.rm = TRUE),
+    municipality_area = min(mun_area, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    minefield_perc = units::drop_units(minefield_area / municipality_area),
+  ) %>%
+  dplyr::arrange(municipality) %>%
+  as.data.frame() %>%
+  dplyr::full_join(
+    bih_postwar_municipalities_shapefile,
+    by = "municipality"
+    ) %>%
+  dplyr::select(municipality, minefield_area, minefield_perc) %>%
+  replace(is.na(.), 0)
+
+# write formatted data
+write.csv(
+  x = bih_minefields_2004_perc_area,
+  file = "../Formatted Data/landmines_2004.csv",
+  row.names = FALSE
+  )
+
+```
+
+```{r}
+#| label: canton-minefield-coverage-2004
+#| echo: FALSE
+
+bih_postwar_cantons_shapefile <- bih_postwar_cantons_shapefile %>%
+  dplyr::mutate(
+    canton_area = units::set_units(sf::st_area(geom), km^2)
+  )
+
+bih_minefields_2004_canton <- sf::st_intersection(
+  minefield_2004_shapefile,
+  bih_postwar_cantons_shapefile
+  )
+
+# collapse by canton
+bih_minefields_2004_perc_canton_area <- bih_minefields_2004_canton %>%
+  sf::st_make_valid() %>%
+  dplyr::mutate(
+    # calculate updated geometry area
+    minefield_area = units::set_units(sf::st_area(geom), km^2)
+  ) %>%
+  dplyr::group_by(canton) %>%
+  dplyr::summarise(
+    minefield_area = sum(minefield_area, na.rm = TRUE),
+    canton_area = min(canton_area, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    minefield_perc = units::drop_units(minefield_area / canton_area),
+  ) %>%
+  dplyr::arrange(canton) %>%
+  as.data.frame() %>%
+  dplyr::full_join(
+    bih_postwar_cantons_shapefile,
+    by = "canton"
+  ) %>%
+  dplyr::select(canton, minefield_area, minefield_perc) %>%
+  replace(is.na(.), 0) %>%
+  dplyr::mutate(
+    canton = stringr::str_squish(canton)
+  )
+
+# write formatted data
+write.csv(
+  x = bih_minefields_2004_perc_canton_area,
+  file = "../Formatted Data/landmines_2004_canton.csv",
+  row.names = FALSE
+  )
+
+```
