@@ -1,7 +1,7 @@
 ---
   title: "Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia and Herzegovina’s 1997 Municipal Elections"
   author: Tim Ballesteros
-  date: "30 January 2026"
+  date: "4 February 2026"
   format:
     html:
       favicon: favicon.png
@@ -27,6 +27,7 @@ library(ggrepel)
 library(patchwork)
 library(plotly)
 library(here)
+library(withr)
 library(jpeg)
 library(grid)
 library(stringr)
@@ -37,9 +38,13 @@ library(tidyverse)
 
 ```{r}
 #| label: load-data
+#| include: FALSE
 #| echo: FALSE
 #| warning: FALSE
 #| message: FALSE
+
+# allow duplicate chunk labels
+options(knitr.duplicate.label = "allow")
 
 ### LOAD DATASETS ###
 
@@ -58,10 +63,12 @@ prewar_data_assigned_to_postwar <- readxl::read_xlsx(
   )
 
 # load 04-GLMs.qmd
-# temp_script <- tempfile(fileext = ".R")
-# knitr::purl("Scripts/04-GLMs.qmd", output = temp_script, documentation = 0)
-# source(temp_script)
-# unlink(temp_script)
+withr::with_dir("Scripts", {
+  temp_script <- tempfile(fileext = ".R")
+  knitr::purl("04-GLMs.qmd", output = temp_script, documentation = 0)
+  source(temp_script)
+  unlink(temp_script)
+})
 
 
 ### LOAD DATA SHAPEFILES ###
@@ -86,7 +93,7 @@ bih_prewar_municipalities_shapefile <- sf::read_sf(
 
 # Postwar Municipalities Map Shapefile
 postwar_municipalities_shapefile <- sf::read_sf(
-  "Shape Files/bih_postwar_municipalities_shapefile_formatted.shp",
+  "Shape Files/Formatted Shape Files/bih_postwar_municipalities_shapefile_formatted.gpkg",
   quiet = TRUE
 )
 
@@ -99,9 +106,6 @@ iebl_shapefile <- sf::read_sf(
 
 ### LOAD OTHER FILES ###
 
-# source GLM models
-source("~/R/bih_voting/11-GLM_1997_vote.R", echo = FALSE)
-
 # load minefield jpg image
 minefield_image <- jpeg::readJPEG("landmine locations 2004.jpg")
 
@@ -113,27 +117,6 @@ minefield_2004_shapefile <- sf::read_sf(
   "Shape Files/bih_landmine_areas.gpkg",
   quiet = TRUE
 )
-
-
-### load data
-# deaths by municipality data
-# death_data <- read.csv("Formatted Data/deaths_per_municipality_formatted.csv")
-# death_data_postwar_municipalities <- read.csv("Formatted Data/deaths_per_postwar_municipality_formatted.csv")
-
-# minefield data
-# landmines <- read.csv("Formatted Data/landmines_1997.csv")
-
-# load formatted shapefiles
-# source("01-Format_shapefiles.R")
-
-# # post-war canton shapefile
-# bih_postwar_canton_shapefile <- sf::read_sf(
-#   "Shape Files/geoBoundaries-BIH-ADM2-all/geoBoundaries-BIH-ADM2.shp",
-#   quiet = TRUE
-# )
-# 
-# # IEBF shapefile
-# iebf_shapefile <- sf::read_sf("Shape Files/internal_entity_division_shapefile.shp")
 
 ```
 
@@ -331,25 +314,51 @@ I classify political parties as "nationalist" and "non-nationalist", as well as 
 
 [^45]: Wilkinson, 1998.
 
+```{r}
+#| label: nationalist-voting-overview
+#| echo: FALSE
+
+nationalist_voting <- postwar_data %>%
+  dplyr::mutate(
+    nationalist_vote_count = `Total Votes Cast, 1997` * `Proportion of Votes for Nationalist Parties, 1997`,
+    nonnationalist_vote_count = `Total Votes Cast, 1997` * `Proportion of Votes for Non-Nationalist Parties, 1997`,
+    sentiment_unknown_count = `Total Votes Cast, 1997` - nationalist_vote_count - nonnationalist_vote_count
+  )
+
+nationalist_vote_nationwide_count <- sum(nationalist_voting[["nationalist_vote_count"]], na.rm = TRUE)
+nonnationalist_vote_nationwide_count <- sum(nationalist_voting[["nonnationalist_vote_count"]], na.rm = TRUE)
+sentiment_unknown_vote_nationwide_count <- sum(nationalist_voting[["sentiment_unknown_count"]], na.rm = TRUE)
+
+nationalist_vote_nationwide_perc <- nationalist_vote_nationwide_count /
+  sum(nationalist_voting[["Total Votes Cast, 1997"]], na.rm = TRUE)
+nonnationalist_vote_nationwide_perc <- nonnationalist_vote_nationwide_count /
+  sum(nationalist_voting[["Total Votes Cast, 1997"]], na.rm = TRUE)
+sentiment_unknown_vote_nationwide_perc <- sentiment_unknown_vote_nationwide_count /
+  sum(nationalist_voting[["Total Votes Cast, 1997"]], na.rm = TRUE)
+
+```
+
+Overall, `r formatC(100 * nationalist_vote_nationwide_perc, digits = 1, format = "f")`% of Bosnian voters in 1997 voted for nationalist political parties, while `r formatC(100 * nonnationalist_vote_nationwide_perc, digits = 1, format = "f")`% voted for non-nationalist parties (`r formatC(100 * sentiment_unknown_vote_nationwide_perc, digits = 1, format = "f")`% were uncoded).
+
 ### Exposure to Violence
 
-Intensity of conflict is hypothesized to result an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits's[^46] work on conflict cementing ethnic identities. Those that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
+I hypothesize that intensity of conflict results in an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits's work on conflict cementing ethnic identities.[^46] This would imply that individuals that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
 
 [^46]: Hadzic, Carlson and Tavits, 2017.
 
-To measure this localized intensity of conflict, two measures are used: deaths by municipality and suspected minefield coverage by municipality.
+Assessing localized conflict intensity is done with two measurements: deaths by municipality and suspected minefield coverage by municipality.
 
-$H_{1a}$: Municipalities that saw a greater portion of deaths relative to population during the war will see lower portions of votes go to non-nationalist parties.
+$H_{1a}$: Municipalities that saw a greater portion of deaths relative to population during the war will see a lower proportion of votes for non-nationalist parties.
 
-$H_{1b}$: Municipalities that saw a greater portion of the municipality's land area covered in possible minefields during the war will see lower portions of votes go to non-nationalist parties.
+$H_{1b}$: Municipalities that saw a greater portion of the municipality's land area covered in suspected minefields during the war will see lower portions of votes go to non-nationalist parties.
 
-Data on deaths per population for each municipality is included as a proxy for the degree of violence in each locale. The data is from Costalli and Moro[^47], who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo. The results are validated using data from the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.[^48] See Appendix A for a comparison of the distribution of fatalities across municipalities and the impact on select models using UCDP data.
+Data on proportions of deaths by municipality comes from Costalli and Moro, who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo.[^47] Costalli and Moro's data is in the form of proportions of the population, so data from the 1991 Bosnian Census is used to calculate counts. Costalli and Moro's data and its use in the models are validated using the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.[^48] See Appendix A for a comparison of the distribution of fatalities across municipalities and the impact on select models using UCDP data.
 
 [^47]: Costalli and Moro, 2012.
 
 [^48]: Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.
 
-Minefield data comes from the Bosnia and Herzegovina Mine Action Center containing data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents.[^49] The data represents the situation as of November 2004, so cleared and lifted areas are assumed to have not been assessed and cleared at the ending of the war. This data was converted to georeferenced vector data. See Figure X for the source map and the extracted approximate mine locations.
+Minefield data comes from the Bosnia and Herzegovina Mine Action Center and contains data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents.[^49] The data represents the situation as of November 2004, so cleared and lifted areas are assumed to have not been assessed and cleared at the ending of the war. This data was converted to georeferenced vector data, split into post-war municipalities, and the percentage of each municipality covered with approximate minefield locations is calculated. See Figure X for the source map and the extracted approximate mine locations.
 
 [^49]: Bosnia and Herzegovina Mine Action Center, 2004.
 
@@ -362,9 +371,6 @@ Minefield data comes from the Bosnia and Herzegovina Mine Action Center containi
 #| fig.height: 5
 #| out.width: "100%"
 
-# convert minefield image
-# minefield_grob <- grid::rasterGrob(minefield_image, interpolate = TRUE)
-
 # create plots
 p1 <- ggplot2::ggplot() + 
   ggplot2::annotation_raster(minefield_image, -Inf, Inf, -Inf, Inf) +
@@ -372,23 +378,12 @@ p1 <- ggplot2::ggplot() +
   ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0, "pt")) +
   ggplot2::coord_fixed(expand = FALSE)
   
-  # p1 <- patchwork::wrap_elements(minefield_grob)
-
 p2 <- ggplot() +
-  # Bottom layer (Base map)
+  # municipality layer
   geom_sf(data = postwar_municipalities_shapefile, fill = "gray80", color = "white") + 
-  # Top layer (Overlay with transparency)
+  # minefield layer
   geom_sf(data = minefield_2004_shapefile, fill = "blue", alpha = 0.5, color = "black") + 
   theme_minimal()
-
-# p2 <- ggplot2::ggplot(minefield_2004_shapefile) +
-#   ggplot2::geom_sf(fill = "black", color = "black", size = 0.2) +
-#   ggplot2::theme_minimal() +
-#   ggplot2::theme(
-#     legend.position = "none",
-#     axis.ticks = element_blank()
-#   ) +
-#   ggplot2::coord_sf(expand = FALSE)
 
 # combine
 p1 + p2
@@ -397,15 +392,13 @@ p1 + p2
 
 [*Notes: Original Approximate Minefield Location Source Image (left) and the extracted approximate minefield location shapefile (right). The shapefile includes approximate cleared, mined, and lifted areas and approximate locations of mine incidents. Source: Bosnia and Herzegovina Mine Action Center, 2004; author calculations.*]{style="font-size: 0.75em;"}
 
-This vectorized data is then split into pre-war municipalities and the percentage of each municipality covered with approximate minefield locations is calculated.
-
-To validate this data, cantonal estimates from the United Nations Mine Action Centre are compared to the above approximate landmine coverage estimates. The United Nations Mine Action Centre released estimates for minefield area coverage across the Federation's 10 cantons and Republika Srpska in 1997.[^50] See Appendix B for the full comparison.
+To validate this data, cantonal estimates from the United Nations Mine Action Centre are compared to the BHMAC approximate landmine coverage estimates. The United Nations Mine Action Centre released estimates for minefield area coverage across the Federation's 10 cantons and Republika Srpska in 1997.[^50] See Appendix B for the full comparison.
 
 [^50]: International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.
 
 ### Ethnic Fractionalization
 
-The literature places a heavy focus on the ethnic composition of voting districts in explaining support for ethnic parties. The exact relationship is not clear, but homogeneous areas are perceived as to not feel threatened by other ethnic groups taking power and as such are potentially less inclined to support diversionary politics. In the case of post-war elections, and especially in the case of Bosnia and Herzegovina, this theory weighs too heavily on the localized governance aspect. Another perspective is that areas with greater heterogeneity will be less inclined to support zero-sum politics as they live in closer proximity to the "others" they would be in essence voting against. As such, it is hypothesized that more heterogeneous areas will see less nationalistic votes.
+The literature places a heavy focus on the ethnic composition of voting districts in explaining support for ethnic parties. The exact relationship is still being researched, but homogeneous areas are perceived as to not feel threatened by other ethnic groups taking power and as such are potentially less inclined to support diversionary politics. In the case of post-war elections, and especially in the case of Bosnia and Herzegovina, this theory weighs too heavily on the localized governance aspect. Another perspective is that areas with greater heterogeneity will be less inclined to support zero-sum politics as they live in closer proximity to the "others" they would be in essence voting against. As such, it is hypothesized that more heterogeneous areas will see less nationalistic votes.
 
 $H_{2a}$: Municipalities that were more ethnically heterogeneous prior to the war will see increased shares of votes for non-nationalist parties.
 
@@ -423,29 +416,27 @@ $Fractionalization = 1-\sum_{i=1}^{N} {p_{i}^{2}}$
 
 where $p$ is the percentage of the population of the $i^{th}$ ethnic group in the country and $N$ is the total number of ethnic groups in the country.
 
-Measurements for ethnic fractionalization are included based on the 1991 and 2013 census results. The former measures the pre-war ethnic composition of municipalities, while the latter assumes that the relative distributions of ethnic groups within municipalities from the immediate post-war perior remain roughly consistent over the next two decades until the 2013 census, with most of the movement of the population occurring during the war.
+Measurements for ethnic fractionalization are based on the 1991 and 2013 census results. The former measures the pre-war ethnic composition of municipalities, while the latter assumes that the relative distributions of ethnic groups within municipalities from the immediate post-war period remain roughly consistent over the next two decades, with most of the movement of the population occurring during the war.
 
-Percentages of each constituent peoples -- Bosniaks, Croats and Serbs -- as well as Yugoslavs and Others are included to determine if any of these five ethnic groups or categories has a particular impact on voting behavior. Data comes from the 1991 census and thus reflects the pre-war distribution of the population rather than the population during the vote. While this similarly has issues with mass population displacement, it allows for analysis on pre-war population demographics that were largely the location of voting in 1997.
+Percentages of each constituent peoples — Bosniaks, Croats and Serbs — as well as Yugoslavs and "Others" (other ethnicities not already mentioned) are included to determine if any of these five ethnic groups or categories has a particular impact on voting behavior. Data comes from the 1991 census and thus reflects the pre-war distribution of the population rather than the population during the vote. While this similarly has issues with mass population displacement, it allows for analysis on pre-war population demographics that were intended to align with voting in 1997.
 
-#### Ethnic population + % change in ethnic population
-
-#### Absolute change in proportion of ethnic populations
+Changes in the percentage of Bosniaks, Croats, and Serbs is also included. As Yugoslavia disappeared before the 2013 census, no Yugoslavs remain for with to assess population changes. Additionally, the absolute change in the proportions Bosniak, Croat, and Serb populations is calculated, measuring the overall degree of demographic change from 1991 to 2013.
 
 ### Voting Location and Turnout
 
-Little research has been done on displaced persons' voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic[^53]. Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,[^54] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
+Little research has been done on displaced persons' voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic.[^53] Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,[^54] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
 
 [^53]: Stefanovic, and Loizides, 2015.
 
 [^54]: Zic, 2017.
 
-$H_{3a}$: Municipalities that saw a larger proportion of absentee voting will see a larger proportion of votes for nationalist parties.
+$H_{3a}$: Municipalities that saw a larger proportion of absentee voting will see a smaller proportion of votes for non-nationalist parties.
 
-<!-- Add turnout -->
+[turnout]
 
 ### Distances
 
-The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic cohorts were heavily concentrated around boarders with Croatia and Serbia prior to the war; spillover from the war in Croatia began in areas neighboring Croatia; and Serb irregular forces as well as Yugoslav troops and supplies entered through rump Yugoslavia.[^55] The war was additionally an attempt by Croatian and Yugoslav governments to annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the "mother" country, and thus will be less inclined to vote for non-nationalist parties.
+The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic Croats and Serbs were heavily concentrated around the country's border regions with Croatia and Serbia, respectively; spillover from the Croatian War of Independence began in regions bordering Croatia; and Serb irregular forces and Yugoslav troops and supplies entered through rump Yugoslavia.[^55] The war was additionally an attempt by Croatian and Yugoslav governments to carve up and annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the "mother" country, and thus will be less inclined to vote for non-nationalist parties.
 
 [^55]: Bennett, 2016.
 
@@ -453,25 +444,29 @@ $H_{4a}$: Municipalities more proximate to the Croatian or Yugoslav[^56] borders
 
 [^56]: Yugoslavia here refers to the post-breakaway rump state, consisting of modern-day Serbia, Montenegro, and Kosovo. What is now known as North Macedonia additionally broke away in 1992, though it was only recognized in 1993.
 
-The division of Bosnia and Herzegovina into two entities by the Inter-Entity Boundary Line (IEBL) in the Dayton Agreement is also predicted to be related to voting patterns. The IEBL roughly follows the final military fronts and as such can be viewed as a proxy for the front line. Similarly, proximity to the IEBL results in proximity to the entity successor of the opposing military force, which implies potential uncertainty for their safety were the Dayton Agreement to fail. As such, proximity to the IEBL is hypothesized to decrease non-nationalist vote shares.
+The division of Bosnia and Herzegovina into two entities by the Inter-Entity Boundary Line (IEBL) in the Dayton Agreement is also predicted to be related to voting patterns. The IEBL roughly follows the final military fronts and as such can be viewed as a proxy for the front line. Similarly, proximity to the IEBL results in proximity to the entity successor of the opposing military force, which implies potential uncertainty for their safety were the Dayton Agreement to fail.
 
 $H_{4b}$: Municipalities more proximate to the IEBL will see decreased shares of votes for non-nationalist parties.
 
-Distances are calculated from the closest point in the municipality to the second geographic feature, such as the IEBL. A binary dummy variable is used to indicate whether a municipality was formed from the division of a pre-war municipality by the IEBL.
+Distances are calculated from the closest point in the municipality to Croatia, Yugoslavia, or the IEBL. A binary dummy variable is used to indicate whether a municipality was formed from the division of a pre-war municipality by the IEBL.
 
 ### Population and Population Density
 
 Similar to the reasoning behind the hypothesis of more diverse populations seeing higher proportions of votes go to non-nationalist parties, the urbanity of a municipality is predicted to be positively related to the portion of votes going to non-nationalist parties.
 
-$H_{5a}$: More urban municipalities will vote in a larger proportion for non-nationalist parties.
+Population from the 1991 census is used for each municipality; while the war did see large amounts of displacement, populations still had belief in the implementation of the right to return promises stated in the Dayton Agreement, many individuals voted absentee in their pre-war municipality, and the population sizes relative to each other are unlikely to have drastically changed.
 
-Population from the 1991 census is used for each municipality; while the war did see large amounts of displacement, populations still had belief in the implementation of the right to return promises stated in the Dayton Agreement, many individuals voted absentee in their pre-war municipality and the population sizes relative to each other are unlikely to have drastically changed.
+$H_{5a}$: Municipalities with larger populations will vote in a larger proportion for non-nationalist parties.
 
-Population density
+Population density, also using pre-population values from the 1991 census, is used as another measure of urbinity.
+
+$H_{5b}$: Municipalities with higher population densities will vote in a larger proportion for non-nationalist parties.
 
 ### Control Variables
 
-FBiH municipality, Sarajevo municipality, % each ethnicity
+Additional dummy variables used were whether the municipality is part of the Sarajevo metropolitan area. Fifteen post-war municipalities were classified as part of Greater Sarajevo: Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
+
+For nation-wide models, a dummy variable for municipalities part of the Federation is also included.
 
 ## Overall Findings
 
@@ -884,6 +879,24 @@ turnout_graph
 
 A municipality's turnout rate --- based on the number of votes registered to vote in the municipality --- was found to correlate to nationalist voting patterns. Model A2 found a higher turnout rate correlated with a lower proportion of votes being cast for non-nationalist parties. Models B1, B2, and B3 found higher turnout rates correlated with higher proportions of votes for nationalist political parties.
 
+### Distance to Croatia and Yugoslavia
+
+None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
+
+Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A3, A1-RS, A2-RS, and A3-RS found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B3, B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
+
+It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
+
+### Population
+
+Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
+
+None of the models found pre-war population or the change in population between 1991 and 2013 to be statistically significant.
+
+### Municiplality Area
+
+Post-war municipal areas were found to correlate with voting patterns. Models A1, A2, A1-FBiH, and A3-FBiH found voters in larger municipalities were more likely to vote proportionally more for non-nationalist voting parties. Models B1, B2, B1-FBiH, and B3-FBiH found larger municipalities saw lower proportions of nationalist voting shares.
+
 ### Ethnic Group Prevalence
 
 ```{r}
@@ -961,7 +974,7 @@ prewar_muslims
 
 A substantial majority of the pre-war Croats living in territory that ended within the Federation.
 
-Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger voteshares for nationalist parties. Several populations in the region of highest Croat concentration --- along the border with Croatia's Dalmatian Coast --- saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
+Higher proportions of Croats in the municipality was associated with higher nationalist voting patterns, particularly in the Federation. Models A2 and A2-FBiH found higher proportions of Croats in the pre-war population was correlated with lower proportions of votes for non-nationalist parties. Models B2 and B2-FBiH found pre-war municipalities with larger proportions of Croats saw larger vote shares for nationalist parties. Several populations in the region of highest Croat concentration --- along the border with Croatia's Dalmatian Coast --- saw some of the largest shares of votes for nationalist parties, including Grude, Neum, Posušje, and Tomislavgrad.
 
 None of the models found the change in proportion of Croats between 1991 and 2013 to be correlated with 1997 voting patterns.
 
@@ -1120,29 +1133,11 @@ prewar_other
 
 No model found either the proportion of Other ethnic groups in the pre-war municipality to be correlated to the proportion of votes cast in the 1997 municipal election.
 
-### Distance to Croatia and Yugoslavia
-
-None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
-
-Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A3, A1-RS, A2-RS, and A3-RS found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B3, B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
-
-It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
-
 ### Sarajevo Municipalities
 
 Fifteen post-war municipalities were classified as part of Greater Sarajevo: Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
 
 Model A3 found municipalities comprising metropolitan Sarajevo to be less likely to have voted for non-nationalist candidates. Models B3, B1-RS, B2-RS, and B3-RS found Sarajevo municipalities to correspond to higher proportions of votes being cast for nationalist candidates.
-
-### Population
-
-Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
-
-None of the models found pre-war population or the change in population between 1991 and 2013 to be statistically significant.
-
-### Municiplality Area
-
-Post-war municipal areas were found to correlate with voting patterns. Models A1, A2, A1-FBiH, and A3-FBiH found voters in larger municipalities were more likely to vote proportionally more for non-nationalist voting parties. Models B1, B2, B1-FBiH, and B3-FBiH found larger municipalities saw lower proportions of nationalist voting shares.
 
 ## Conclusion
 
@@ -1514,7 +1509,7 @@ canton_area <- postwar_municipalities_shapefile %>%
   dplyr::mutate(
     canton = stringr::str_squish(canton),
     entity = stringr::str_squish(entity),
-    area = units::set_units(sf::st_area(geometry), "km^2")
+    area = units::set_units(sf::st_area(geom), "km^2")
     ) %>%
   as.data.frame() %>%
   dplyr::group_by(canton) %>%

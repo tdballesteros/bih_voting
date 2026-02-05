@@ -3,7 +3,7 @@ title: "04-GLMs"
 format: html
 ---
 
-...
+This script runs linear models modelling nationalist and non-nationalist portions of votes by post-war municipality.
 
 ## Loading
 ```{r}
@@ -86,9 +86,11 @@ df_fbih <- df %>%
 #| echo: FALSE
 
 # correlation matrix
-cor_matrix <- cor(df %>%
-                    dplyr::select(
-      `Deaths per Population`, `Minefields per Sq. km, Canton`, `Ethnic Fractionalization, 1991`,
+cor_matrix <- cor(
+  df %>%
+    dplyr::select(
+      `Proportion of Votes for Non-Nationalist Parties, 1997`, `Deaths per Population`,
+      `Minefield Percentage of Municipalty`, `Ethnic Fractionalization, 1991`,
       `Change in Ethnic Fractionalization, 1991 to 2013`,
       `Proportion of Votes Cast Out-District, 1997`, `Turnout Rate, 1997`,
       `Yugoslav Population Percentage, 1991`, `Other Population Percentage, 1991`,
@@ -97,9 +99,7 @@ cor_matrix <- cor(df %>%
       `Distance to IEBL, Post-War`, `Population Density, 1991 Redistributed Logged`,
       `Population, 1991 Redistributed Logged`, `Change in Population`, `Federation Municipality`,
       `Sarajevo District`, `Muslim Population Percentage, 1991`,
-      `Change in % Bosniaks, 1991 to 2013`, `Croat Population Percentage, 1991`,
-      `Change in % Croats, 1991 to 2013`, `Serb Population Percentage, 1991`,
-      `Change in % Serbs, 1991 to 2013`
+      `Change in % Bosniaks, 1991 to 2013`
         ))
   
 # NOTE: var1-var2 and var2-var1 will both be listed
@@ -153,11 +153,16 @@ model_a1 <- glm(`Proportion of Votes for Non-Nationalist Parties, 1997` ~
                   `Change in Ethnic Fractionalization, 1991 to 2013` +
                   `Proportion of Votes Cast Out-District, 1997` + `Turnout Rate, 1997` +
                   `Yugoslav Population Percentage, 1991` + `Other Population Percentage, 1991` +
-                  `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
+                  # `Absolute Change in Bosniaks, Croats, and Serbs, 1991 to 2013` +
                   `Distance to Croatia, Post-War` + `Distance to Yugoslavia, Post-War` +
-                  `Distance to IEBL, Post-War` + `Population Density, 1991 Redistributed Logged` +
-                  `Population, 1991 Redistributed Logged` + `Change in Population` +
-                  `Federation Municipality` + `Sarajevo District` + 
+                  `Distance to IEBL, Post-War` +
+                  `Population Density, 1991 Redistributed` +
+                  # `Population Density, 1991 Redistributed Logged` +
+                  `Population, 1991 Redistributed Logged` +
+                  # `Population, 1991 Redistributed` +
+                  # `Change in Population` +
+                  `Federation Municipality` +
+                  `Sarajevo District` + 
                   `Muslim Population Percentage, 1991` + `Change in % Bosniaks, 1991 to 2013`,
                 data = df, family = gaussian()
 )
