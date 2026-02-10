@@ -1,9 +1,12 @@
 ---
   title: "Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia and Herzegovina’s 1997 Municipal Elections"
   author: Tim Ballesteros
-  date: "4 February 2026"
+  date: "10 February 2026"
   format:
     html:
+      toc: TRUE
+      toc-depth: 2
+      toc-location: left
       favicon: favicon.png
   editor: source
 ---
@@ -736,9 +739,12 @@ Multiple models found a correlation between wartime deaths per pre-war municipal
 
 ### Minefield Prevelance
 
-Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
+No model found minefield prevelance to be correlated with non-nationalist voting patterns.
+
+<!-- Due to estimates only available for Republika Srpska as a whole, minefield density was not able to be used in Republika Srpska-specific models.
 
 Models A1, A2, A3, A1-FBiH, and A3-FBiH all found higher municipal minefield densities to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B2, B3, B1-FBiH, and B3-FBiH all found higher densities correlated to lower proportions of votes for nationalist parties.
+-->
 
 ```{r}
 #| label: minefield-map
@@ -789,19 +795,21 @@ minefield_density_canton_map <- ggplot2::ggplot() +
 
 Pre-war ethnic fractionalization, as an operationalization of ethnic diversity, was found to correlate to post-war voting patterns.
 
-Models A1, A2, A3, A1-FBiH, A2-FBiH, and A3-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores --- a more heterogeneous society --- were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, B2-FBiH, and B3-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses --- the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment --- to be statistically significant; model A3 found an increase in ethnic fractionalization --- the municipality became more diverse --- correlated to higher proportions of votes for non-nationalist political parties.
+Models A1, A2, A3, A1-FBiH, and A2-FBiH all found municipalities that had higher pre-war ethnic fractionalization index scores --- a more heterogeneous society --- were less likely to vote for non-nationalist political parties. Models B1, B2, B3, B1-FBiH, and B2-FBiH found higher pre-war ethnic fractionalization correlated to a higher proportion of votes being cast for nationalist political parties. Only one model found the change in ethnic fractionalization between the 1991 and 2013 censuses --- the 2013 ethnic distribution is assumed to be relatively reflective of the post-war environment --- to be statistically significant; model A3 found an increase in ethnic fractionalization --- the municipality became more diverse --- correlated to higher proportions of votes for non-nationalist political parties.
 
-Overall, more diverse pre-war municipalities saw higher rates of voting for nationalist political parties, even when controlling for levels of violence in the communities. This appears to be true primarily for Federation municipalities. While the evidence is limited, it appears municipalities who gained diversity - or at least loss diversity relatively less than other municipalities - following the war were less inclined to vote for nationalist parties. Only 13 of the 130 municipalities who participated in the 1997 elections saw increased ethnic diversity from 1997 to 2013.
+Overall, more diverse pre-war municipalities saw higher rates of voting for nationalist political parties, even when controlling for levels of violence in the communities. This appears to be true primarily for Federation municipalities. 
+
+While the evidence is limited, it appears municipalities who gained diversity - or at least loss diversity relatively less than other municipalities - following the war were less inclined to vote for nationalist parties. Model B1, ... found an increase in ethnic fractionalization correlated to higher nationalist vote shares. Only 13 of the 130 municipalities who participated in the 1997 elections saw increased ethnic diversity from 1997 to 2013.
 
 ### Votes Cast Outside of Municipality
 
 Just over one-fifth of all votes cast came from absentee voters. This means absentee voters voted at lower rates than those who were living within the muncipality they registered. Berkovići, Petrovo, and Donji Žabar --- all in Republika Srpska --- saw just 3% of votes come from out-of-municipality each, while Bosansko Grahovo saw over 91% of votes be cast from outside the municipality.
 
-The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1-FBiH and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
+The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1, B1-FBiH, and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
 
 ### Turnout Rate
 
-turnout intro
+A municipality's turnout rate --- based on the number of votes registered to vote in the municipality --- was found to correlate to nationalist voting patterns. Model A2 found higher turnout rates associated with lower proportions of non-nationalist votes, while Models B1 and B2 found higher turnout rates associated with higher portions of votes for nationalist parties.
 
 **FIGURE X.** Turnout Rates in Republika Srpska and the Federation, by municipality
 
@@ -877,25 +885,23 @@ turnout_graph
 
 [*Notes: Municipalities depicted are post-war municipalities. Brčko district is included in both Republika Srpska and the Federation. Turnout rates are calculated based on pre-war population counts and include all persons, including those not eligible to vote, such as minors. Source: Bosnia's Central Election Commission, 2012.*]{style="font-size: 0.75em;"}
 
-A municipality's turnout rate --- based on the number of votes registered to vote in the municipality --- was found to correlate to nationalist voting patterns. Model A2 found a higher turnout rate correlated with a lower proportion of votes being cast for non-nationalist parties. Models B1, B2, and B3 found higher turnout rates correlated with higher proportions of votes for nationalist political parties.
-
 ### Distance to Croatia and Yugoslavia
 
 None of the models found the distance from the municipality to Croatia or the Inter-Ethnic Boundary Line to be statistically significant.
 
-Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. Models A1, A3, A1-RS, A2-RS, and A3-RS found a further distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties. Models B1, B3, B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties.
+Multiple models found the distance from the municipality to Yugoslavia (present-day Serbia, Montenegro, and Kosovo), to be statistically significant. However, the relation appears to have the opposite impact in Republika Srpska and the Federation. Models A1-RS, A2-RS, and A3-RS found a greater distance between the municipality and Yugoslavia to be correlated with higher proportions of votes for non-nationalist parties; Models A1-FBiH and A2-FBiH found larger distances to Yugoslavia correlated with lower proportions of non-nationalist votes.
 
-It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. Showing this trend applies to Republika Srpska specifically may relate to internal divisions that would result in a crisis within Republika Srpska the following year.
+Models B1-RS, B2-RS, and B3-RS found higher distances to Yugoslavia to correlate with lower vote shares for nationalist political parties, whereas Models B1-FBiH and B2-FBiH found higher distances to Yugoslavia correlated with higher vote shares for nationalist parties.
+
+It appears the relationship between distance to Yugoslavia and the municipality to nationalist voting preference is different between Republika Srpska and the Federation. In Republika Srpska, closer municipalities voted more heavily for nationalist political parties, whereas in the Federation, closer municipalities voted more frequently for non-nationalist parties.
 
 ### Population
 
 Pre-war municipal populations ranged greatly, from 4,172 (Ljubinje) to 195,692 (Banja Luka) people. Sarajevo was split into 10 municipalities, though the combined population of these municipalities was 527,049 people. Assessing post-war municipalities by their pre-war populations, several newly formed municipalities had drastically lower population counts, with Istočni Mostar, Kupres in Republika Srpska, and Petrovac all having less than 1,000 in 1991 within the territory that would form these new districts; Istočni Drvar saw a pre-war population of under 100.
 
+Model A2-FBiH found municipalities in the Federation with higher populations to vote proportionally less for non-nationalist parties.
+
 None of the models found pre-war population or the change in population between 1991 and 2013 to be statistically significant.
-
-### Municiplality Area
-
-Post-war municipal areas were found to correlate with voting patterns. Models A1, A2, A1-FBiH, and A3-FBiH found voters in larger municipalities were more likely to vote proportionally more for non-nationalist voting parties. Models B1, B2, B1-FBiH, and B3-FBiH found larger municipalities saw lower proportions of nationalist voting shares.
 
 ### Ethnic Group Prevalence
 
@@ -934,7 +940,7 @@ These three ethnic groups were not spread evenly across the country. Many munici
 
 #### Muslims/Bosniaks
 
-No model found either the proportion of Muslims in the pre-war municipality or the change in the percentage of Muslims comprising the municipality from the 1991 to 2013 censuses to correlated to the proportion of votes cast in the 1997 municipal election.
+Model A1-FBiH found municipalities in the Federation with larger portions of Bosniaks were more likely to vote for non-nationalist political parties. Model A1 found municipalities that saw an increase in the proportions of Bosniaks from 1991 to 2013 to vote proportionally more for non-nationalist parties. Models B1 and B1-FBiH saw municipalities nationwide and in the Federation, respectively, that saw increases in the relative Bosniak population to vote proportionally less for nationalist parties.
 
 **MAP X.** Percent Identifying as Muslim in 1991, by municipality
 
@@ -1014,7 +1020,9 @@ prewar_croats
 
 #### Serbs
 
-Unlike the proportion of Croats, a higher pre-war proportion of Serbs in a municipality correlated to more non-nationalist voting, primarily within the Federation. Models A3 and A3-FBiH found both higher percentage of Serbs in the pre-war municipality and an increase in the relative proportions of Serbs between 1991 and 2013 to be correlated with higher rates of non-nationalist voting. Models B3 and B3-FBiH found lower proportions of Serbs in pre-war municipalities and an increase of Serbs' relative proportion within municipalities to be correlated with lower rates of nationalist voting. These findings were not found in Republika Srpska, which was dominated by a single ethnicity, unlike the Federation.
+Unlike the proportion of Croats, a higher pre-war proportion of Serbs in a municipality correlated to more non-nationalist voting, primarily within the Federation. Models A3 and A3-FBiH found both higher percentage of Serbs in the pre-war municipality to be correlated with higher rates of non-nationalist voting. Models B3 and B3-FBiH found lower proportions of Serbs in pre-war municipalities to be correlated with lower rates of nationalist voting. These findings were not found in Republika Srpska, which was dominated by a single ethnicity, unlike the Federation.
+
+None of the models found the change in proportion of Serbs between 1991 and 2013 to be correlated with 1997 voting patterns.
 
 **MAP X.** Percent Identifying as Serb in 1991, by municipality
 
@@ -1088,9 +1096,9 @@ prewar_yugoslavs
 
 [*Notes: Municipalities shown are pre-war municipalities. The post-war Inter-Ethnic Boundary Line is shown in black. Source: Bosnia Census 1991.*]{style="font-size: 0.75em;"}
 
-All country-wide and Federation-wide models found the pre-war proportion of the population identifying as "Yugoslav" to be statistically significant, with larger proportions of Yugoslavs in the pre-war municipality correlating to greater shares of the vote going towards non-nationalist parties and lesser shares towards nationalist parties.
+All country-wide and Federation-wide models found the pre-war proportion of people identifying as "Yugoslav" to be correlated with larger proportions of votes for non-nationalist parties. All country-wide models and Models B1-FBiH and B2-FBiH found the proportion of Yugoslavs to correlate with lower proportions of votes for nationalist parties.
 
-The proportion of Yugoslavs was not correlated to non-nationalist vote shares in Republika Srpska.
+The proportion of Yugoslavs was not correlated to non-nationalist or nationalist vote shares in Republika Srpska.
 
 As mentioned before, higher proportions of people identified as Yugoslav in Bosnia and Herzegovina's cities than in towns or rural areas. The proportion of people identifying as Yugoslav was moderately correlated with both municipal population (cor = `r yug_pop_cor`) and the municipal population, log-scale (cor = `r yug_pop_log_cor`).
 
@@ -1137,13 +1145,21 @@ No model found either the proportion of Other ethnic groups in the pre-war munic
 
 Fifteen post-war municipalities were classified as part of Greater Sarajevo: Hadžići, Ilidža, Ilijaš, Istočna Ilidža, Istočni Stari Grad, Istočno Novo Sarajevo, Novo Sarajevo, Pale, Pale-Prača, Sarajevo Centar, Sarajevo Novi Grad, Sarajevo Stari Grad, Trnovo-FBIH, Trnovo-RS, and Vogošća.
 
-Model A3 found municipalities comprising metropolitan Sarajevo to be less likely to have voted for non-nationalist candidates. Models B3, B1-RS, B2-RS, and B3-RS found Sarajevo municipalities to correspond to higher proportions of votes being cast for nationalist candidates.
+Models B1-RS, B2-RS, and B3-RS found Sarajevo municipalities to correspond to higher proportions of votes being cast for nationalist candidates.
 
 ## Conclusion
 
-...
-
 Multiple factors were found to have strong connections with voting intentionality in only Republika Srpska or the Federation. Voters faced different incentives in how to vote within these two entities, and certain factors appear to have only been significant influences within one entity or the other. Influencing factors therefore cannot solely be assessed at the country-wide level; local levels must be assessed in addition, particularly when the levels correspond to military frontiers and sides of the war.
+
+Exposure to violence during the war impacts voting patterns at the municipal level, though it appears different types of exposure impact voting intent. Municipalities that saw a higher number of fatalities, proportional to their pre-war population, voted for nationalist parties at higher rates. Meanwhile, suspected minefield prevalence was not found to impact voting behavior at a municipal level.
+
+Ethnic diversity also impacted voting patterns, with municipalities that were more diverse pre-war voting for nationalist political parties at higher rates, particularly in the Federation. No evidence was found for changes in ethnic diversity within a municipality during the war impacting voting patterns, though this may stem from a lack of timely post-war data.
+
+The scale of voting that took place physically outside of the municipality did see some correlation with voting patterns, but only in the Federation. Higher proportions of mail-in ballots in a municipality were related to higher proportions of votes for non-naitonalist parties. Higher turnout in elections was correlated with a lower proportion of votes for non-nationalist parties.
+
+The proportion of total votes cast outside the municipality was found to correlate with nationalist vote shares, but only in the Federation. Models A1-FBiH and A2-FBiH found higher proportions of voters casting votes from outside the municipality was connected to higher proportions of votes for non-nationalist political parties. Models B1, B1-FBiH, and B2-FBiH found similar results, with higher proportions of votes coming from outside the municipality correlated to less votes going to nationalist political parties.
+
+While the distance to Yugoslavia did impact voting patterns, it differed between Republika Srpska and the Federation. In Republika Srpska, municipalities closer to Yugoslavia voted more prominently for nationalist parties, while in the Federation, municipalities closer to Yugoslavia voted proportionately more for non-nationalist parties. No evidence was found connecting the distance to Croatia to voting intentionality.
 
 ## Works Cited
 
@@ -1319,10 +1335,6 @@ death_counts_comparison_plot <- ggplot2::ggplot(data = death_comparison_df) +
     ggplot2::aes(x = deaths_count_best_ucdp_log, y = Municipality, size = `Deaths per 100,000, UCDP`, color = "UCDP")
     )
 
-# death_counts_comparison_plot
-
-
-
 # plot diff in percent of total deaths
 death_perc_comparison_df <- death_comparison_df %>%
   dplyr::filter(abs(diff_in_perc) > 0.01) %>%
@@ -1386,6 +1398,41 @@ plotly <- plotly::ggplotly(
   )
 
 plotly
+
+```
+
+```{r}
+#| label: death-comparison-scatterplot
+
+# death_counts_comparison_plot
+death_comparison_scatter_df <- death_comparison_df %>%
+  dplyr::rename(
+    `Percent of Deaths, C&M` = perc_of_deaths_cm,
+    `Percent of Deaths, UCDP` = perc_of_deaths_best_ucdp
+  )
+
+scatter_death_comparison <- ggplot2::ggplot(data = death_comparison_scatter_df,
+                                            ggplot2::aes(x = `Percent of Deaths, C&M`,
+                                                         y = `Percent of Deaths, UCDP`)) +
+  ggplot2::geom_abline(aes(intercept = 0, slope = 1, linetype = "x = y line"), color = "gray50") +
+  ggplot2::geom_point() +
+  ggplot2::scale_x_continuous(
+    transform = "log1p", 
+    limits = c(0, 0.1),
+    breaks = c(0, .01, .1), 
+    labels = scales::label_percent() 
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = "log1p", 
+    limits = c(0, 0.25),
+    breaks = c(0, .01, .1, .25), 
+    labels = scales::label_percent()
+  ) +
+  ggplot2::scale_linetype_manual(name = "Reference", values = "dotted") +
+  ggplot2::labs(title = "Log-Transformed Plot (Original Scale Labels)") +
+  ggplot2::theme_minimal()
+
+scatter_death_comparison
 
 ```
 
