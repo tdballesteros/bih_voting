@@ -4,14 +4,14 @@ Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia
 # Overview
 This project accesses municipal-level voting patterns in Bosnia and Herzegovina's 1997 municipal election, which occurred in the immediate aftermath of the Bosnian War (1992-95). Specifically, this project analyzes multiple factors that may predict the proportion of votes cast in a municipality for nationalist and non-nationalist political parties.
 
-# Sources
+# Data Sources
 ## Shapefiles
 The original pre-war Bosnia and Herzegovina municipality shapefile is from Andreas Berger (2012). Modifications to include Sarajevo Centar and Sarajevo Novi Grad municipalities are derived from the post-war shapefile.
 
 The dataset is available here:
 https://www.andybeger.com/blog/2011-01-18-bosnia-1991-municipalities/
 
-The post-war Bosnia and Herzegovina shapefiles are from the geoBoundaries Global Database of Political Administrative Boundaries Database (2025). The Inter-Ethnic Boundary Line (IEBL) - the line demarcating Republika Srpska, the Federation, and Brčko District - is derived from the municipality-level shapefile.
+The post-war Bosnia and Herzegovina shapefiles are from the geoBoundaries Global Database of Political Administrative Boundaries Database (Runfola, et al. 2020). The Inter-Ethnic Boundary Line (IEBL) - the line demarcating Republika Srpska, the Federation, and Brčko District - is derived from the municipality-level shapefile.
 
 The datasets are available here: https://data.humdata.org/dataset/geoboundaries-admin-boundaries-for-bosnia-and-herzegovina
 
@@ -27,18 +27,20 @@ Bosnia and Herzegovina's 1997 municipal election result data comes from the Cent
 Geo-referenced death data comes from two sources. The first comes from the Research and Documentation Centre Sarajevo Database and Costalli & Moro (2012). The second comes from the UCDP Georeferenced Event Dataset (GED) Global version 25.1 (Davies, Pettersson, Sollenberg, and Öberg, 2025; Sundberg and Melander 2013).
 
 ## Minefield data
-Estimates of minefield prevalence in Federation cantons and Republika Srpska come from the International Committee of the Red Cross (1998), who in turn obtained estimates from the United Nations Mine Action Centre (UNMAC).
+Minefield data comes from the Bosnia and Herzegovina Mine Action Center (2004) and contains data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents as of 2004.
 
-Information used to calculate estimates on Brčko District's minefield prevalence came from two sources. Estimates on the area of suspected minefields in Brčko come from Bolton (2003). Estimates on the total number of minefields and average number of mines per minefield come from the United Nations (1997).
+An alternative estimate of minefield  prevalence in Federation cantons and Republika Srpska come from the International Committee of the Red Cross (1998), who in turn obtained estimates from the United Nations Mine Action Centre (UNMAC).Information used to calculate estimates on Brčko District's minefield prevalence came from two sources. Estimates on the area of suspected minefields in Brčko come from Bolton (2003). Estimates on the total number of minefields and average number of mines per minefield come from the United Nations (1997).
 
 # Works Cited
 Agencija za statistiku Bosne i Hercegovine, (2016). Popis stanovništva, domaćinstava i stanova u Bosni I Hercegovini, 2013. Rezultati popisa [Cenzus of population, households and dwellings in Bosnia and Herzegovina, 2013: Final results]. Sarajevo, Bosnia and Herzegovina: Bosnia and Herzegovina.
 
-Avdić, B., Mirić, R., Gekić, H. and A. B. Gekić, (2022). Municipalities and Cities Along the Entity Boundary in Bosnia and Herzegovina: Problems of Local and Regional Development. International Scientific Conference GEOBALANCIA 2022, pp. 229-239. https://geobalcanica.org/wp-content/uploads/GBP/2022/GBP.2022.17.pdf
+Avdić, B., Mirić, R., Gekić, H. and A. B. Gekić, (2022). Municipalities and Cities Along the Entity Boundary in Bosnia and Herzegovina: Problems of Local and Regional Development. International Scientific Conference GEOBALANCIA 2022, pp. 229-239. <https://geobalcanica.org/wp-content/uploads/GBP/2022/GBP.2022.17.pdf>.
 
 Berger, A., (2012). Using front lines to predict deaths in the Bosnian civil war.
 
-Bolton, M, (2003). "Mine Action in Bosnia’s Special District: A Case Study." Journal of Mine Action. Vol. 7: Iss. 2, Article 7. https://commons.lib.jmu.edu/cgi/viewcontent.cgi?article=2386&context=cisr-journal
+Bolton, M, (2003). "Mine Action in Bosnia’s Special District: A Case Study." Journal of Mine Action. Vol. 7: Iss. 2, Article 7. <https://commons.lib.jmu.edu/cgi/viewcontent.cgi?article=2386&context=cisr-journal>.
+
+Bosnia and Herzegovina Mine Action Center, (2004). Bosnia and Herzegovina Mine Situation as at Nov 2004. Bosnia and Herzegovina Mine Action Center. <https://www.bhmac.org>.
 
 Centralna izborna komisija Bosne i Hercegovine, (2012). 1997 Municipal Election Final Results [online]. Centralna izborna komisija Bosne i Hercegovine. [Accessed 13 February 2020].
 
@@ -46,11 +48,12 @@ Costalli, S. and F. Moro, (2012). Ethnicity and strategy in the Bosnian civil wa
 
 Davies, S., Pettersson, T., Sollenberg, M., & Öberg, M. (2025). Organized violence 1989–2024, and the challenges of identifying civilian victims. Journal of Peace Research, 62(4).
 
-International Committee of the Red Cross, (1998). The Silent Menace: Landmines in Bosnia and Herzegovina. https://www.icrc.org/sites/default/files/external/doc/en/assets/files/other/silent-menace-bosnia-herzegovina-57jp32-010298.pdf. [Accessed 8 November 2025].
+International Committee of the Red Cross, (1998). The Silent Menace: Landmines in Bosnia and Herzegovina. <https://www.icrc.org/sites/default/files/external/doc/en/assets/files/other/silent-menace-bosnia-herzegovina-57jp32-010298.pdf>. [Accessed 8 November 2025].
+
+Runfola D, Anderson A, Baier H, Crittenden M, Dowker E, Fuhrig S, et al., (2020). geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. <https://doi.org/10.1371/journal.pone.0231866>. 
 
 Sundberg, Ralph and Erik Melander (2013) Introducing the UCDP Georeferenced Event Dataset. Journal of Peace Research 50(4).
 
-United Nations, (1997). "BOSNIA AND HERZEGOVINA PRESS CONFERENCE ON LANDMINES." https://press.un.org/en/1997/19971218.mines18.dec.html
+United Nations, (1997). "BOSNIA AND HERZEGOVINA PRESS CONFERENCE ON LANDMINES." <https://press.un.org/en/1997/19971218.mines18.dec.html>.
 
 Zavod za statistiku Bosne i Hercegovine, (1991). Ethnic composition of Bosnia-Herzegovina population, by municipalities and settlements, 1991. Sarajevo, Bosnia and Herzegovina: Socialist Republic of Bosnia and Herzegovina.
-

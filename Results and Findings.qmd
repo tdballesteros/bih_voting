@@ -1,7 +1,7 @@
 ---
   title: "Non-Nationalist Voting Patterns in Post-Conflict Countries: Evidence from Bosnia and Herzegovina’s 1997 Municipal Elections"
   author: Tim Ballesteros
-  date: "10 February 2026"
+  date: "3 March 2026"
   format:
     html:
       toc: TRUE
@@ -125,133 +125,69 @@ minefield_2004_shapefile <- sf::read_sf(
 
 ## Introduction
 
-Democratic elections in post-conflict settings are seen as pivotal in shifting away from partisan violence to non-violent competition of power through electoral politics. Parties that contest and succeed in elections, however, are frequently those organised through established communities; following a conflict, this means the combatant organisations will have a leg up in organisational capacity and recognition needed to succeed in elections.[^1] Additionally, identities that were once fluid or not divisive frequently harden during and following a conflict.[^2] While the exact relationship between conflict and the solidifying of identities has yet to be determined, by the end of the conflict citizens are largely split along the divisions of the conflict.
-
-[^1]: Lyons, 2004; Reilly, 2002.
-
-[^2]: Hadzic, Carlson, and Tavits, 2017.
+Democratic elections in post-conflict settings are seen as pivotal in shifting away from partisan violence to non-violent competition of power through electoral politics. Parties that contest and succeed in elections, however, are frequently those organised through established communities; following a conflict, this means the combatant organisations will have a leg up in organisational capacity and recognition needed to succeed in elections.^[Lyons, 2004; Reilly, 2002.] Additionally, identities that were once fluid or not divisive frequently harden during and following a conflict.^[Hadzic, Carlson, and Tavits, 2017.] While the exact relationship between conflict and the solidifying of identities has yet to be determined, by the end of the conflict citizens are largely split along the divisions of the conflict.
 
 Taken together, political parties forming from --- or indeed just the rebranding of --- militant groups have an advantage over other groups in campaigning and communities will have polarized views of the identity-based political parties. Often this results in victories for ethnic politics following an election, particularly in countries with little prior experience with democracy.
 
 Ethnic parties -- or parties with any identitarian focus --- however, do not obtain all the votes. Nor do they receive equal support from all parts of society. Non-ethnic parties --- parties campaigning along the traditional left-right divide or for specific issues --- often see support from particular groups in society or within a confined geographic region, while support from the population at large is essentially absent.
 
-To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality[^3] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
-
-[^3]: *Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.
+To determine what factors impacts the level of support for non-ethnic parties following a conflict, I look at the 1997 local elections in Bosnia and Herzegovina, the first elections held for local government positions and the second elections after the concurrent presidential and parliamentary elections held the prior year. Local elections were chosen because of the availability of data at the municipality^[*Općina* (p. *općine*) in Bosnian and Croatian and *opština* (p. *opštine*) in Serbian.] level, as well as the breakdown of votes for each political party. This allows for features of the municipality to be correlated with their voting patterns.
 
 ## Literature Review
 
-Academic literature widely uses the concept of ethnic parties - and sectarian parties more generally - but generally omit concretely defining the term.[^4] Operationalizations of differing concepts of ethnic parties lead to vastly different measurements, with Chandra finding that, depending on the measurement, ethnic parties received between 2% and 39% of the vote in India's 1991 parliamentary election.[^5] Literature also generally operates on the assumption that all ethnic parties are generally the same; authors that do differentiate between different groups largely limit themselves to territoriality or different degrees of political demands.[^6] Another way to differentiate different kinds of ethnic parties is by focusing on how ethnic parties are structured and how they present themselves to the electorate, instead of distinguishing based on their platforms.[^7]
-
-[^4]: Chandra, 2011.
-
-[^5]: Chandra, 2011.
-
-[^6]: de Winter and Gomez-Reino, 2002; Gadjanova, 2015.
-
-[^7]: Ishiyama and Breuning, 2011.
+Academic literature widely uses the concept of ethnic parties - and sectarian parties more generally - but generally omit concretely defining the term.^[Chandra, 2011.] Operationalizations of differing concepts of ethnic parties lead to vastly different measurements, with Chandra finding that, depending on the measurement, ethnic parties received between 2% and 39% of the vote in India's 1991 parliamentary election.^[Chandra, 2011.] Literature also generally operates on the assumption that all ethnic parties are generally the same; authors that do differentiate between different groups largely limit themselves to territoriality or different degrees of political demands.^[de Winter and Gomez-Reino, 2002; Gadjanova, 2015.] Another way to differentiate different kinds of ethnic parties is by focusing on how ethnic parties are structured and how they present themselves to the electorate, instead of distinguishing based on their platforms.^[Ishiyama and Breuning, 2011.]
 
 Despite a lack of universal classification as to what constitutes an "ethnic" party, or even if there is one composition of an "ethnic" party, much work has been done that has furthered the understanding of how these parties gain and maintain support in post-conflict settings.
 
-Peace agreements now commonly feature elections as a key pillar, though researchers do not agree upon their efficacy in maintaining peace. Conflicts that are fought along ethnic lines often feature minority ethnic groups demanding greater cultural autonomy; increased democratic representation would merely channel this to ethnic political representation.[^8] The pre-existing organizational capacity of ethnic-based political actors following a conflict gives them an advantage over often poorly mobilized civil society. These parties can thus easily "appeal to the very same insecurities that generated the original conflict" as "the easiest way to mobilize voter support".[^9] According to Lyons, this results in the "\[e\]lectoral ratification of the militarized institutions of the civil war," by definition non-inclusive parties.[^10] With the war's actors being the best organized and their platforms the easiest to mobilize around, the effects of conflict only further entrench any pre-war ethnic voting patterns. Hadzic, Carlson and Tavits found that wartime exposure to violence solidifies ethnic identity, engenders distrust towards non-co-ethnics, and causes greater intra-ethnic trust.[^11]
+Peace agreements now commonly feature elections as a key pillar, though researchers do not agree upon their efficacy in maintaining peace. Conflicts that are fought along ethnic lines often feature minority ethnic groups demanding greater cultural autonomy; increased democratic representation would merely channel this to ethnic political representation.^[Wagner and Dreff, 2014.] The pre-existing organizational capacity of ethnic-based political actors following a conflict gives them an advantage over often poorly mobilized civil society. These parties can thus easily "appeal to the very same insecurities that generated the original conflict" as "the easiest way to mobilize voter support".^[Reilly, 2002: 133.] According to Lyons, this results in the "\[e\]lectoral ratification of the militarized institutions of the civil war," by definition non-inclusive parties.^[Lyons, 2004: 36.] With the war's actors being the best organized and their platforms the easiest to mobilize around, the effects of conflict only further entrench any pre-war ethnic voting patterns. Hadzic, Carlson and Tavits found that wartime exposure to violence solidifies ethnic identity, engenders distrust towards non-co-ethnics, and causes greater intra-ethnic trust.^[Hadzic, Carlson and Tavits, 2017.]
 
-[^8]: Wagner and Dreff, 2014.
+Not all post-conflict countries see support for ethnic parties. Batty found that ethnically divided Liberia and Sierra Leone both saw cross-segmental support in the first elections after their respective wars, while Pickering accredits the success of non-nationalist parties in North Macedonia following their conflict to the parties' stronger record in governing.^[Batty, 2015; Pickering, 2009.] Murtagh found that which electoral system was used to be critical, with consociationalism providing the potential to constrain ethnic-based parties after a conflict.^[Murtagh, 2015.]
 
-[^9]: Reilly, 2002: 133.
+Ethnic-based political parties are marked by incentives for further extremism and chauvinism in order for the party to be deemed "more" ethnic than rival parties representing the same group.^[Stroschein, 2011.] This leads to a process of outbidding, where parties attempt to take progressively more radical positions in order to gain the support of those belonging to their ethnic community.^[Rabushka and Shepsle, 1972; Zuber, 2011.] Political elites will generate this outbidding as they compete for the votes by sacrificing moderation.^[Horowitz, 1985.]
 
-[^10]: Lyons 2004: 36
+Competition between parties representing the same ethnicity does not necessarily have to be marked by outbidding. Stroschein found that outbidding was not the primary source of division between ethnic Hungarian parties in Romania, but rather that they were divided based on their view of whether to influence policies at the national or at the local level.^[Stroschein, 2011.] Zuber found that ethnic Hungarian and Bosniak parties in Serbia enacted strategies other than outbidding when competing with rival ethnic-based parties.^[Zuber, 2011.]
 
-[^11]: Hadzic, Carlson and Tavits, 2017.
+Often, there is an uneven spread of votes for ethnic and non-ethnic parties across a country. Pugh and Cobble found that municipalities in Bosnia and Herzegovina with higher population densities and more ethnic diversity voted more frequently for non-nationalist parties.^[Pugh and Cobble, 2001.] Stroschein identified that the calculations of voting for ethnic parties are different for those in ethnic enclaves and those living outside those enclaves; the study found those in enclaves more receptive to voting for the more extreme Hungarian party in Romania than those outside Hungarian enclaves.^[Stroschein, 2011.] Fractionalization and polarization metrics have been used to quantify ethnic diversity when looking at the impact of this heterogeneity in voting patterns.^[Pugh and Cobble, 2001.]
 
-Not all post-conflict countries see support for ethnic parties. Batty found that ethnically divided Liberia and Sierra Leone both saw cross-segmental support in the first elections after their respective wars, while Pickering accredits the success of non-nationalist parties in North Macedonia following their conflict to the parties' stronger record in governing.[^12] Murtagh found that which electoral system was used to be critical, with consociationalism providing the potential to constrain ethnic-based parties after a conflict.[^13]
+Studies on conflict-related violence and elections have found violence conducted during the conflict impacts post-conflict election participation and voting patterns. 
+ <!--
+Vargas, Purroy, Coy, Perilla, and Prem 2024
+* landmine explosions lead to decreased localized political participation
+* landmine explosions lead to localized decrease in vote share for groups associated with landmine dispersal
 
-[^12]: Batty, 2015; Pickering, 2009.
+Gutiérrez-Romero and LeBas 2020
+* voters are less likely to vote for candidates who are perceived to be connected to those using violence
+* voting participation decreases when voters have to choose between multiple canddiates rumored to use violence.
 
-[^13]: Murtagh, 2015.
-
-Ethnic-based political parties are marked by incentives for further extremism and chauvinism in order for the party to be deemed "more" ethnic than rival parties representing the same group.[^14] This leads to a process of outbidding, where parties attempt to take progressively more radical positions in order to gain the support of those belonging to their ethnic community.[^15] Political elites will generate this outbidding as they compete for the votes by sacrificing moderation.[^16]
-
-[^14]: Stroschein, 2011.
-
-[^15]: Rabushka and Shepsle, 1972; Zuber, 2011.
-
-[^16]: Horowitz, 1985.
-
-Competition between parties representing the same ethnicity does not necessarily have to be marked by outbidding. Stroschein found that outbidding was not the primary source of division between ethnic Hungarian parties in Romania, but rather that they were divided based on their view of whether to influence policies at the national or at the local level.[^17] Zuber found that ethnic Hungarian and Bosniak parties in Serbia enacted strategies other than outbidding when competing with rival ethnic-based parties.[^18]
-
-[^17]: Stroschein, 2011.
-
-[^18]: Zuber, 2011.
-
-Often, there is an uneven spread of votes for ethnic and non-ethnic parties across a country. Pugh and Cobble found that municipalities in Bosnia and Herzegovina with higher population densities and more ethnic diversity voted more frequently for non-nationalist parties.[^19] Stroschein identified that the calculations of voting for ethnic parties are different for those in ethnic enclaves and those living outside those enclaves; the study found those in enclaves more receptive to voting for the more extreme Hungarian party in Romania than those outside Hungarian enclaves.[^20] Fractionalization and polarization metrics have been used to quantify ethnic diversity when looking at the impact of this heterogeneity in voting patterns.[^21]
-
-[^19]: Pugh and Cobble, 2001.
-
-[^20]: Stroschein, 2011.
-
-[^21]: Pugh and Cobble, 2001.
+Bellows and Miguel 2009
+* individuals directly exposed to violence during the war were more likely to be politically engaged
+-->
 
 ## Election Background
 
 ### The Dayton Agreement
 
-The Dayton Agreement[^22] featured guarantees for elections across Bosnia at national, entity, canton, and municipal levels very quickly after the end of the Bosnian War. The Dayton Agreement set national, entity, and cantonal office elections to be held six months after the signing of the agreement,[^23] extendable by the Organization for Security and Co-operation in Europe's (OSCE) to "no later than nine months" if they determine delays necessary.[^24] International and domestic stakeholders had less urgency for municipal-level elections.
+The Dayton Agreement^[Formally the General Framework Agreement for Peace in Bosnia and Herzegovina.] featured guarantees for elections across Bosnia at national, entity, canton, and municipal levels very quickly after the end of the Bosnian War. The Dayton Agreement set national, entity, and cantonal office elections to be held six months after the signing of the agreement,^[The signing of the Dayton Agreement and its immediate entry into force is taken as 14 December 1994, the date of the formal signing in Paris, France. Parties to the conflict initially signed the agreement on 21 November 1995 at the Wright-Patterson Air Force Base outside Dayton, Ohio.] extendable by the Organization for Security and Co-operation in Europe's (OSCE) to "no later than nine months" if they determine delays necessary.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date ("Election Day") six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." <https://www.ohr.int/dayton-peace-agreement/annex-3/>] International and domestic stakeholders had less urgency for municipal-level elections.
 
-[^22]: Formally the General Framework Agreement for Peace in Bosnia and Herzegovina.
-
-[^23]: The signing of the Dayton Agreement and its immediate entry into force is taken as 14 December 1994, the date of the formal signing in Paris, France. Parties to the conflict initially signed the agreement on 21 November 1995 at the Wright-Patterson Air Force Base outside Dayton, Ohio.
-
-[^24]: General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article II(4). "Timing. Elections shall take place on a date ("Election Day") six months after entry into force of this Agreement or, if the OSCE determines a delay necessary, no later than nine months after entry into force." https://www.ohr.int/dayton-peace-agreement/annex-3/
-
-The Dayton Agreement additionally set out initial voter eligibility rules, emphasizing the right of refugees to participate in the elections.[^25] The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities;[^26] the estimated population of Bosnia and Herzegovina in 1996 was 16.7% lower than the pre-war population count, a decrease of 732,033 people.[^27] These statistics emphasized the importance to establish fair and just protocols for these individuals to vote. For the 1996 elections, individuals had multiple options for in which municipality to register: (1) as a general rule, where the individual had lived at the time of the 1991 census, regardless of their current residence; (2) where the individual now resided; or (3) where they intended to live in the future.
-
-[^25]: General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article IV. "Voters. Any citizen of Bosnia and Herzegovina aged 18 or older whose name appears on the 1991 census for Bosnia and Herzegovina shall be eligible, in accordance with electoral rules and regulations, to vote. A citizen who no longer lives in the municipality in which he or she resided in 1991 shall, as a general rule, be expected to vote, in person or by absentee ballot, in that municipality, provided that the person is determined to have been registered in that municipality as confirmed by the local election commission and the Provisional Election Commission. Such a citizen may, however, apply to the Commission to cast his or her ballot elsewhere. The exercise of a refugee's right to vote shall be interpreted as confirmation of his or her intention to return to Bosnia and Herzegovina. By Election Day, the return of refugees should already be underway, thus allowing many to participate in person in elections in Bosnia and Herzegovina. The Commission may provide in the electoral rules and regulations for citizens not listed in the 1991 census to vote." https://www.ohr.int/dayton-peace-agreement/annex-3/
-
-[^26]: Commission on Security and Cooperation in Europe, 1997.
-
-[^27]: Gekic, Bidzan-Gekic, Miric, and Remenyi, 2020.
-
+The Dayton Agreement additionally set out initial voter eligibility rules, emphasizing the right of refugees to participate in the elections.^[General Framework Agreement for Peace in Bosnia and Herzegovina, 1995. Annex 3, Article IV. "Voters. Any citizen of Bosnia and Herzegovina aged 18 or older whose name appears on the 1991 census for Bosnia and Herzegovina shall be eligible, in accordance with electoral rules and regulations, to vote. A citizen who no longer lives in the municipality in which he or she resided in 1991 shall, as a general rule, be expected to vote, in person or by absentee ballot, in that municipality, provided that the person is determined to have been registered in that municipality as confirmed by the local election commission and the Provisional Election Commission. Such a citizen may, however, apply to the Commission to cast his or her ballot elsewhere. The exercise of a refugee's right to vote shall be interpreted as confirmation of his or her intention to return to Bosnia and Herzegovina. By Election Day, the return of refugees should already be underway, thus allowing many to participate in person in elections in Bosnia and Herzegovina. The Commission may provide in the electoral rules and regulations for citizens not listed in the 1991 census to vote." <https://www.ohr.int/dayton-peace-agreement/annex-3/>] The Bosnian War saw an estimated half of the population be displaced internally or as refugees abroad, on top of the estimated 100,000 fatalities;^[Commission on Security and Cooperation in Europe, 1997.] the estimated population of Bosnia and Herzegovina in 1996 was 16.7% lower than the pre-war population count, a decrease of 732,033 people.^[Gekic, Bidzan-Gekic, Miric, and Remenyi, 2020.] These statistics emphasized the importance to establish fair and just protocols for these individuals to vote. For the 1996 elections, individuals had multiple options for in which municipality to register: (1) as a general rule, where the individual had lived at the time of the 1991 census, regardless of their current residence; (2) where the individual now resided; or (3) where they intended to live in the future.
+ 
 ### Implementing Dayton: The 1996 General Elections
 
-Michel Foucault stated "politics is war by other means."[^28] The war's belligerents may have laid down their arms - or at least transitioned away from armed conflict - but they were still seeking to achieve the same goals as they had been over the previous four years. With the rules of the elections laid out in the Dayton Agreement, the Provisional Election Commission, and the OSCE, belligerents in the war transitioned to politics to cement their victories gained during the war. And these groups would take any advantage they could to win.
+Michel Foucault stated "politics is war by other means."^[Foucault, 2003.] The war's belligerents may have laid down their arms - or at least transitioned away from armed conflict - but they were still seeking to achieve the same goals as they had been over the previous four years. With the rules of the elections laid out in the Dayton Agreement, the Provisional Election Commission, and the OSCE, belligerents in the war transitioned to politics to cement their victories gained during the war. And these groups would take any advantage they could to win.
 
-[^28]: Foucault, 2003.
+Another challenge was the flexibility in voter's municipality of registration. In attempting to accommodate to the many IDPs and refugees, the Dayton Agreement and official bodies involved in overseeing the elections allowed for actors to commit fraud that was, within select municipalities, widespread. Groups within Bosnia and Herzegovina - particularly but by no means exclusively Serbs in Republika Srpska and Brčko district^[Bureau of Democracy, Human Rights, and Labor, 1998.] - took advantage of displaced persons being able to choose what municipality to register in with very little requirements; at this point, there were no requirements for a connection to the municipality people intended to relocate to, meaning displaced persons could essentially chose freely where to register.
 
-Another challenge was the flexibility in voter's municipality of registration. In attempting to accommodate to the many IDPs and refugees, the Dayton Agreement and official bodies involved in overseeing the elections allowed for actors to commit fraud that was, within select municipalities, widespread. Groups within Bosnia and Herzegovina - particularly but by no means exclusively Serbs in Republika Srpska and Brčko district[^29] - took advantage of displaced persons being able to choose what municipality to register in with very little requirements; at this point, there were no requirements for a connection to the municipality people intended to relocate to, meaning displaced persons could essentially chose freely where to register.
-
-[^29]: Bureau of Democracy, Human Rights, and Labor, 1998.
-
-Initially, the Provisional Election Commission attempted to have themselves and the government update voter rolls. This allowed multiple government actors to influence voter registration, specifically allowing them to have people who are more likely to vote in their favor to be registered to the municipality of the government's choice. This was, in effect, a plan to cement demographic changes caused by the war by allowing politicians from "their" community to get elected and discourage those from "other" communities who were displaced to return. Brčko, the district not within either Republika Srpska or the Federation, was particularly impacted.[^30]
-
-[^30]: Bureau of Democracy, Human Rights, and Labor, 1998.
+Initially, the Provisional Election Commission attempted to have themselves and the government update voter rolls. This allowed multiple government actors to influence voter registration, specifically allowing them to have people who are more likely to vote in their favor to be registered to the municipality of the government's choice. This was, in effect, a plan to cement demographic changes caused by the war by allowing politicians from "their" community to get elected and discourage those from "other" communities who were displaced to return. Brčko, the district not within either Republika Srpska or the Federation, was particularly impacted.^[Bureau of Democracy, Human Rights, and Labor, 1998.]
 
 Due to the fraud in voter enrollment, the OSCE postponed the municipal elections - that is, the races where accurate registration to a specific municipality had the most impact - in August 1996 to November the same year. The timeframe-mandated general elections occurred as scheduled on 14 September 1996, the last day within the nine-month window. These national-, entity-, and canton-level elections were less impacted by fraudulent municipal registration, as the precise municipality of registration did not as greatly impact what elections the voters participated in.
 
-Fraud in voter rolls was noted as a significant problem in the general elections. The International Crisis Group (ICG) reported that, based on preliminary results, voter turnout in the 1996 general election was over 100%.[^31] This claim has been disputed when extrapolating demographic trends,[^32] though the lack of demographic information about the post-war Bosnian population limits any concrete claims on number of eligible citizens. Another significant problem was relating to freedom of movement, which the Dayton Agreement stated was an essential condition of elections. Individuals faced threats, were subjected to violence, detained, and murdered when attempting to cross the IEBL to participate in the election. Official UNHCR buses transporting voters across the lines were stoned and faced harassment and detention.[^33]
+Fraud in voter rolls was noted as a significant problem in the general elections. The International Crisis Group (ICG) reported that, based on preliminary results, voter turnout in the 1996 general election was over 100%.^[International Crisis Group, 1996.] This claim has been disputed when extrapolating demographic trends,^[Malcolm, 1997.] though the lack of demographic information about the post-war Bosnian population limits any concrete claims on number of eligible citizens. Another significant problem was relating to freedom of movement, which the Dayton Agreement stated was an essential condition of elections. Individuals faced threats, were subjected to violence, detained, and murdered when attempting to cross the IEBL to participate in the election. Official UNHCR buses transporting voters across the lines were stoned and faced harassment and detention.^[International Crisis Group, 1996.]
 
-[^31]: International Crisis Group, 1996.
+Due to the problems experienced leading up to the general elections, the OSCE modified the requirements for internally displaced persons (IDPs) and refugees. IDPs attempting to register in the municipality to which they were displaced now had to have resided there since before August 1996 and be able to provide documentary proof. IDPs and refugees attempting to register in a municipality other than the one they resided prior to the war were now required to demonstrate with clear and convincing documentation that they had a pre-existing, legitimate, and non-transitory relationship with that municipality based on ownership of a property or business, an offer of employment, or an invitation by a blood relative who had lived in that municipality before the conflict began.^[Commission on Security and Cooperation in Europe, 1997.] Diverting from both the European-wide and Bosnian norms, the Provisional Election Commission required individuals to actively register to vote for the municipal elections; previously voter registration was automatic in Bosnia and Herzegovina.^[Commission on Security and Cooperation in Europe, 1997.] To account for these changes, the OSCE delayed municipal elections from November 1996 to April 1997, then a third time to 13-14 September 1997.^[Commission on Security and Cooperation in Europe, 1997.]
 
-[^32]: Malcolm, 1997.
+These new restrictions, in addition to more assertive monitoring, did reduce fraud. In the general election, 160,000 Bosnians in Yugoslavia registered to vote in a municipality other than the one in which they lived in 1991. Leading up to the municipal elections, only several thousand refugees across all countries attempted to do so; only 145 were able to do so.^[Commission on Security and Cooperation in Europe, 1997.] The OSCE also scrutinized and prevented several cases of attempted fraud. In Bosniak-dominated Žepče, the *Hrvatska demokratska zajednica* (HDZ; Croatian Democratic Union, the main Croat nationalist party) attempted to bring in voters from surrounding areas to register with false documentation. The OSCE removed approximately 2,800 voters from the registration list and they began a new, three-day registration period. The OSCE also rejected over 3,000 voter registration forms in Brčko over suspicion of fraud.^[Commission on Security and Cooperation in Europe, 1997.]
 
-[^33]: International Crisis Group, 1996.
-
-Due to the problems experienced leading up to the general elections, the OSCE modified the requirements for internally displaced persons (IDPs) and refugees. IDPs attempting to register in the municipality to which they were displaced now had to have resided there since before August 1996 and be able to provide documentary proof. IDPs and refugees attempting to register in a municipality other than the one they resided prior to the war were now required to demonstrate with clear and convincing documentation that they had a pre-existing, legitimate, and non-transitory relationship with that municipality based on ownership of a property or business, an offer of employment, or an invitation by a blood relative who had lived in that municipality before the conflict began.[^34] Diverting from both the European-wide and Bosnian norms, the Provisional Election Commission required individuals to actively register to vote for the municipal elections; previously voter registration was automatic in Bosnia and Herzegovina.[^35] To account for these changes, the OSCE delayed municipal elections from November 1996 to April 1997, then a third time to 13-14 September 1997.[^36]
-
-[^34]: Commission on Security and Cooperation in Europe, 1997.
-
-[^35]: Commission on Security and Cooperation in Europe, 1997.
-
-[^36]: Commission on Security and Cooperation in Europe, 1997.
-
-These new restrictions, in addition to more assertive monitoring, did reduce fraud. In the general election, 160,000 Bosnians in Yugoslavia registered to vote in a municipality other than the one in which they lived in 1991. Leading up to the municipal elections, only several thousand refugees across all countries attempted to do so; only 145 were able to do so.[^37] The OSCE also scrutinized and prevented several cases of attempted fraud. In Bosniak-dominated Žepče, the *Hrvatska demokratska zajednica* (HDZ; Croatian Democratic Union, the main Croat nationalist party) attempted to bring in voters from surrounding areas to register with false documentation. The OSCE removed approximately 2,800 voters from the registration list and they began a new, three-day registration period. The OSCE also rejected over 3,000 voter registration forms in Brčko over suspicion of fraud.[^38]
-
-[^37]: Commission on Security and Cooperation in Europe, 1997.
-
-[^38]: Commission on Security and Cooperation in Europe, 1997.
-
-Table 1 shows OSCE's data on where individuals registered to vote based on where they were located, by entity.[^39]
-
-[^39]: Organization for Security and Co-operation in Europe, 1997.
+Table 1 shows OSCE's data on where individuals registered to vote based on where they were located, by entity.
 
 **TABLE 1.** Voter Registration in the 1997 Election, by Entity and Absentee Status
 
@@ -295,27 +231,15 @@ registration_table
 
 [*Notes: Percents might not add up to 100 due to rounding. All percentages displayed are out of the row-wise total. Municipalities depicted are post-war municipalities. Source: Organization for Security and Co-operation in Europe, 1997.*]{style="font-size: 0.75em;"}
 
-Individuals registering for their 1991 municipality of residence while still living within that municipality was far more frequent in the Federation than in Republika Srpska.[^40] Republika Srpska saw larger proportions of voters register absentee both within-country and out-of-country, as well as in their 1997 municipality of residence. Overall, nearly a quarter of voters registered as absentee voters.
+Individuals registering for their 1991 municipality of residence while still living within that municipality was far more frequent in the Federation than in Republika Srpska.^[Organization for Security and Co-operation in Europe, 1997.] Republika Srpska saw larger proportions of voters register absentee both within-country and out-of-country, as well as in their 1997 municipality of residence. Overall, nearly a quarter of voters registered as absentee voters.
 
-[^40]: Organization for Security and Co-operation in Europe, 1997.
-
-While the delay of municipal elections to occurring just short of two years since the signing of the Dayton Agreement did provide opportunities for the OSCE to take measures on voter registration fraud, freedom of movement remained restricted; this denial of a civil right had significant implications for elections at local levels.[^41] Violence against displaced persons attempting to return remained, including cases where local law enforcement participated.[^42]
-
-[^41]: Commission on Security and Cooperation in Europe, 1997.
-
-[^42]: Bureau of Democracy, Human Rights, and Labor, 1998.
+While the delay of municipal elections to occurring just short of two years since the signing of the Dayton Agreement did provide opportunities for the OSCE to take measures on voter registration fraud, freedom of movement remained restricted; this denial of a civil right had significant implications for elections at local levels.^[Commission on Security and Cooperation in Europe, 1997.] Violence against displaced persons attempting to return remained, including cases where local law enforcement participated.^[Bureau of Democracy, Human Rights, and Labor, 1998.]
 
 ## Methodology and Research Questions
 
-To address what factors impact a municipality's proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.[^43]
+To address what factors impact a municipality's proportion of the vote went to non-nationalist parties, I assess municipal voting proportions for parties in the 1997 municipal elections. Complete party-level results at the municipal level exist for 130 municipalities for the 1997 municipal elections, as published by the Central Election Commission.^[Centralna izborna komisija Bosne i Hercegovine, 2012.]
 
-[^43]: Centralna izborna komisija Bosne i Hercegovine, 2012.
-
-I classify political parties as "nationalist" and "non-nationalist", as well as "other" and "independent", based on research by Pugh and Cobble on Bosnian municipal elections.[^44] Parties appealing to a particular ethnic group and promoting that group's rights to the exclusion of the rights of others were coded as nationalist. Modifications were made such that parties appealing to an ethnic base to promote ethnic rights in a pluralistic society were coded as non-nationalist parties. This is particularly important in several municipalities in Canton 10, where parties such as Zavičaj and Za Drvar appealed to displaced Serbs and promoted their rights but did not campaign for the discrimination against non-Serbs.[^45] As such, "nationalist parties" refers to those that promote a sole identity group to the exclusion of the rights of others. "Non-nationalist parties," on the other hand, refers to a wider range of parties, ranging from those that promote specific interests, those that campaign on the left-right political and those that campaign to specific national communities within the context of a pluralist country. Only parties that saw at least a modest amount of support were coded, leaving independents and small parties uncoded.
-
-[^44]: Pugh and Cobble, 2001.
-
-[^45]: Wilkinson, 1998.
+I classify political parties as "nationalist" and "non-nationalist", as well as "other" and "independent", based on research by Pugh and Cobble on Bosnian municipal elections.^[Pugh and Cobble, 2001.] Parties appealing to a particular ethnic group and promoting that group's rights to the exclusion of the rights of others were coded as nationalist. Modifications were made such that parties appealing to an ethnic base to promote ethnic rights in a pluralistic society were coded as non-nationalist parties. This is particularly important in several municipalities in Canton 10, where parties such as Zavičaj and Za Drvar appealed to displaced Serbs and promoted their rights but did not campaign for the discrimination against non-Serbs.^[Wilkinson, 1998.] As such, "nationalist parties" refers to those that promote a sole identity group to the exclusion of the rights of others. "Non-nationalist parties," on the other hand, refers to a wider range of parties, ranging from those that promote specific interests, those that campaign on the left-right political and those that campaign to specific national communities within the context of a pluralist country. Only parties that saw at least a modest amount of support were coded, leaving independents and small parties uncoded.
 
 ```{r}
 #| label: nationalist-voting-overview
@@ -345,9 +269,7 @@ Overall, `r formatC(100 * nationalist_vote_nationwide_perc, digits = 1, format =
 
 ### Exposure to Violence
 
-I hypothesize that intensity of conflict results in an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits's work on conflict cementing ethnic identities.[^46] This would imply that individuals that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
-
-[^46]: Hadzic, Carlson and Tavits, 2017.
+I hypothesize that intensity of conflict results in an increase in votes for nationalist parties, stemming from Hadzic, Carlson and Travits's work on conflict cementing ethnic identities.^[Hadzic, Carlson and Tavits, 2017.] This would imply that individuals that were targeted due to their ethnicity are predicted to have voted for ethnically chauvinist parties that explicitly pledge to protect them from other groups.
 
 Assessing localized conflict intensity is done with two measurements: deaths by municipality and suspected minefield coverage by municipality.
 
@@ -355,15 +277,9 @@ $H_{1a}$: Municipalities that saw a greater portion of deaths relative to popula
 
 $H_{1b}$: Municipalities that saw a greater portion of the municipality's land area covered in suspected minefields during the war will see lower portions of votes go to non-nationalist parties.
 
-Data on proportions of deaths by municipality comes from Costalli and Moro, who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo.[^47] Costalli and Moro's data is in the form of proportions of the population, so data from the 1991 Bosnian Census is used to calculate counts. Costalli and Moro's data and its use in the models are validated using the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.[^48] See Appendix A for a comparison of the distribution of fatalities across municipalities and the impact on select models using UCDP data.
+Data on proportions of deaths by municipality comes from Costalli and Moro, who in turn calculated their results from data from the Research and Documentation Centre of Sarajevo.^[Costalli and Moro, 2012.] Costalli and Moro's data is in the form of proportions of the population, so data from the 1991 Bosnian Census is used to calculate counts. Costalli and Moro's data and its use in the models are validated using the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1, which provides georeferenced incident-level data.^[Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.] See Appendix A for a comparison of the distribution of fatalities across municipalities and the impact on select models using UCDP data.
 
-[^47]: Costalli and Moro, 2012.
-
-[^48]: Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.
-
-Minefield data comes from the Bosnia and Herzegovina Mine Action Center and contains data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents.[^49] The data represents the situation as of November 2004, so cleared and lifted areas are assumed to have not been assessed and cleared at the ending of the war. This data was converted to georeferenced vector data, split into post-war municipalities, and the percentage of each municipality covered with approximate minefield locations is calculated. See Figure X for the source map and the extracted approximate mine locations.
-
-[^49]: Bosnia and Herzegovina Mine Action Center, 2004.
+Minefield data comes from the Bosnia and Herzegovina Mine Action Center and contains data on the approximate location of cleared, mined, and lifted areas, as well as approximate locations of mine incidents.^[Bosnia and Herzegovina Mine Action Center, 2004.] The data represents the situation as of November 2004, so cleared and lifted areas are assumed to have not been assessed and cleared at the ending of the war. This data was converted to georeferenced vector data, split into post-war municipalities, and the percentage of each municipality covered with approximate minefield locations is calculated. See Figure X for the source map and the extracted approximate mine locations.
 
 **FIGURE X.** Approximate Minefield Location Source Image and Extracted Shapefile
 
@@ -395,9 +311,7 @@ p1 + p2
 
 [*Notes: Original Approximate Minefield Location Source Image (left) and the extracted approximate minefield location shapefile (right). The shapefile includes approximate cleared, mined, and lifted areas and approximate locations of mine incidents. Source: Bosnia and Herzegovina Mine Action Center, 2004; author calculations.*]{style="font-size: 0.75em;"}
 
-To validate this data, cantonal estimates from the United Nations Mine Action Centre are compared to the BHMAC approximate landmine coverage estimates. The United Nations Mine Action Centre released estimates for minefield area coverage across the Federation's 10 cantons and Republika Srpska in 1997.[^50] See Appendix B for the full comparison.
-
-[^50]: International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.
+To validate this data, cantonal estimates from the United Nations Mine Action Centre are compared to the BHMAC approximate landmine coverage estimates. The United Nations Mine Action Centre released estimates for minefield area coverage across the Federation's 10 cantons and Republika Srpska in 1997.^[International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.] See Appendix B for the full comparison.
 
 ### Ethnic Fractionalization
 
@@ -409,11 +323,7 @@ The war drastically changed the ethnic composition of many municipalities, which
 
 $H_{2b}$: Municipalities that were more ethnically heterogeneous after the war will see increased shares of votes for non-nationalist parties.
 
-To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization measurement is taken from Alesina et al.[^51] and Fearon[^52], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country's fractionalization as
-
-[^51]: Alesina et al., 2003.
-
-[^52]: Fearon, 2003.
+To measure ethnic heterogeneity within a district, I use measurements of ethnic fractionalization, which allows for a straightforward quantification of diversity within each municipality. The ethnic fractionalization measurement is taken from Alesina et al.^[Alesina et al., 2003.] and Fearon^[Fearon, 2003.], which was itself a reapplication of the ethnolinguistic fractionalization variable (ELF), which defines a country's fractionalization as
 
 $Fractionalization = 1-\sum_{i=1}^{N} {p_{i}^{2}}$
 
@@ -427,11 +337,7 @@ Changes in the percentage of Bosniaks, Croats, and Serbs is also included. As Yu
 
 ### Voting Location and Turnout
 
-Little research has been done on displaced persons' voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic.[^53] Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,[^54] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
-
-[^53]: Stefanovic, and Loizides, 2015.
-
-[^54]: Zic, 2017.
+Little research has been done on displaced persons' voting patterns and no theories have been popularized. As a mobile population, determining accurate and representative statistics for the population as a whole has been a key challenge in producing literature on the topic.^[Stefanovic, and Loizides, 2015.] Even so, the limited evidence points towards displaced persons having different voting patterns than the rest of the population. Stefanovic and Loizides point to the case of Drvar, where returnee voting produced high votes from displaced Serbs, despite the municipality being in the Federation. Zic,^[Zic, 2017.] focusing on Bosniaks, found that those that were displaced voted more frequently for the Bosniak Muslim party *Stranka demokratske akcije* (SDA; Party of Democratic Action). Despite the lack of established theory in this area, I include absentee votes as a percentage of total votes cast for two reasons: (1) both aforementioned research articles point to some relationship, and (2) the findings here can help further research towards establishing a theory, though that is outside the scope of this paper.
 
 $H_{3a}$: Municipalities that saw a larger proportion of absentee voting will see a smaller proportion of votes for non-nationalist parties.
 
@@ -439,13 +345,9 @@ $H_{3a}$: Municipalities that saw a larger proportion of absentee voting will se
 
 ### Distances
 
-The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic Croats and Serbs were heavily concentrated around the country's border regions with Croatia and Serbia, respectively; spillover from the Croatian War of Independence began in regions bordering Croatia; and Serb irregular forces and Yugoslav troops and supplies entered through rump Yugoslavia.[^55] The war was additionally an attempt by Croatian and Yugoslav governments to carve up and annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the "mother" country, and thus will be less inclined to vote for non-nationalist parties.
+The war in Bosnia and Herzegovina was marked by the heavy influence of neighboring countries. Ethnic Croats and Serbs were heavily concentrated around the country's border regions with Croatia and Serbia, respectively; spillover from the Croatian War of Independence began in regions bordering Croatia; and Serb irregular forces and Yugoslav troops and supplies entered through rump Yugoslavia.^[Bennett, 2016.] The war was additionally an attempt by Croatian and Yugoslav governments to carve up and annex portions of Bosnia and Herzegovina. As such, it is expected that the relationship between people residing close to the boarder will have a stronger connection to the "mother" country, and thus will be less inclined to vote for non-nationalist parties.
 
-[^55]: Bennett, 2016.
-
-$H_{4a}$: Municipalities more proximate to the Croatian or Yugoslav[^56] borders will see decreased shares of votes for non-nationalist parties.
-
-[^56]: Yugoslavia here refers to the post-breakaway rump state, consisting of modern-day Serbia, Montenegro, and Kosovo. What is now known as North Macedonia additionally broke away in 1992, though it was only recognized in 1993.
+$H_{4a}$: Municipalities more proximate to the Croatian or Yugoslav^[Yugoslavia here refers to the post-breakaway rump state, consisting of modern-day Serbia, Montenegro, and Kosovo. What is now known as North Macedonia additionally broke away in 1992, though it was only recognized in 1993.] borders will see decreased shares of votes for non-nationalist parties.
 
 The division of Bosnia and Herzegovina into two entities by the Inter-Entity Boundary Line (IEBL) in the Dayton Agreement is also predicted to be related to voting patterns. The IEBL roughly follows the final military fronts and as such can be viewed as a proxy for the front line. Similarly, proximity to the IEBL results in proximity to the entity successor of the opposing military force, which implies potential uncertainty for their safety were the Dayton Agreement to fail.
 
@@ -565,19 +467,11 @@ cat('</details>')
 
 ### Deaths per Population
 
-The Bosnian War was deadly, particularly on civilians. While the exact degree of severity remains unknown, estimates for the number of total fatalities from the Bosnian War are approximately 100,000 deaths, approximately 2.3% of the pre-war population. Some estimates give vastly different results, though these were typically produced within the first decade following the war; death estimates have ranged from 25,000 to 329,000.[^57] This speaks nothing for the number of injured, the countless families forced to flee their homes, those who lost loved ones in the violence, and the immense cultural heritage targeted and sometimes erased.
-
-[^57]: Nilsen, 2004.
+The Bosnian War was deadly, particularly on civilians. While the exact degree of severity remains unknown, estimates for the number of total fatalities from the Bosnian War are approximately 100,000 deaths, approximately 2.3% of the pre-war population. Some estimates give vastly different results, though these were typically produced within the first decade following the war; death estimates have ranged from 25,000 to 329,000.^[Nilsen, 2004.] This speaks nothing for the number of injured, the countless families forced to flee their homes, those who lost loved ones in the violence, and the immense cultural heritage targeted and sometimes erased.
 
 Fatalities remain one of the most accessible metrics of violence resulting from conflict. While it in and of itself may represent a small portion of people who suffered due to conflict, deaths remain a good proxy for overall violence within the war. Casualties, particularly among combatants, likely correlate strongly with locations of fatalities. Fatalities also likely depict areas of increased fighting, which would relate to forced civilian displacement.
 
-As stated above, an estimated 100,000 people died in the Bosnian War. These estimates do vary: The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.[^58] This figure was increased to 101,040 in the final 2012 release of the report.[^59] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.[^60] Applying the 1991 Bosnian Census data to Costalli and Moro's pre-war municipality proportion of population deaths, their dataset contains an estimated 95,088 deaths, all attributed to specific pre-war municipalities. The UCDP's Georeferenced Event Dataset Global, version 25.1, which features geo-referenced incident-level data with fatality estimates, contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate).
-
-[^58]: Ball, Tabeau, & Verwimp, 2007.
-
-[^59]: Sito-Sucic & Robinson, 2012.
-
-[^60]: Zwierzchowski & Tabeau, 2010.
+As stated above, an estimated 100,000 people died in the Bosnian War. These estimates do vary: The initial release of the Bosnian Book of the Dead, which features names of individuals who died during the war and is seen as the most definitive count of deceased, contained 96,985 names.^[Ball, Tabeau, & Verwimp, 2007.] This figure was increased to 101,040 in the final 2012 release of the report.^[Sito-Sucic & Robinson, 2012.] The International Criminal Tribunal for the former Yugoslavia estimated 104,732 fatalities, stating the minimum number of deaths to be 89,186.^[Zwierzchowski & Tabeau, 2010.] Applying the 1991 Bosnian Census data to Costalli and Moro's pre-war municipality proportion of population deaths, their dataset contains an estimated 95,088 deaths, all attributed to specific pre-war municipalities. The UCDP's Georeferenced Event Dataset Global, version 25.1, which features geo-referenced incident-level data with fatality estimates, contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate).
 
 The five pre-war municipalities that saw the most absolute number of deaths were Srebrenica (7,711 deaths), Prijedor (5,201), Zvornik (4,127), Bratunac (3,604), and Sarajevo Novi Grad (3,151), which combined account for an estimated 25% of all deaths in the war. Based on pre-war populations, the pre-war municipalities that saw the highest proporitons of death relative to population were Srebrenica (21.0% of the municipality's pre-war population), Bratunac (10.7%), Rogatica (9.2%), Vlasenica (8.6%), and Višegrad (8.3%). These counts are based on the location of death, not where the individuals lived. As such, places like Srebrenica that saw large numbers of individuals who lived in other municipalities die did not necessarily see the highest proportion of their pre-war population die, but rather saw the highest proportion of people die in the municipality relative to their pre-war population. Map X shows pre-war municipalities by the absolute number of deaths (left) and the number of deaths relative to the pre-war population (right), with the five municipalities with the highest values highlighted.
 
@@ -1245,17 +1139,11 @@ Zwierzchowski, J. and E. Tabeau, (2010). The 1992-95 War in Bosnia and Herzegovi
 
 ## Appendix A: Verification and Comparison of Deaths by Municipality
 
-This study uses two data sources for municipal-level fatalities during the Bosnian War: Costalli and Moro and the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1[^61] Due to the nature of measuring deceased following a war, particularly geolocating the deaths to specific municipalities, differences are expected between the datasets. However, large levels of discepencies in a select few municipalities may lead to a different result when using either dataset in the models. This section assesses the degree of discrepencies in overall and municipal-level data and presents the results of select models using UCDP data instead of Costalli and Moro data.
-
-[^61]: Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.
+This study uses two data sources for municipal-level fatalities during the Bosnian War: Costalli and Moro and the Uppsala Conflict Data Program's UCDP Georeferenced Event Dataset Global version 25.1^[Davies, Pettersson, Sollenberg & Öberg, 2025; Sundberg and Melander, 2013.] Due to the nature of measuring deceased following a war, particularly geolocating the deaths to specific municipalities, differences are expected between the datasets. However, large levels of discepencies in a select few municipalities may lead to a different result when using either dataset in the models. This section assesses the degree of discrepencies in overall and municipal-level data and presents the results of select models using UCDP data instead of Costalli and Moro data.
 
 Applying the 1991 Bosnian Census data to Costalli and Moro's proportions of population deaths, the dataset contains an estimated 95,088 deaths. Regarding overall deaths recorded in each dataset, UCDP's GED dataset contains a best-estimate of 63,535 deaths (58,799 low estimate, 72,325 high estimate), of which 63,229 are geocoded (58,522 low estimate, 71,221 high estimate). This means UCDP's dataset features only two-thirds (66.8%) the number of deaths as Costalli and Moro's and the 1991 Bosnian Ceensus's data.
 
-It appears likely that UCDP's dataset is undercounting deaths, as the estimated Costalli and Moro total aligns closely with other estimates, including the Bosnian Book of the Dead's 101,040 deaths[^62] and the International Criminal Tribunal for the former Yugoslavia's estimated 104,732 fatalities, with a minimum estimate of 89,186 deaths.[^63]
-
-[^62]: Sito-Sucic & Robinson, 2012.
-
-[^63]: Zwierzchowski & Tabeau, 2010.
+It appears likely that UCDP's dataset is undercounting deaths, as the estimated Costalli and Moro total aligns closely with other estimates, including the Bosnian Book of the Dead's 101,040 deaths^[Sito-Sucic & Robinson, 2012.] and the International Criminal Tribunal for the former Yugoslavia's estimated 104,732 fatalities, with a minimum estimate of 89,186 deaths.^[Zwierzchowski & Tabeau, 2010.]
 
 Though the two datasets differ in the overall estimated number of deaths, the models will only be impacted by differing distributions of deaths across municipalities. Assessing proportions of total deaths by municipality in Costalli and Moro's dataset and the UCDP GED dataset's best estimate, 21 pre-war municipalities have differences in the proportion of total deaths between the two sources of 1 percentage point or more. Figure X displays the estimated proportion of overall deaths in each of these select municipalities from both data sources, with bands for UCDP's low and high estimates shown in gray.
 
@@ -1534,9 +1422,7 @@ death_perc_comparison_map_plotly
 
 ## Appendix B: Verification and Comparison of Estimated Minefield Coverage by Municipality
 
-The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a specific canton or Republika Srpska.[^64] Map X shows the estimated minefield density (estimated number of minefields per square kilometer) per canton, Brčko district, and Republika Srpska.
-
-[^64]: International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.
+The United Nations Mine Action Centre's minefield estimates by canton (for Federation cantons) and Republika Srpska in 1997 estimate 17,854 minefields across the country, of which 17,429 are attributed to a specific canton or Republika Srpska.^[International Committee of the Red Cross, 1998. Data originally from the United Nations Mine Action Centre.] Map X shows the estimated minefield density (estimated number of minefields per square kilometer) per canton, Brčko district, and Republika Srpska.
 
 **TABLE X.** Title
 
